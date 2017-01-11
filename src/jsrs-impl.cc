@@ -295,6 +295,7 @@ v8::Local<v8::String> ParseNetworkPackets(v8::Isolate* isolate,
           curr_chunk + chunk_size, &parsed_chunk_size);
 
       if (parsed_chunk_size != chunk_size) {
+        delete []source;
         isolate->ThrowException(v8::Exception::SyntaxError(
             v8::String::NewFromUtf8(isolate, "Invalid format")));
         return v8::String::Empty(isolate);
@@ -643,6 +644,7 @@ char* GetControlChar(v8::Isolate* isolate, const char* str,
     case 'x': {
       *result = ReadHexNumber(str + 1, 2, &ok);
       if (!ok) {
+        delete []result;
         isolate->ThrowException(v8::Exception::SyntaxError(
             v8::String::NewFromUtf8(isolate,
                 "Invalid hexadecimal escape sequence")));
@@ -666,6 +668,7 @@ char* GetControlChar(v8::Isolate* isolate, const char* str,
         ok = false;
       }
       if (!ok) {
+        delete []result;
         isolate->ThrowException(v8::Exception::SyntaxError(
             v8::String::NewFromUtf8(isolate,
                 "Invalid Unicode escape sequence")));
