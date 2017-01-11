@@ -614,7 +614,7 @@ char* CodePointsToUtf8(unsigned int c, std::size_t* size) {
 }
 
 unsigned int ReadHexNumber(const char* str, int len, bool* ok) {
-  char t[5];
+  char t[6];
   char* end;
   std::strncpy(t, str, len);
   t[len] = '\0';
@@ -661,7 +661,15 @@ char* GetControlChar(v8::Isolate* isolate, const char* str,
       } else if (str[1] == '{') {
         std::size_t hex_size;  // maximal hex is 10FFFF
         for (hex_size = 1; str[hex_size + 2] != '}' && hex_size <= 6;
-            hex_size++) continue;
+             hex_size++) {
+          if (str[hex_size + 2] == '\0') {
+            delete []result;
+            isolate->ThrowException(v8::Exception::SyntaxError(
+                v8::String::NewFromUtf8(isolate,
+                    "Invalid Unicode code point escape")));
+            return nullptr;
+          }
+        }
         symb_code = ReadHexNumber(str + 2, hex_size, &ok);
         *size = hex_size + 3;
       } else {
