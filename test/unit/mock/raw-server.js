@@ -15,18 +15,16 @@ function RawServerMock() {
 
 util.inherits(RawServerMock, events.EventEmitter);
 
-RawServerMock.prototype.listen = function(callback) {
-  if (callback) {
-    callback();
-  }
-};
+RawServerMock.prototype.listen = pass;
 
-RawServerMock.prototype.close = function(callback) {
-  if (callback) {
-    callback();
-  }
-};
+RawServerMock.prototype.close = pass;
 
 RawServerMock.prototype.createTransport = function() {
   return new TransportMock();
 };
+
+function pass(callback) {
+  if (callback) {
+    callback();
+  }
+}
