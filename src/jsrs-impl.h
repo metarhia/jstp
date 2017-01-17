@@ -204,7 +204,7 @@ char* CodePointsToUtf8(unsigned int c, std::size_t* size);
 
 // Parses a hexadecimal number into unsigned int. Whether the parsing
 // was successful is determined by the value of `ok`.
-unsigned int ReadHexNumber(const char* str, int len, bool* ok);
+unsigned int ReadHexNumber(const char* str, std::size_t len, bool* ok);
 
 // Parses a part of a JavaScript string representation after the backslash
 // character (i.e., an escape sequence without \) into an unescaped control
