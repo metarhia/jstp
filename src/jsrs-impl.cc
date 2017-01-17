@@ -148,7 +148,8 @@ v8::Local<v8::String> StringifyString(v8::Isolate* isolate,
   result_str.push_back('\'');
 
   return v8::String::NewFromUtf8(isolate, result_str.data(),
-      v8::NewStringType::kNormal, result_str.size()).ToLocalChecked();
+      v8::NewStringType::kNormal,
+      static_cast<int>(result_str.size())).ToLocalChecked();
 }
 
 const char* GetEscapedControlChar(char str, std::size_t* size) {
@@ -577,7 +578,7 @@ v8::Local<v8::Value> ParseString(v8::Isolate* isolate, const char* begin,
     return v8::String::Empty(isolate);
   }
   v8::Local<v8::String> result_str = v8::String::NewFromUtf8(isolate, result,
-      v8::NewStringType::kNormal, res_index).ToLocalChecked();
+      v8::NewStringType::kNormal, static_cast<int>(res_index)).ToLocalChecked();
   delete []result;
   return result_str;
 }
@@ -613,13 +614,13 @@ char* CodePointsToUtf8(unsigned int c, std::size_t* size) {
   return result;
 }
 
-unsigned int ReadHexNumber(const char* str, int len, bool* ok) {
+unsigned int ReadHexNumber(const char* str, std::size_t len, bool* ok) {
   char t[6];
   char* end;
   std::strncpy(t, str, len);
   t[len] = '\0';
   unsigned int result = std::strtol(t, &end, 16);
-  if (end - t != len) {
+  if (end - t != static_cast<std::ptrdiff_t>(len)) {
     *ok = false;
   } else {
     *ok = true;
@@ -719,7 +720,8 @@ v8::Local<v8::String> ParseKeyInObject(v8::Isolate* isolate, const char* begin,
         if (current_length != 0) {
           result = v8::String::NewFromUtf8(isolate, begin,
                                            v8::NewStringType::kInternalized,
-                                           current_length).ToLocalChecked();
+                                           static_cast<int>(current_length))
+                                               .ToLocalChecked();
           break;
         } else {
           isolate->ThrowException(v8::Exception::SyntaxError(
@@ -869,7 +871,7 @@ v8::Local<v8::Value> ParseArray(v8::Isolate* isolate, const char* begin,
           begin + i, end, &current_length);
       if (!(current_type == Type::kUndefined &&
             begin[i] == ']')) {
-        array->Set(current_element++, t);
+        array->Set(static_cast<uint32_t>(current_element++), t);
       }
       i += current_length;
 
