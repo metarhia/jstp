@@ -119,7 +119,7 @@ Local<String> StringifyString(Isolate* isolate, Local<String> string) {
 // string, but always at least by two, even when the function
 // returns nullptr.
 static const char* GetEscapedControlChar(char str, size_t* size) {
-  static const char* control_chars[0x20] = {
+  static constexpr const char* control_chars[0x20] = {
     "\\u0000", "\\u0001", "\\u0002",
     "\\u0003", "\\u0004", "\\u0005",
     "\\u0006", "\\u0007", "\\u0008",

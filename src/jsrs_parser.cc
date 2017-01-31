@@ -52,10 +52,10 @@ static bool GetType(const char* begin, const char* end, Type* type);
 
 // The table of parsing functions indexed with the values of the Type
 // enumeration.
-static Local<Value> (*kParseFunctions[])(Isolate*,
-                                         const char*,
-                                         const char*,
-                                         size_t*) = {
+static constexpr Local<Value> (*kParseFunctions[])(Isolate*,
+                                                   const char*,
+                                                   const char*,
+                                                   size_t*) = {
   &internal::ParseUndefined,
   &internal::ParseNull,
   &internal::ParseBool,
