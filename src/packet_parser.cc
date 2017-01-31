@@ -13,7 +13,6 @@
 using std::size_t;
 
 using v8::Array;
-using v8::Exception;
 using v8::Isolate;
 using v8::Local;
 using v8::String;

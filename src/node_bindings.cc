@@ -10,7 +10,6 @@
 #include "packet_parser.h"
 
 using v8::Array;
-using v8::Exception;
 using v8::FunctionCallbackInfo;
 using v8::HandleScope;
 using v8::Isolate;
