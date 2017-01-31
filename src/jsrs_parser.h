@@ -30,7 +30,7 @@ const char* PrepareString(v8::Isolate* isolate,
 v8::Local<v8::Value> ParseUndefined(v8::Isolate* isolate,
                                     const char*  begin,
                                     const char*  end,
-                                    std::size_t* size); 
+                                    std::size_t* size);
 
 // Parses a null value from `begin` but never past `end` and returns the parsed
 // JavaScript value. The `size` is incremented by the number of characters the
