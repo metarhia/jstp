@@ -3,9 +3,13 @@
 
 #include "packet_parser.h"
 
+#include <cstddef>
+
 #include <v8.h>
 
 #include "jsrs_parser.h"
+
+using std::size_t;
 
 using v8::Array;
 using v8::Exception;
