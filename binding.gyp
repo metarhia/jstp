@@ -1,4 +1,9 @@
 {
+  'variables': {
+    'jstp_base_cflags': ['-Wall', '-Wextra', '-Wno-unused-parameter'],
+    'jstp_debug_cflags': ['-g', '-O0'],
+    'jstp_release_cflags': ['-O3']
+  },
   'targets': [
     {
       'target_name': 'jstp',
@@ -11,21 +16,21 @@
       ],
       'configurations': {
         'Debug': {
-          'cflags': ['-g', '-O0'],
+          'cflags': ['<@(jstp_debug_cflags)'],
           'xcode_settings': {
-            'OTHER_CFLAGS': ['-g', '-O0']
+            'OTHER_CFLAGS': ['<@(jstp_debug_cflags)']
           }
         },
         'Release': {
-          'cflags': ['-O3'],
+          'cflags': ['<@(jstp_release_cflags)'],
           'xcode_settings': {
-            'OTHER_CFLAGS': ['-O3']
+            'OTHER_CFLAGS': ['<@(jstp_release_cflags)']
           }
         }
       },
-      'cflags': ['-Wall', '-Wextra', '-Wno-unused-parameter'],
+      'cflags': ['<@(jstp_base_cflags)'],
       'xcode_settings': {
-        'OTHER_CFLAGS': ['-Wall', '-Wextra', '-Wno-unused-parameter']
+        'OTHER_CFLAGS': ['<@(jstp_base_cflags)']
       }
     }
   ]
