@@ -5,11 +5,12 @@
 
 #include <cctype>
 #include <cstddef>
-
 #include <vector>
 
 #include <v8.h>
 
+using std::isalpha;
+using std::isalnum;
 using std::size_t;
 
 using v8::Array;

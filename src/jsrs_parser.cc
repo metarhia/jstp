@@ -7,14 +7,22 @@
 #include <cstddef>
 #include <cstdlib>
 #include <cstring>
-
 #include <vector>
 
 #include "common.h"
 #include "unicode_utils.h"
 
+using std::atof;
+using std::isalnum;
+using std::isalpha;
+using std::isdigit;
+using std::isxdigit;
+using std::memset;
 using std::ptrdiff_t;
 using std::size_t;
+using std::strncmp;
+using std::strncpy;
+using std::strtol;
 
 using v8::Array;
 using v8::False;

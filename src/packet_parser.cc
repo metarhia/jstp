@@ -12,6 +12,7 @@
 #include "jsrs_parser.h"
 
 using std::size_t;
+using std::strlen;
 
 using v8::Array;
 using v8::Isolate;
