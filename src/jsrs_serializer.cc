@@ -2,8 +2,12 @@
 // governed by the MIT license that can be found in the LICENSE file.
 
 #include "jsrs_serializer.h"
+
+#include <cctype>
 #include <cstddef>
+
 #include <vector>
+
 #include <v8.h>
 
 using std::size_t;

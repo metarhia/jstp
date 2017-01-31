@@ -4,6 +4,7 @@
 #include "packet_parser.h"
 
 #include <cstddef>
+#include <cstring>
 
 #include <v8.h>
 
