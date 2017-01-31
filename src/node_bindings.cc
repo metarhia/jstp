@@ -33,7 +33,7 @@ void Stringify(const FunctionCallbackInfo<Value>& args) {
 
   HandleScope scope(isolate);
 
-  Local<String> result = jstp::serializer::Stringify(isolate, args[0]);
+  auto result = jstp::serializer::Stringify(isolate, args[0]);
   args.GetReturnValue().Set(result);
 }
 
@@ -52,8 +52,7 @@ void Parse(const FunctionCallbackInfo<Value>& args) {
   HandleScope scope(isolate);
 
   String::Utf8Value str(args[0]->ToString());
-
-  Local<v8::Value> result = jstp::parser::Parse(isolate, str);
+  auto result = jstp::parser::Parse(isolate, str);
   args.GetReturnValue().Set(result);
 }
 
@@ -64,7 +63,6 @@ void ParseNetworkPackets(const FunctionCallbackInfo<Value>& args) {
     THROW_EXCEPTION(TypeError, "Wrong number of arguments");
     return;
   }
-
   if (!args[0]->IsString() || !args[1]->IsArray()) {
     THROW_EXCEPTION(TypeError, "Wrong argument type");
     return;
@@ -75,7 +73,6 @@ void ParseNetworkPackets(const FunctionCallbackInfo<Value>& args) {
   String::Utf8Value str(args[0]->ToString());
   auto array = Local<Array>::Cast(args[1]);
   auto result = jstp::packet_parser::ParseNetworkPackets(isolate, str, array);
-
   args.GetReturnValue().Set(result);
 }
 
