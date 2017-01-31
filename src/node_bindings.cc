@@ -70,7 +70,7 @@ void ParseNetworkPackets(const FunctionCallbackInfo<Value>& args) {
   HandleScope scope(isolate);
 
   String::Utf8Value str(args[0]->ToString());
-  auto array = Local<Array>::Cast(args[1]);
+  auto array = args[1].As<Array>();
   auto result = jstp::packet_parser::ParseNetworkPackets(isolate, str, array);
   args.GetReturnValue().Set(result);
 }
