@@ -10,6 +10,7 @@
 
 #include <vector>
 
+#include "common.h"
 #include "unicode_utils.h"
 
 using std::ptrdiff_t;
@@ -75,8 +76,7 @@ Local<Value> Parse(Isolate* isolate, const String::Utf8Value& in) {
 
   Type type;
   if (!GetType(to_parse, to_parse + size, &type)) {
-    isolate->ThrowException(Exception::TypeError(
-        String::NewFromUtf8(isolate, "Invalid type")));
+    THROW_EXCEPTION(TypeError, "Invalid type");
     return Undefined(isolate);
   }
 
@@ -84,8 +84,7 @@ Local<Value> Parse(Isolate* isolate, const String::Utf8Value& in) {
   Local<Value> result =
       (kParseFunctions[type])(isolate, to_parse, to_parse + size, &parsed_size);
   if (size != parsed_size) {
-    isolate->ThrowException(Exception::SyntaxError(
-        String::NewFromUtf8(isolate, "Invalid format")));
+    THROW_EXCEPTION(SyntaxError, "Invalid format");
     return Undefined(isolate);
   }
 
@@ -185,8 +184,7 @@ const char* PrepareString(Isolate*    isolate,
     } else if (str[i] == '\\' && IsLineTerminatorSequence(str + i + 1, &size)) {
       i += size;
     } else if (IsLineTerminatorSequence(str + i, &size)) {
-      isolate->ThrowException(Exception::SyntaxError(
-          String::NewFromUtf8(isolate, "Unexpected line end in string")));
+      THROW_EXCEPTION(SyntaxError, "Unexpected line end in string");
       delete[] result;
       return nullptr;
     } else {
@@ -209,8 +207,7 @@ Local<Value> ParseUndefined(Isolate*    isolate,
   } else if (*begin == 'u') {
     *size = 9;
   } else {
-    isolate->ThrowException(Exception::TypeError(
-        String::NewFromUtf8(isolate, "Invalid format of undefined value")));
+    THROW_EXCEPTION(TypeError, "Invalid format of undefined value");
   }
   return Undefined(isolate);
 }
@@ -235,9 +232,7 @@ Local<Value> ParseBool(Isolate*    isolate,
     result = False(isolate);
     *size = 5;
   } else {
-    isolate->ThrowException(Exception::TypeError(
-        String::NewFromUtf8(isolate,
-            "Invalid format: expected boolean")));
+    THROW_EXCEPTION(TypeError, "Invalid format: expected boolean");
     result = Undefined(isolate);
   }
   return result;
@@ -266,8 +261,8 @@ Local<Value> ParseNumber(Isolate*    isolate,
     number_start++;
 
     if (IsOctalDigit(*number_start)) {
-      return isolate->ThrowException(Exception::SyntaxError(
-          String::NewFromUtf8(isolate, "Use new octal literal syntax")));
+      THROW_EXCEPTION(SyntaxError, "Use new octal literal syntax");
+      return Undefined(isolate);
     } else if (*number_start == 'b') {
       base = 2;
       number_start++;
@@ -370,8 +365,7 @@ Local<Value> ParseString(Isolate*    isolate,
   }
 
   if (!is_ended) {
-    isolate->ThrowException(Exception::SyntaxError(
-        String::NewFromUtf8(isolate, "Error while parsing string")));
+    THROW_EXCEPTION(SyntaxError, "Error while parsing string");
     return String::Empty(isolate);
   }
 
@@ -407,9 +401,7 @@ static char* GetControlChar(Isolate*    isolate,
       *result = ReadHexNumber(str + 1, 2, &ok);
       if (!ok) {
         delete[] result;
-        isolate->ThrowException(Exception::SyntaxError(
-            String::NewFromUtf8(isolate,
-                "Invalid hexadecimal escape sequence")));
+        THROW_EXCEPTION(SyntaxError, "Invalid hexadecimal escape sequence");
         return nullptr;
       }
       *size = 3;
@@ -428,9 +420,7 @@ static char* GetControlChar(Isolate*    isolate,
              hex_size++) {
           if (str[hex_size + 2] == '\0') {
             delete[] result;
-            isolate->ThrowException(Exception::SyntaxError(
-                String::NewFromUtf8(isolate,
-                    "Invalid Unicode code point escape")));
+            THROW_EXCEPTION(SyntaxError, "Invalid Unicode code point escape");
             return nullptr;
           }
         }
@@ -442,9 +432,7 @@ static char* GetControlChar(Isolate*    isolate,
 
       if (!ok) {
         delete[] result;
-        isolate->ThrowException(Exception::SyntaxError(
-            String::NewFromUtf8(isolate,
-                "Invalid Unicode escape sequence")));
+        THROW_EXCEPTION(SyntaxError, "Invalid Unicode escape sequence");
         return nullptr;
       }
       char* unicode_symbol = CodePointToUtf8(symb_code, res_len);
@@ -490,9 +478,8 @@ Local<String> ParseKeyInObject(Isolate*    isolate,
       *size = offset;
       return result;
     } else {
-      isolate->ThrowException(Exception::SyntaxError(
-          String::NewFromUtf8(isolate,
-              "Invalid format in object: key is invalid string")));
+      THROW_EXCEPTION(SyntaxError,
+          "Invalid format in object: key is invalid string");
       return Local<String>();
     }
   } else {
@@ -506,8 +493,7 @@ Local<String> ParseKeyInObject(Isolate*    isolate,
                                            .ToLocalChecked();
           break;
         } else {
-          isolate->ThrowException(Exception::SyntaxError(
-              String::NewFromUtf8(isolate, "Unexpected token :")));
+          THROW_EXCEPTION(SyntaxError, "Unexpected token :");
           return Local<String>();
         }
       } else if (begin[i] == '_' || (i != 0 ?
@@ -515,9 +501,8 @@ Local<String> ParseKeyInObject(Isolate*    isolate,
                                      isalpha(begin[i]))) {
         current_length++;
       } else {
-        isolate->ThrowException(Exception::SyntaxError(
-            String::NewFromUtf8(isolate,
-                "Invalid format in object: key has invalid type")));
+        THROW_EXCEPTION(SyntaxError,
+            "Invalid format in object: key has invalid type");
         return Local<String>();
       }
     }
@@ -537,8 +522,7 @@ Local<Value> ParseValueInObject(Isolate*    isolate,
     value = (kParseFunctions[current_type])(isolate, begin, end, size);
     return value;
   } else {
-    isolate->ThrowException(Exception::TypeError(
-        String::NewFromUtf8(isolate, "Invalid type in object")));
+    THROW_EXCEPTION(TypeError, "Invalid type in object");
     return Object::New(isolate);
   }
 }
@@ -579,16 +563,12 @@ Local<Value> ParseObject(Isolate*    isolate,
                                         current_key,
                                         current_value);
         if (is_ok.IsNothing()) {
-          isolate->ThrowException(
-              Exception::Error(String::NewFromUtf8(isolate,
-                  "Cannot add property to object")));
+          THROW_EXCEPTION(Error, "Cannot add property to object");
         }
       }
       i += current_length;
       if (begin[i] != ',' && begin[i] != '}') {
-        isolate->ThrowException(Exception::SyntaxError(
-            String::NewFromUtf8(isolate,
-                "Invalid format in object")));
+        THROW_EXCEPTION(SyntaxError, "Invalid format in object");
         return Object::New(isolate);
       } else if (begin[i] == '}') {
         *size = i + 1;
@@ -629,17 +609,14 @@ Local<Value> ParseArray(Isolate*    isolate,
       current_length = 0;
 
       if (begin[i] != ',' && begin[i] != ']') {
-        isolate->ThrowException(Exception::SyntaxError(
-            String::NewFromUtf8(isolate,
-                "Invalid format in array: missed comma")));
+        THROW_EXCEPTION(SyntaxError, "Invalid format in array: missed comma");
         return Array::New(isolate);
       } else if (begin[i] == ']') {
         *size = i + 1;
         break;
       }
     } else {
-      isolate->ThrowException(Exception::TypeError(
-          String::NewFromUtf8(isolate, "Invalid type in array")));
+      THROW_EXCEPTION(TypeError, "Invalid type in array");
       return Array::New(isolate);
     }
   }

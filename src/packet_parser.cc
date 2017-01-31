@@ -7,6 +7,7 @@
 
 #include <v8.h>
 
+#include "common.h"
 #include "jsrs_parser.h"
 
 using std::size_t;
@@ -44,8 +45,7 @@ Local<String> ParseNetworkPackets(Isolate* isolate,
 
       if (parsed_chunk_size != chunk_size) {
         delete[] source;
-        isolate->ThrowException(Exception::SyntaxError(
-            String::NewFromUtf8(isolate, "Invalid format")));
+        THROW_EXCEPTION(SyntaxError, "Invalid format");
         return String::Empty(isolate);
       }
 

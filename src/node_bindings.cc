@@ -4,6 +4,7 @@
 #include <node.h>
 #include <v8.h>
 
+#include "common.h"
 #include "jsrs_parser.h"
 #include "jsrs_serializer.h"
 #include "packet_parser.h"
@@ -26,8 +27,7 @@ void Stringify(const FunctionCallbackInfo<Value>& args) {
   Isolate* isolate = args.GetIsolate();
 
   if (args.Length() != 1) {
-    isolate->ThrowException(Exception::TypeError(
-        String::NewFromUtf8(isolate, "Wrong number of arguments")));
+    THROW_EXCEPTION(TypeError, "Wrong number of arguments");
     return;
   }
 
@@ -41,13 +41,11 @@ void Parse(const FunctionCallbackInfo<Value>& args) {
   Isolate* isolate = args.GetIsolate();
 
   if (args.Length() != 1) {
-    isolate->ThrowException(Exception::TypeError(
-        String::NewFromUtf8(isolate, "Wrong number of arguments")));
+    THROW_EXCEPTION(TypeError, "Wrong number of arguments");
     return;
   }
   if (!args[0]->IsString() && !args[0]->IsUint8Array()) {
-    isolate->ThrowException(Exception::TypeError(
-        String::NewFromUtf8(isolate, "Wrong argument type")));
+    THROW_EXCEPTION(TypeError, "Wrong argument type");
     return;
   }
 
@@ -63,14 +61,12 @@ void ParseNetworkPackets(const FunctionCallbackInfo<Value>& args) {
   Isolate* isolate = args.GetIsolate();
 
   if (args.Length() != 2) {
-    isolate->ThrowException(Exception::TypeError(
-        String::NewFromUtf8(isolate, "Wrong number of arguments")));
+    THROW_EXCEPTION(TypeError, "Wrong number of arguments");
     return;
   }
 
   if (!args[0]->IsString() || !args[1]->IsArray()) {
-    isolate->ThrowException(Exception::TypeError(
-        String::NewFromUtf8(isolate, "Wrong argument type")));
+    THROW_EXCEPTION(TypeError, "Wrong argument type");
     return;
   }
 
