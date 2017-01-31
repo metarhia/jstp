@@ -1,8 +1,13 @@
 {
   'variables': {
-    'jstp_base_cflags': ['-Wall', '-Wextra', '-Wno-unused-parameter'],
-    'jstp_debug_cflags': ['-g', '-O0'],
-    'jstp_release_cflags': ['-O3']
+    'jstp_base_ccflags': [
+      '-Wall',
+      '-Wextra',
+      '-Wno-unused-parameter',
+      '-std=c++11'
+    ],
+    'jstp_debug_ccflags': ['-g', '-O0'],
+    'jstp_release_ccflags': ['-O3']
   },
   'targets': [
     {
@@ -16,21 +21,21 @@
       ],
       'configurations': {
         'Debug': {
-          'cflags': ['<@(jstp_debug_cflags)'],
+          'cflags_cc': ['<@(jstp_debug_ccflags)'],
           'xcode_settings': {
-            'OTHER_CFLAGS': ['<@(jstp_debug_cflags)']
+            'OTHER_CPLUSPLUSFLAGS': ['<@(jstp_debug_ccflags)']
           }
         },
         'Release': {
-          'cflags': ['<@(jstp_release_cflags)'],
+          'cflags_cc': ['<@(jstp_release_ccflags)'],
           'xcode_settings': {
-            'OTHER_CFLAGS': ['<@(jstp_release_cflags)']
+            'OTHER_CPLUSPLUSFLAGS': ['<@(jstp_release_ccflags)']
           }
         }
       },
-      'cflags': ['<@(jstp_base_cflags)'],
+      'cflags_cc': ['<@(jstp_base_ccflags)'],
       'xcode_settings': {
-        'OTHER_CFLAGS': ['<@(jstp_base_cflags)']
+        'OTHER_CPLUSPLUSFLAGS': ['<@(jstp_base_ccflags)']
       }
     }
   ]
