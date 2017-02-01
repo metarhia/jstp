@@ -372,6 +372,7 @@ Local<Value> ParseString(Isolate*    isolate,
   }
 
   if (!is_ended) {
+    delete[] result;
     THROW_EXCEPTION(SyntaxError, "Error while parsing string");
     return String::Empty(isolate);
   }
