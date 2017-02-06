@@ -168,7 +168,7 @@ describe('JSTP Connection', function() {
 
     it('must process anonymous handshake packets on server', function() {
       var sendSpy = chai.spy.on(serverTransportMock, 'send');
-      var startSessisionSpy = chai.spy.on(serverMock, 'startSession');
+      var startSessionSpy = chai.spy.on(serverMock, 'startSession');
 
       serverTransportMock.emitPacket({
         handshake: [0, constants.TEST_APPLICATION]
@@ -179,16 +179,16 @@ describe('JSTP Connection', function() {
         ok: constants.TEST_SESSION_ID
       }));
 
-      expect(startSessisionSpy).to.have.been.called.with(
+      expect(startSessionSpy).to.have.been.called.with(
         serverConnection, applicationMock);
 
       sendSpy.reset();
-      startSessisionSpy.reset();
+      startSessionSpy.reset();
     });
 
     it('must process authenticated handshake packets on a server', function() {
       var sendSpy = chai.spy.on(serverTransportMock, 'send');
-      var startSessisionSpy =
+      var startSessionSpy =
         chai.spy.on(serverMock, 'startSession');
 
       var packet = {
@@ -204,17 +204,17 @@ describe('JSTP Connection', function() {
         ok: constants.TEST_SESSION_ID
       }));
 
-      expect(startSessisionSpy).to.have.been.called.with(
+      expect(startSessionSpy).to.have.been.called.with(
         serverConnection, applicationMock,
         constants.TEST_USERNAME, constants.TEST_PASSWORD);
 
       sendSpy.reset();
-      startSessisionSpy.reset();
+      startSessionSpy.reset();
     });
 
     it('must process handshake packets with invalid credentials', function() {
       var sendSpy = chai.spy.on(serverTransportMock, 'end');
-      var startSessisionSpy =
+      var startSessionSpy =
         chai.spy.on(serverMock, 'startSession');
 
       var packet = {
@@ -232,11 +232,11 @@ describe('JSTP Connection', function() {
         error: [jstp.ERR_AUTH_FAILED]
       }));
 
-      expect(startSessisionSpy).to.have.been.called.with(
+      expect(startSessionSpy).to.have.been.called.with(
         serverConnection, applicationMock, constants.TEST_USERNAME, password);
 
       sendSpy.reset();
-      startSessisionSpy.reset();
+      startSessionSpy.reset();
     });
 
     it('must not process handshakes on a client', function() {
