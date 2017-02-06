@@ -129,10 +129,22 @@ Handshake packets always have ID equal to `0`. The response contains either
 the key `ok` with a value that is the session identifier or `error` that is
 an array with error code and optional error message.
 
+The action field of handshake requests specifies the authentication strategy.
+There are two supported strategies now:
+
+* `login` — authentication with login and password. The payload is an array of
+  two elements: username and password, both represented as strings.
+* `anonymous` — anonymous session request. The payload is ignored (e.g., `true`
+  or an empty array may be used). For anonymous handshakes the action field can
+  be omitted completely, `anonymous` is implied by default.
+
+More strategies may be added in the future (for example, `session` to reconnect
+to an existing session after connection break due to a network error).
+
 Successful handshake:
 
 ```javascript
-C: {handshake:[0,'example'],marcus:'7b458e1a9dda....67cb7a3e'}
+C: {handshake:[0,'example'],login:['marcus','7b458e1a9dda....67cb7a3e']}
 S: {handshake:[0],ok:'9b71d224bd62...bcdec043'}
 ```
 
@@ -153,7 +165,7 @@ Successful handshake of [Impress](https://github.com/metarhia/Impress) worker
 connecting to a private cloud controller:
 
 ```javascript
-C: {handshake:[0,'impress'],S1N5:'d3ea3d73319b...5c2e5c3a'}
+C: {handshake:[0,'impress'],login:['S1N5','d3ea3d73319b...5c2e5c3a']}
 S: {handshake:[0],ok:'PrivateCloud'}
 ```
 

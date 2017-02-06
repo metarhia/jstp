@@ -32,16 +32,28 @@ ServerMock.prototype.getClients = function() {
 ServerMock.prototype.broadcast = function() { };
 
 ServerMock.prototype.startSession =
-  function(connection, application, username, password, callback) {
+  function(connection, application, strategy, credentials, callback) {
     if (application.name !== constants.TEST_APPLICATION) {
       return callback(new jstp.RemoteError(jstp.ERR_APP_NOT_FOUND));
     }
 
-    if (username &&
-        (username !== constants.TEST_USERNAME ||
-         password !== constants.TEST_PASSWORD)) {
-      return callback(new jstp.RemoteError(jstp.ERR_AUTH_FAILED));
+    let username = null;
+    let success = false;
+
+    if (strategy === 'anonymous') {
+      success = true;
     }
 
-    callback(null, constants.TEST_SESSION_ID);
+    if (strategy === 'login' &&
+        credentials[0] === constants.TEST_USERNAME &&
+        credentials[1] === constants.TEST_PASSWORD) {
+      success = true;
+      username = constants.TEST_USERNAME;
+    }
+
+    if (success) {
+      callback(null, username, constants.TEST_SESSION_ID);
+    } else {
+      callback(new jstp.RemoteError(jstp.ERR_AUTH_FAILED));
+    }
   };

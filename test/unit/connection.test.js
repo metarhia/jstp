@@ -112,10 +112,9 @@ describe('JSTP Connection', () => {
         constants.TEST_USERNAME, constants.TEST_PASSWORD, callback);
 
       const handshakeRequest = {
-        handshake: [0, constants.TEST_APPLICATION]
+        handshake: [0, constants.TEST_APPLICATION],
+        login: [constants.TEST_USERNAME, constants.TEST_PASSWORD]
       };
-
-      handshakeRequest[constants.TEST_USERNAME] = constants.TEST_PASSWORD;
 
       expect(clientTransportMock.send)
         .to.be.called.with(jstp.stringify(handshakeRequest));
@@ -193,9 +192,8 @@ describe('JSTP Connection', () => {
 
       const packet = {
         handshake: [0, constants.TEST_APPLICATION],
+        login: [constants.TEST_USERNAME, constants.TEST_PASSWORD]
       };
-
-      packet[constants.TEST_USERNAME] = constants.TEST_PASSWORD;
 
       serverTransportMock.emitPacket(packet);
 
@@ -205,8 +203,8 @@ describe('JSTP Connection', () => {
       }));
 
       expect(startSessionSpy).to.have.been.called.with(
-        serverConnection, applicationMock,
-        constants.TEST_USERNAME, constants.TEST_PASSWORD);
+        serverConnection, applicationMock, 'login',
+        [constants.TEST_USERNAME, constants.TEST_PASSWORD]);
 
       sendSpy.reset();
       startSessionSpy.reset();
@@ -217,13 +215,11 @@ describe('JSTP Connection', () => {
       const startSessionSpy =
         chai.spy.on(serverMock, 'startSession');
 
+      const password = 'illegal password';
       const packet = {
         handshake: [0, constants.TEST_APPLICATION],
+        login: [constants.TEST_USERNAME, password]
       };
-
-      const password = 'illegal password';
-
-      packet[constants.TEST_USERNAME] = password;
 
       serverTransportMock.emitPacket(packet);
 
@@ -233,7 +229,8 @@ describe('JSTP Connection', () => {
       }));
 
       expect(startSessionSpy).to.have.been.called.with(
-        serverConnection, applicationMock, constants.TEST_USERNAME, password);
+        serverConnection, applicationMock, 'login',
+        [constants.TEST_USERNAME, password]);
 
       sendSpy.reset();
       startSessionSpy.reset();
