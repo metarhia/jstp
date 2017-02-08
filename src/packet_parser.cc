@@ -19,8 +19,8 @@ using v8::Isolate;
 using v8::Local;
 using v8::String;
 
-using jstp::parser::internal::PrepareString;
 using jstp::parser::internal::ParseObject;
+using jstp::parser::internal::SkipToNextToken;
 
 namespace jstp {
 
@@ -29,9 +29,9 @@ namespace packet_parser {
 Local<String> ParseNetworkPackets(Isolate* isolate,
                                   const String::Utf8Value& in,
                                   Local<Array> out) {
-  size_t total_size = 0;
+  const size_t total_size = in.length();
   size_t parsed_size = 0;
-  const char* source = PrepareString(isolate, *in, in.length(), &total_size);
+  const char* source = *in;
   const char* curr_chunk = source;
   int index = 0;
 
@@ -40,9 +40,15 @@ Local<String> ParseNetworkPackets(Isolate* isolate,
     parsed_size += chunk_size + 1;
 
     if (parsed_size <= total_size) {
-      size_t parsed_chunk_size = 0;
-      auto result = ParseObject(isolate, curr_chunk,
+      size_t skipped_size = SkipToNextToken(curr_chunk,
+          curr_chunk + chunk_size);
+      size_t parsed_chunk_size;
+      auto result = ParseObject(isolate, curr_chunk + skipped_size,
           curr_chunk + chunk_size, &parsed_chunk_size);
+
+      parsed_chunk_size += skipped_size;
+      parsed_chunk_size += SkipToNextToken(curr_chunk + parsed_chunk_size,
+          curr_chunk + chunk_size);
 
       if (parsed_chunk_size != chunk_size) {
         delete[] source;
@@ -56,7 +62,6 @@ Local<String> ParseNetworkPackets(Isolate* isolate,
   }
 
   auto rest = String::NewFromUtf8(isolate, curr_chunk);
-  delete[] source;
   return rest;
 }
 

@@ -7,12 +7,14 @@
 #include <cstddef>
 #include <cstdlib>
 #include <cstring>
+#include <functional>
 #include <vector>
 
 #include "common.h"
 #include "unicode_utils.h"
 
 using std::atof;
+using std::function;
 using std::isalnum;
 using std::isalpha;
 using std::isdigit;
@@ -74,28 +76,30 @@ static constexpr Local<Value> (*kParseFunctions[])(Isolate*,
 };
 
 Local<Value> Parse(Isolate* isolate, const String::Utf8Value& in) {
-  size_t size;
-  const char* to_parse =
-      internal::PrepareString(isolate, *in, in.length(), &size);
-  if (!to_parse) {
-    return Undefined(isolate);
-  }
+  const char* str = *in;
+  const size_t length = in.length();
+  const char* end = str + length;
 
   Type type;
-  if (!GetType(to_parse, to_parse + size, &type)) {
+
+  size_t start_pos = internal::SkipToNextToken(str, end);
+  if (!GetType(str + start_pos, end, &type)) {
     THROW_EXCEPTION(TypeError, "Invalid type");
     return Undefined(isolate);
   }
 
   size_t parsed_size = 0;
   Local<Value> result =
-      (kParseFunctions[type])(isolate, to_parse, to_parse + size, &parsed_size);
-  if (size != parsed_size) {
+      (kParseFunctions[type])(isolate, str + start_pos, end, &parsed_size);
+
+  parsed_size += internal::SkipToNextToken(str + start_pos + parsed_size, end);
+  parsed_size += start_pos;
+
+  if (length != parsed_size) {
     THROW_EXCEPTION(SyntaxError, "Invalid format");
     return Undefined(isolate);
   }
 
-  delete[] to_parse;
   return result;
 }
 
@@ -152,67 +156,76 @@ static bool GetType(const char* begin, const char* end, Type* type) {
 
 namespace internal {
 
-const char* PrepareString(Isolate*    isolate,
-                          const char* str,
-                          size_t      length,
-                          size_t*     new_length) {
-  char* result = new char[length + 1];
-  bool string_mode = false;
-  enum { kDisabled = 0, kOneline, kMultiline } comment_mode = kDisabled;
-  size_t j = 0;
-  size_t size = 0;
+// Returns true if `str` points to a multiline comment ending, false otherwise.
+bool IsMultilineCommentEnd(const char* str, size_t* size) {
+  if (str[0] == '*' && str[1] == '/') {
+    *size = 2;
+    return true;
+  }
+  return false;
+}
 
-  for (size_t i = 0; i < length; i++) {
-    if ((comment_mode == kDisabled) &&
-        (str[i] == '\"' || str[i] == '\'') &&
-        (i == 0 || str[i - 1] != '\\')) {
-      string_mode = !string_mode;
+// Returns count of bytes needed to skip to current comment ending.
+size_t SkipToCommentEnd(const char* str, const char* end) {
+  bool is_single_line;
+
+  switch (str[1]) {
+    case '/': {
+      is_single_line = true;
+      break;
     }
-
-    if (!string_mode) {
-      if (comment_mode == kDisabled && str[i] == '/') {
-        switch (str[i + 1]) {
-          case '/': {
-            comment_mode = kOneline;
-            break;
-          }
-          case '*': {
-            comment_mode = kMultiline;
-            break;
-          }
-        }
-      }
-
-      if (comment_mode == kDisabled) {
-        if (IsWhiteSpaceCharacter(str + i, &size) ||
-            IsLineTerminatorSequence(str + i, &size)) {
-          i += size - 1;
-        } else {
-          result[j++] = str[i];
-        }
-      }
-
-      if ((comment_mode == kOneline &&
-            IsLineTerminatorSequence(str + i, &size)) ||
-          (comment_mode == kMultiline &&
-            str[i - 1] == '*' && str[i] == '/')) {
-        comment_mode = kDisabled;
-      }
-    } else if (str[i] == '\\' && IsLineTerminatorSequence(str + i + 1, &size)) {
-      i += size;
-    } else if (IsLineTerminatorSequence(str + i, &size)) {
-      THROW_EXCEPTION(SyntaxError, "Unexpected line end in string");
-      delete[] result;
-      return nullptr;
-    } else {
-      result[j++] = str[i];
+    case '*': {
+      is_single_line = false;
+      break;
+    }
+    default: {  // In case it is not a comment start
+      return 0;
     }
   }
 
-  result[j] = '\0';
-  *new_length = j;
+  function<bool(const char*, size_t*)> end_check_func;
 
-  return result;
+  if (is_single_line) {
+    end_check_func = IsLineTerminatorSequence;
+  } else {
+    end_check_func = IsMultilineCommentEnd;
+  }
+
+  const size_t size = end - str;
+
+  size_t pos = 2;
+  size_t current_size;
+
+  for (; pos < size; pos++) {
+    if (end_check_func(str + pos, &current_size)) {
+      return pos + current_size;
+    }
+  }
+
+  return pos;
+}
+
+size_t SkipToNextToken(const char* str, const char* end) {
+  size_t pos = 0;
+  size_t current_size;
+  const size_t size = end - str;
+
+  while (pos < size) {
+    if (IsWhiteSpaceCharacter(str + pos, &current_size) ||
+        IsLineTerminatorSequence(str + pos, &current_size)) {
+      pos += current_size;
+    } else if (str[pos] == '/') {
+      size_t to_skip = SkipToCommentEnd(str + pos, end);
+      if (!to_skip) {
+        break;
+      }
+      pos += to_skip;
+    } else {
+      break;
+    }
+  }
+
+  return pos;
 }
 
 Local<Value> ParseUndefined(Isolate*    isolate,
@@ -367,15 +380,23 @@ Local<Value> ParseString(Isolate*    isolate,
     }
 
     if (begin[i] == '\\') {
-      char* symb =
-          GetControlChar(isolate, begin + ++i, &out_offset, &in_offset);
-      if (!symb) {
-        return String::Empty(isolate);
+      if (IsLineTerminatorSequence(begin + i + 1, &in_offset)) {
+        i += in_offset;
+      } else {
+        char* symb =
+            GetControlChar(isolate, begin + ++i, &out_offset, &in_offset);
+        if (!symb) {
+          return String::Empty(isolate);
+        }
+        strncpy(result + res_index, symb, out_offset);
+        delete[] symb;
+        i += in_offset - 1;
+        res_index += out_offset;
       }
-      strncpy(result + res_index, symb, out_offset);
-      delete[] symb;
-      i += in_offset - 1;
-      res_index += out_offset;
+    } else if (IsLineTerminatorSequence(begin + i, &in_offset)) {
+      delete[] result;
+      THROW_EXCEPTION(SyntaxError, "Unexpected line end in string");
+      return String::Empty(isolate);
     } else {
       result[res_index++] = begin[i];
     }
@@ -524,7 +545,11 @@ Local<String> ParseKeyInObject(Isolate*    isolate,
   } else {
     size_t current_length = 0;
     for (size_t i = 0; i < *size; i++) {
-      if (begin[i] == ':') {
+      if (begin[i] == '_' || (i != 0 &&
+                              isalnum(begin[i])) ||
+                              isalpha(begin[i])) {
+        current_length++;
+      } else {
         if (current_length != 0) {
           result = String::NewFromUtf8(isolate, begin,
                                        NewStringType::kInternalized,
@@ -532,17 +557,9 @@ Local<String> ParseKeyInObject(Isolate*    isolate,
                                            .ToLocalChecked();
           break;
         } else {
-          THROW_EXCEPTION(SyntaxError, "Unexpected token :");
+          THROW_EXCEPTION(SyntaxError, "Unexpected identifier");
           return Local<String>();
         }
-      } else if (begin[i] == '_' || (i != 0 ?
-                                     isalnum(begin[i]) :
-                                     isalpha(begin[i]))) {
-        current_length++;
-      } else {
-        THROW_EXCEPTION(SyntaxError,
-            "Invalid format in object: key has invalid type");
-        return Local<String>();
       }
     }
     *size = current_length;
@@ -579,12 +596,9 @@ Local<Value> ParseObject(Isolate*    isolate,
 
   for (size_t i = 1; i < *size; i++) {
     if (key_mode) {
+      i += SkipToNextToken(begin + i, end);
       if (begin[i] == '}') {
-        if (begin[i - 1] != ',') {  // In case of empty object
-          *size = 2;
-        } else {                    // In case of trailing comma
-          *size = i + 1;
-        }
+        *size = i + 1;
         break;
       }
       current_key = ParseKeyInObject(isolate,
@@ -592,7 +606,13 @@ Local<Value> ParseObject(Isolate*    isolate,
                                      end,
                                      &current_length);
       i += current_length;
+      i += SkipToNextToken(begin + i, end);
+      if (begin[i] != ':') {
+        THROW_EXCEPTION(SyntaxError, "Unexpected token");
+        return Object::New(isolate);
+      }
     } else {
+      i += SkipToNextToken(begin + i, end);
       current_value = ParseValueInObject(isolate,
                                          begin + i,
                                          end,
@@ -606,6 +626,7 @@ Local<Value> ParseObject(Isolate*    isolate,
         }
       }
       i += current_length;
+      i += SkipToNextToken(begin + i, end);
       if (begin[i] != ',' && begin[i] != '}') {
         THROW_EXCEPTION(SyntaxError, "Invalid format in object");
         return Object::New(isolate);
@@ -626,14 +647,19 @@ Local<Value> ParseArray(Isolate*    isolate,
   auto array = Array::New(isolate);
   size_t current_length = 0;
   *size = end - begin;
-  if (*begin == '[' && *(begin + 1) == ']') {  // In case of empty array
-    *size = 2;
-    return array;
-  }
+
+  bool is_empty = true;
 
   size_t current_element = 0;
+  Type current_type;
+
   for (size_t i = 1; i < *size; i++) {
-    Type current_type;
+    i += SkipToNextToken(begin + i, end);
+    if (is_empty && begin[i] == ']') { // In case of empty array
+      *size = i + 1;
+      return array;
+    }
+
     bool valid = GetType(begin + i, end, &current_type);
     if (valid) {
       auto t = kParseFunctions[current_type](isolate,
@@ -642,9 +668,12 @@ Local<Value> ParseArray(Isolate*    isolate,
                                              &current_length);
       if (!(current_type == Type::kUndefined && begin[i] == ']')) {
         array->Set(static_cast<uint32_t>(current_element++), t);
+        is_empty = false;
       }
 
       i += current_length;
+      i += SkipToNextToken(begin + i, end);
+
       current_length = 0;
 
       if (begin[i] != ',' && begin[i] != ']') {
