@@ -19,11 +19,8 @@ v8::Local<v8::Value> Parse(v8::Isolate* isolate,
 
 namespace internal {
 
-// Prepares a source string for parsing throwing out whitespace and comments.
-const char* PrepareString(v8::Isolate* isolate,
-                          const char*  str,
-                          std::size_t  length,
-                          std::size_t* new_length);
+// Returns count of bytes needed to skip to next token.
+size_t SkipToNextToken(const char* str, const char* end);
 
 // Parses an undefined value from `begin` but never past `end` and returns the
 // parsed JavaScript value. The `size` is incremented by the number of
