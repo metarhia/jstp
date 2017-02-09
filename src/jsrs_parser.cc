@@ -103,41 +103,49 @@ static bool GetType(const char* begin, const char* end, Type* type) {
   bool result = true;
   switch (*begin) {
     case ',':
-    case ']':
+    case ']': {
       *type = Type::kUndefined;
       break;
-    case '{':
+    }
+    case '{': {
       *type = Type::kObject;
       break;
-    case '[':
+    }
+    case '[': {
       *type = Type::kArray;
       break;
+    }
     case '\"':
-    case '\'':
+    case '\'': {
       *type = Type::kString;
       break;
+    }
     case 't':
-    case 'f':
+    case 'f': {
       *type = Type::kBool;
       break;
-    case 'n':
+    }
+    case 'n': {
       *type = Type::kNull;
       if (begin + 4 <= end) {
         result = (strncmp(begin, "null", 4) == 0);
       }
       break;
-    case 'u':
+    }
+    case 'u': {
       *type = Type::kUndefined;
       if (begin + 9 <= end) {
         result = (strncmp(begin, "undefined", 9) == 0);
       }
       break;
-    default:
+    }
+    default: {
       result = false;
       if (isdigit(*begin) || *begin == '.' || *begin == '+' || *begin == '-') {
         *type = Type::kNumber;
         result = true;
       }
+    }
   }
   return result;
 }
@@ -164,12 +172,14 @@ const char* PrepareString(Isolate*    isolate,
     if (!string_mode) {
       if (comment_mode == kDisabled && str[i] == '/') {
         switch (str[i + 1]) {
-          case '/':
+          case '/': {
             comment_mode = kOneline;
             break;
-          case '*':
+          }
+          case '*': {
             comment_mode = kMultiline;
             break;
+          }
         }
       }
 
@@ -397,13 +407,34 @@ static char* GetControlChar(Isolate*    isolate,
   *res_len = 1;
   bool ok;
   switch (str[0]) {
-    case 'b': *result = '\b'; break;
-    case 'f': *result = '\f'; break;
-    case 'n': *result = '\n'; break;
-    case 'r': *result = '\r'; break;
-    case 't': *result = '\t'; break;
-    case 'v': *result = '\v'; break;
-    case '0': *result = '\0'; break;
+    case 'b': {
+      *result = '\b';
+      break;
+    }
+    case 'f': {
+      *result = '\f';
+      break;
+    }
+    case 'n': {
+      *result = '\n';
+      break;
+    }
+    case 'r': {
+      *result = '\r';
+      break;
+    }
+    case 't': {
+      *result = '\t';
+      break;
+    }
+    case 'v': {
+      *result = '\v';
+      break;
+    }
+    case '0': {
+      *result = '\0';
+      break;
+    }
 
     case 'x': {
       *result = ReadHexNumber(str + 1, 2, &ok);
