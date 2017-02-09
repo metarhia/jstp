@@ -42,12 +42,13 @@ bool IsWhiteSpaceCharacter(const char* str, size_t* size) {
   } else {
     bool is_multibyte_space = false;
     switch (str[0]) {
-      case '\xE1':
+      case '\xE1': {
         if (str[1] == '\xBB' && str[2] == '\xBF') {
           is_multibyte_space = true;
         }
         break;
-      case '\xE2':
+      }
+      case '\xE2': {
         if ((str[1] == '\x80' &&
             ((static_cast<unsigned char>(str[2]) & 0x7F) <= 0xA ||
                                          str[2] == '\xAF'))     ||
@@ -55,16 +56,19 @@ bool IsWhiteSpaceCharacter(const char* str, size_t* size) {
           is_multibyte_space = true;
         }
         break;
-      case '\xE3':
+      }
+      case '\xE3': {
         if (str[1] == '\x80' && str[2] == '\x80') {
           is_multibyte_space = true;
         }
         break;
-      case '\xEF':
+      }
+      case '\xEF': {
         if (str[1] == '\xBB' && str[2] == '\xBF') {
           is_multibyte_space = true;
         }
         break;
+      }
     }
     if (is_multibyte_space) {
       *size = 3;
