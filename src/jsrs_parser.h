@@ -4,6 +4,8 @@
 #ifndef SRC_JSRS_PARSER_H_
 #define SRC_JSRS_PARSER_H_
 
+#include <cstddef>
+
 #include <v8.h>
 
 namespace jstp {
