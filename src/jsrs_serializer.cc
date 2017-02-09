@@ -146,13 +146,14 @@ static const char* GetEscapedControlChar(char str, size_t* size) {
     case '\\': return "\\\\";
     case '\'': return "\\'";
     case 0x7F: return "\\u007f";
-    default:
+    default: {
       if (str < 0x20) {
         *size = 6;
         return control_chars[static_cast<size_t>(str)];
       } else {
         return nullptr;
       }
+    }
   }
 }
 
