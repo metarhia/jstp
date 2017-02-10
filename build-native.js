@@ -4,11 +4,14 @@ const fs = require('fs');
 const childProcess = require('child_process');
 
 const EXIT_SUCCESS = 0;
+const EXIT_FAIL = 1;
 
 const nodeGyp = childProcess.spawn('node-gyp', ['rebuild'], { shell: true });
 const errorLines = [];
 
-nodeGyp.on('error', showWarning);
+nodeGyp.on('error', () => {
+  handleBuildError(EXIT_FAIL);
+});
 
 nodeGyp.stdout.pipe(process.stdout);
 
@@ -23,12 +26,16 @@ nodeGyp.on('exit', (code) => {
     fs.writeFileSync('builderror.log', errorLines.join('\n'));
   }
   if (code !== EXIT_SUCCESS) {
-    showWarning();
+    handleBuildError(code);
   }
   process.exit();
 });
 
-function showWarning() {
-  console.warn('Could not build JSTP native extensions, ' +
-    'JavaScript implementation will be used instead.');
+function handleBuildError(code) {
+  if (process.env.TRAVIS) {
+    process.exit(code);
+  } else {
+    console.warn('Could not build JSTP native extensions, ' +
+      'JavaScript implementation will be used instead.');
+  }
 }
