@@ -452,10 +452,6 @@ static char* GetControlChar(Isolate*    isolate,
       *result = '\v';
       break;
     }
-    case '0': {
-      *result = '\0';
-      break;
-    }
 
     case 'x': {
       *result = ReadHexNumber(str + 1, 2, &ok);
