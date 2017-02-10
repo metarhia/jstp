@@ -350,10 +350,11 @@ Local<Value> ParseIntegerNumber(Isolate*    isolate,
   return Integer::New(isolate, value);
 }
 
-static char* GetControlChar(Isolate*    isolate,
-                            const char* str,
-                            size_t*     res_len,
-                            size_t*     size);
+static bool GetControlChar(Isolate*    isolate,
+                           const char* str,
+                           size_t*     res_len,
+                           size_t*     size,
+                           char*       write_to);
 
 Local<Value> ParseString(Isolate*    isolate,
                          const char* begin,
@@ -361,7 +362,6 @@ Local<Value> ParseString(Isolate*    isolate,
                          size_t*     size) {
   *size = end - begin;
   char* result = new char[*size + 1];
-  memset(result, 0, *size + 1);
 
   enum { kApostrophe = 0, kQMarks} string_mode = (*begin == '\'') ?
                                                  kApostrophe :
@@ -375,7 +375,6 @@ Local<Value> ParseString(Isolate*    isolate,
         (string_mode == kApostrophe && begin[i] == '\'')) {
       is_ended = true;
       *size = i + 1;
-      result[res_index] = '\0';
       break;
     }
 
@@ -383,13 +382,12 @@ Local<Value> ParseString(Isolate*    isolate,
       if (IsLineTerminatorSequence(begin + i + 1, &in_offset)) {
         i += in_offset;
       } else {
-        char* symb =
-            GetControlChar(isolate, begin + ++i, &out_offset, &in_offset);
-        if (!symb) {
+        bool ok = GetControlChar(isolate, begin + ++i, &out_offset, &in_offset,
+                                 result + res_index);
+        if (!ok) {
+          delete[] result;
           return String::Empty(isolate);
         }
-        strncpy(result + res_index, symb, out_offset);
-        delete[] symb;
         i += in_offset - 1;
         res_index += out_offset;
       }
@@ -418,51 +416,51 @@ static unsigned int ReadHexNumber(const char* str, size_t len, bool* ok);
 
 // Parses a part of a JavaScript string representation after the backslash
 // character (i.e., an escape sequence without \) into an unescaped control
-// character.
-static char* GetControlChar(Isolate*    isolate,
-                            const char* str,
-                            size_t*     res_len,
-                            size_t*     size) {
-  char* result = new char[5];
+// character and writes it to `write_to`.
+// Returns true if no error occured, false otherwise.
+static bool GetControlChar(Isolate*    isolate,
+                           const char* str,
+                           size_t*     res_len,
+                           size_t*     size,
+                           char*       write_to) {
   *size = 1;
   *res_len = 1;
   bool ok;
   switch (str[0]) {
     case 'b': {
-      *result = '\b';
+      *write_to = '\b';
       break;
     }
     case 'f': {
-      *result = '\f';
+      *write_to = '\f';
       break;
     }
     case 'n': {
-      *result = '\n';
+      *write_to = '\n';
       break;
     }
     case 'r': {
-      *result = '\r';
+      *write_to = '\r';
       break;
     }
     case 't': {
-      *result = '\t';
+      *write_to = '\t';
       break;
     }
     case 'v': {
-      *result = '\v';
+      *write_to = '\v';
       break;
     }
     case '0': {
-      *result = '\0';
+      *write_to = '\0';
       break;
     }
 
     case 'x': {
-      *result = ReadHexNumber(str + 1, 2, &ok);
+      *write_to = static_cast<char>(ReadHexNumber(str + 1, 2, &ok));
       if (!ok) {
-        delete[] result;
         THROW_EXCEPTION(SyntaxError, "Invalid hexadecimal escape sequence");
-        return nullptr;
+        return false;
       }
       *size = 3;
       break;
@@ -479,9 +477,8 @@ static char* GetControlChar(Isolate*    isolate,
              str[hex_size + 2] != '}' && hex_size <= 6;
              hex_size++) {
           if (str[hex_size + 2] == '\0') {
-            delete[] result;
             THROW_EXCEPTION(SyntaxError, "Invalid Unicode code point escape");
-            return nullptr;
+            return false;
           }
         }
         symb_code = ReadHexNumber(str + 2, hex_size, &ok);
@@ -491,20 +488,19 @@ static char* GetControlChar(Isolate*    isolate,
       }
 
       if (!ok) {
-        delete[] result;
         THROW_EXCEPTION(SyntaxError, "Invalid Unicode escape sequence");
-        return nullptr;
+        return false;
       }
-      char* unicode_symbol = CodePointToUtf8(symb_code, res_len);
-      delete[] result;
-      return unicode_symbol;
+      CodePointToUtf8(symb_code, res_len, write_to);
+      break;
     }
 
-    default:
-      *result = str[0];
+    default: {
+      *write_to = str[0];
+    }
   }
 
-  return result;
+  return true;
 }
 
 // Parses a hexadecimal number into unsigned int. Whether the parsing

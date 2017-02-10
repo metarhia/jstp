@@ -78,9 +78,8 @@ bool IsWhiteSpaceCharacter(const char* str, size_t* size) {
   return false;
 }
 
-char* CodePointToUtf8(unsigned int c, size_t* size) {
-  char* result = new char[4];
-  char* b = result;
+void CodePointToUtf8(unsigned int c, size_t* size, char* write_to) {
+  char* b = write_to;
   if (c < 0x80) {
     *b++ = c;
     *size = 1;
@@ -89,8 +88,8 @@ char* CodePointToUtf8(unsigned int c, size_t* size) {
     *b++ = 128 + c % 64;
     *size = 2;
   } else if (c - 0xd800u < 0x800) {
-    delete[] result;
-    return CodePointToUtf8(0xFFFD, size);
+    CodePointToUtf8(0xFFFD, size, write_to);
+    return;
   } else if (c < 0x10000) {
      *b++ = 224 + c / 4096;
      *b++ = 128 + c / 64 % 64;
@@ -103,10 +102,9 @@ char* CodePointToUtf8(unsigned int c, size_t* size) {
      *b++ = 128 + c % 64;
      *size = 4;
   } else {
-    delete[] result;
-    return CodePointToUtf8(0xFFFD, size);
+    CodePointToUtf8(0xFFFD, size, write_to);
+    return;
   }
-  return result;
 }
 
 }  // namespace unicode_utils
