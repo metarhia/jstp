@@ -655,7 +655,7 @@ Local<Value> ParseArray(Isolate*    isolate,
 
   for (size_t i = 1; i < *size; i++) {
     i += SkipToNextToken(begin + i, end);
-    if (is_empty && begin[i] == ']') { // In case of empty array
+    if (is_empty && begin[i] == ']') {  // In case of empty array
       *size = i + 1;
       return array;
     }
