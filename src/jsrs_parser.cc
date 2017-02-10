@@ -386,7 +386,7 @@ Local<Value> ParseString(Isolate*    isolate,
                                  result + res_index);
         if (!ok) {
           delete[] result;
-          return String::Empty(isolate);
+          return Local<String>();
         }
         i += in_offset - 1;
         res_index += out_offset;
@@ -394,7 +394,7 @@ Local<Value> ParseString(Isolate*    isolate,
     } else if (IsLineTerminatorSequence(begin + i, &in_offset)) {
       delete[] result;
       THROW_EXCEPTION(SyntaxError, "Unexpected line end in string");
-      return String::Empty(isolate);
+      return Local<String>();
     } else {
       result[res_index++] = begin[i];
     }
@@ -403,7 +403,7 @@ Local<Value> ParseString(Isolate*    isolate,
   if (!is_ended) {
     delete[] result;
     THROW_EXCEPTION(SyntaxError, "Error while parsing string");
-    return String::Empty(isolate);
+    return Local<String>();
   }
 
   Local<String> result_str = String::NewFromUtf8(isolate, result,

@@ -53,7 +53,7 @@ Local<String> ParseNetworkPackets(Isolate* isolate,
       if (parsed_chunk_size != chunk_size) {
         delete[] source;
         THROW_EXCEPTION(SyntaxError, "Invalid format");
-        return String::Empty(isolate);
+        return Local<String>();
       }
 
       out->Set(index++, result);
