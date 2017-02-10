@@ -20,9 +20,9 @@ bool IsLineTerminatorSequence(const char* str, std::size_t* size);
 // code point (1, 2, 3).
 bool IsWhiteSpaceCharacter(const char* str, std::size_t* size);
 
-// Encodes a Unicode code point in UTF-8. `size` will receive the number of
-// bytes used (1, 2, 3 or 4).
-char* CodePointToUtf8(unsigned int c, std::size_t* size);
+// Encodes a Unicode code point in UTF-8 and writes it to `write_to`.
+// `size` will receive the number of bytes used (1, 2, 3 or 4).
+void CodePointToUtf8(unsigned int c, std::size_t* size, char* write_to);
 
 }  // namespace unicode_utils
 
