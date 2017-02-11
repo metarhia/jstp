@@ -1,8 +1,11 @@
 # JSTP / JavaScript Transfer Protocol
 
-[![Build Status](https://travis-ci.org/metarhia/JSTP.svg?branch=master)](https://travis-ci.org/metarhia/JSTP)
-[![Dependency Status](https://david-dm.org/metarhia/JSTP.svg)](https://david-dm.org/metarhia/JSTP)
-[![DevDependency Status](https://david-dm.org/metarhia/JSTP/dev-status.svg)](https://david-dm.org/metarhia/JSTP)
+[![Travis CI](https://travis-ci.org/metarhia/JSTP.svg?branch=master)](https://travis-ci.org/metarhia/JSTP)
+[![bitHound Dependencies](https://www.bithound.io/github/metarhia/JSTP/badges/dependencies.svg)](https://www.bithound.io/github/metarhia/JSTP/master/dependencies/npm)
+[![bitHound Score](https://www.bithound.io/github/metarhia/JSTP/badges/score.svg)](https://www.bithound.io/github/metarhia/JSTP)
+[![NPM Version](https://badge.fury.io/js/metarhia-jstp.svg)](https://badge.fury.io/js/metarhia-jstp)
+[![NPM Downloads/Month](https://img.shields.io/npm/dm/metarhia-jstp.svg)](https://www.npmjs.com/package/metarhia-jstp)
+[![NPM Downloads](https://img.shields.io/npm/dt/metarhia-jstp.svg)](https://www.npmjs.com/package/metarhia-jstp)
 
 ## Installation
 

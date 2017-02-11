@@ -1,8 +1,9 @@
-[![TravisCI](https://img.shields.io/travis/metarhia/JSTP.svg?branch=master&style=flat-square)](https://travis-ci.org/metarhia/JSTP)
-[![bitHound](https://img.shields.io/bithound/dependencies/github/metarhia/JSTP.svg?style=flat-square)](https://www.bithound.io/github/metarhia/JSTP)
-[![NPM Version](https://img.shields.io/npm/v/metarhia-jstp.svg?style=flat-square)](https://www.npmjs.com/package/metarhia-jstp)
-[![NPM Downloads/Month](https://img.shields.io/npm/dm/metarhia-jstp.svg?style=flat-square)](https://www.npmjs.com/package/metarhia-jstp)
-[![NPM Downloads](https://img.shields.io/npm/dt/metarhia-jstp.svg?style=flat-square)](https://www.npmjs.com/package/metarhia-jstp)
+[![Travis CI](https://travis-ci.org/metarhia/JSTP.svg?branch=master)](https://travis-ci.org/metarhia/JSTP)
+[![bitHound Dependencies](https://www.bithound.io/github/metarhia/JSTP/badges/dependencies.svg)](https://www.bithound.io/github/metarhia/JSTP/master/dependencies/npm)
+[![bitHound Score](https://www.bithound.io/github/metarhia/JSTP/badges/score.svg)](https://www.bithound.io/github/metarhia/JSTP)
+[![NPM Version](https://badge.fury.io/js/metarhia-jstp.svg)](https://badge.fury.io/js/metarhia-jstp)
+[![NPM Downloads/Month](https://img.shields.io/npm/dm/metarhia-jstp.svg)](https://www.npmjs.com/package/metarhia-jstp)
+[![NPM Downloads](https://img.shields.io/npm/dt/metarhia-jstp.svg)](https://www.npmjs.com/package/metarhia-jstp)
 
 # JSTP / JavaScript Transfer Protocol
 
