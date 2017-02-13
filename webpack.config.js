@@ -19,32 +19,22 @@ module.exports = {
     library: ['api', 'jstp']
   },
   module: {
-    loaders: [{
+    rules: [{
       test: /\.js$/,
-      loader: 'babel-loader?cacheDirectory=true'
+      loader: 'babel-loader',
+      options: {
+        cacheDirectory: true
+      }
     }]
   },
   devtool: 'source-map',
-  node: {
-    Buffer: true,
-  },
   bail: true,
   plugins: [
-    new webpack.optimize.OccurenceOrderPlugin(),
-    new webpack.optimize.DedupePlugin(),
     new webpack.optimize.UglifyJsPlugin({
-      compressor: {
-        screw_ie8: true,  // eslint-disable-line camelcase
-        warnings: false
-      },
-      mangle: {
-        screw_ie8: true  // eslint-disable-line camelcase
-      },
-      output: {
-        comments: false,
-        screw_ie8: true  // eslint-disable-line camelcase
-      }
+      sourceMap: true
     }),
-    new webpack.BannerPlugin(license)
+    new webpack.BannerPlugin({
+      banner: license
+    })
   ]
 };
