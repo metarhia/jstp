@@ -208,7 +208,7 @@ function processCommits(commits) {
   for (const commit of commits) {
     let semverTag = '';
     if (commit.semver !== 'patch') {
-      semverTag = ` - **${commit.semver}**`;
+      semverTag = ` **\\[semver-${commit.semver}\\]**`;
     }
 
     console.log(`${commit.hash} ${commit.message}${semverTag}`);
