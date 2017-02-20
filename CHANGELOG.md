@@ -28,7 +28,6 @@ Notable changes:
    *(Alexey Orlenko)*
    [#78](https://github.com/metarhia/JSTP/pull/78)
 
-
 All changes:
 
  * **server:** clean internal structures on close
