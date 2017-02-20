@@ -206,12 +206,12 @@ function processCommits(commits) {
   let changelog = '';
 
   for (const commit of commits) {
-    let semverTag = '';
+    let consoleMessage = `${commit.hash} ${commit.message}`;
     if (commit.semver !== 'patch') {
-      semverTag = ` **\\[semver-${commit.semver}\\]**`;
+      consoleMessage += ` - **${commit.semver.toUpperCase()}**`;
     }
+    console.log(consoleMessage);
 
-    console.log(`${commit.hash} ${commit.message}${semverTag}`);
     script += ` \\\n  ${commit.hash}`;
 
     const colonPos = commit.message.indexOf(':');
@@ -225,8 +225,10 @@ function processCommits(commits) {
 
     const url = `https://github.com/${commit.repo}/pull/${commit.pr}`;
     const pr = `[#${commit.pr}](${url})`;
-    changelog += ` * ${message}\n   (*${commit.author}*)\n   ` +
-                 `${pr}${semverTag}\n`;
+    changelog += ` * ${message}\n   (*${commit.author}*)\n   ${pr}\n`;
+    if (commit.semver !== 'patch') {
+      changelog += `   **\\[semver-${commit.semver}\\]**\n`;
+    }
   }
 
   script += '\n';
