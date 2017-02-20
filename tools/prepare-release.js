@@ -92,7 +92,7 @@ function getCommandOutput(cmd) {
 }
 
 function getMetadata(commitHash) {
-  const command = 'git log --format="%aN &lt;%aE&gt;%n%B" -n 1 ' + commitHash;
+  const command = 'git log --format="%aN%n%B" -n 1 ' + commitHash;
   return getCommandOutput(command).then((output) => {
     const firstLfIndex = output.indexOf('\n');
     const secondLfIndex = output.indexOf('\n', firstLfIndex + 1);
