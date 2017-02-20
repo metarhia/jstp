@@ -153,7 +153,9 @@ function httpsGetJson(options) {
         if (err) return reject(err);
 
         if (res.statusCode !== 200) {
-          const message = `Request failed with status code ${res.statusCode}`;
+          const url = `https://${options.host}${options.path}`;
+          const message = `Request to ${url} failed with status code ` +
+                          res.statusCode;
           return reject(`${message}\n${json}`);
         }
 
