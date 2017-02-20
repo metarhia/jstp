@@ -225,7 +225,7 @@ function processCommits(commits) {
 
     const url = `https://github.com/${commit.repo}/pull/${commit.pr}`;
     const pr = `[#${commit.pr}](${url})`;
-    changelog += ` * ${message}\n   (*${commit.author}*)\n   ${pr}\n`;
+    changelog += ` * ${message}\n   *(${commit.author})*\n   ${pr}\n`;
     if (commit.semver !== 'patch') {
       changelog += `   **\\[semver-${commit.semver}\\]**\n`;
     }
