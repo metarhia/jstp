@@ -14,8 +14,10 @@ dev/
 # node-gyp build
 build/
 
-# Built docs
+# Docs
+doc/
 site/
+mkdocs.yml
 
 # Python bytecode
 *.pyc
