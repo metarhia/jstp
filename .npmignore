@@ -4,7 +4,6 @@
 *.heapsnapshot
 
 # Development helpers
-crlf.js
 dev/
 
 # Project files
