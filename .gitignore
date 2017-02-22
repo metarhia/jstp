@@ -5,7 +5,6 @@ node_modules
 *.heapsnapshot
 
 # Development helpers
-crlf.js
 dev/
 
 # Project files
