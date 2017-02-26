@@ -64,8 +64,8 @@
     "lint": "eslint . && remark .",
     "install": "npm run rebuild-node",
     "build": "npm run build-node && npm run build-browser",
-    "build-node": "node build-native",
-    "rebuild-node": "node build-native --rebuild",
+    "build-node": "node tools/build-native",
+    "rebuild-node": "node tools/build-native --rebuild",
     "build-browser": "webpack --progress --colors",
     "prepublish": "npm run build-browser",
     "pretest": "npm run build-node"
