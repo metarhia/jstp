@@ -2,10 +2,10 @@
 
 'use strict';
 
-const childProcess = require('child_process');
-const fs = require('fs');
 const https = require('https');
 const path = require('path');
+
+const { getCommandOutput, writeFile } = require('./common');
 
 const commandName = path.relative('.', __filename);
 const help = `\
@@ -82,14 +82,6 @@ getCommandOutput('git cherry ' + branch).then((cherryOut) => {
   console.error(message);
   process.exit(1);
 });
-
-function getCommandOutput(cmd) {
-  const exec = promisify(childProcess.exec);
-  return exec(cmd).then((stdout, stderr) => {
-    if (stderr) console.error(stderr);
-    return stdout;
-  });
-}
 
 function getMetadata(commitHash) {
   const command = 'git log --format="%aN%n%B" -n 1 ' + commitHash;
@@ -188,17 +180,6 @@ function getStreamData(stream, callback) {
   stream.on('error', callback);
 }
 
-function promisify(fn) {
-  return (...args) => (
-    new Promise((resolve, reject) => {
-      fn(...args, (error, ...result) => {
-        if (error) reject(error);
-        else resolve(...result);
-      });
-    })
-  );
-}
-
 function processCommits(commits) {
   commits = filterCommits(commits, maxLevel);
 
@@ -233,7 +214,6 @@ function processCommits(commits) {
 
   script += '\n';
 
-  const writeFile = promisify(fs.writeFile);
   return Promise.all([
     writeFile(`${branch}-apply-commits.sh`, script),
     writeFile(`${branch}-commits.md`, changelog)
