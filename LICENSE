@@ -3,9 +3,8 @@ JavaScript Transfer Protocol ("JSTP") is licensed for use as follows:
 """
 MIT License
 
-Copyright (c) 2016 JSTP project authors
-(see https://github.com/metarhia/JSTP/blob/master/AUTHORS for full list)
-and other JSTP contributors.
+Copyright (c) 2016–2017 JSTP contributors
+(see https://github.com/metarhia/JSTP/blob/master/AUTHORS).
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
