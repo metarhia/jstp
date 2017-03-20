@@ -91,16 +91,16 @@ void CodePointToUtf8(unsigned int c, size_t* size, char* write_to) {
     CodePointToUtf8(0xFFFD, size, write_to);
     return;
   } else if (c < 0x10000) {
-     *b++ = 224 + c / 4096;
-     *b++ = 128 + c / 64 % 64;
-     *b++ = 128 + c % 64;
-     *size = 3;
+    *b++ = 224 + c / 4096;
+    *b++ = 128 + c / 64 % 64;
+    *b++ = 128 + c % 64;
+    *size = 3;
   } else if (c < 0x110000) {
-     *b++ = 240 + c / 262144;
-     *b++ = 128 + c / 4096 % 64;
-     *b++ = 128 + c / 64 % 64;
-     *b++ = 128 + c % 64;
-     *size = 4;
+    *b++ = 240 + c / 262144;
+    *b++ = 128 + c / 4096 % 64;
+    *b++ = 128 + c / 64 % 64;
+    *b++ = 128 + c % 64;
+    *size = 4;
   } else {
     CodePointToUtf8(0xFFFD, size, write_to);
     return;
