@@ -38,12 +38,12 @@ wsClient.on('error', (error) => {
   common.fatal('WebSocket client error: ' + error);
 });
 
-function onConnect(client, error, connection, sessionId, api) {
+function onConnect(client, error, connection, api) {
   if (error) {
     common.fatal('Could not connect: ' + error);
   }
 
-  console.log('Connected, session ID is', sessionId);
+  console.log('Connected, session ID is', connection.sessionId);
 
   connection.on('error', (error) => {
     common.fatal('Connection error: ' +  error);
