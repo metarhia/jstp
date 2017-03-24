@@ -1,6 +1,6 @@
 'use strict';
 
-// TODO: feature request: support jstp://server and jstps://server
+// TODO: support jstp://server and jstps://server
 
 const jstp = require('.');
 const readline = require('readline');
@@ -8,45 +8,74 @@ const readline = require('readline');
 const log = console.log;
 const logErr = console.error;
 
+const commandProcessor = {};
+const lineProcessor = {};
+
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
-  completer: completer
+  completer
 });
+
+rl.on('line', (line) => {
+  const [type, leftover] = _split(line.trim(), ' ', 1);
+  if (!type) {
+    return rl.prompt(true);
+  }
+  const processor = lineProcessor[type];
+  if (!processor) {
+    logErr(`Unknown command ${type}`);
+  } else {
+    processor(leftover, (err, result) => {
+      if (err) return logErr(`${err.name} occurred: ${err.message}`);
+      log(result);
+    });
+  }
+  rl.prompt(true);
+});
+
+rl.on('SIGINT', () => {
+  rl.close();
+});
+
+function completer(line) {
+  return [[], line];
+}
 
 const state = {
   client: null,
   connection: null
 };
 
-const methodProcessor = {
-  call: (interfaceName, methodName, args, callback) => {
-    state.connection.callMethod(interfaceName, methodName, args.map(jstp.parse),
-        callback);
-  },
-  event: (interfaceName, eventName, args, callback) => {
-    state.connection.emitRemoteEvent(interfaceName, eventName,
-        args.map(jstp.parse));
-    callback();
-  },
-  connect: (host, port, appName, callback) => {
-    state.client = jstp.tcp.createClient({host, port, secure: true});
-    state.client.connectAndHandshake(appName, null, null,
-        (err, connection) => {
-      if (!err) state.connection = connection;
-      return callback(err)
-    });
-  },
-  disconnect: (callback) => {
-    if (state.client !== null) {
-      return state.client.disconnect(() => {
-        state.connection = null;
-        state.client = null;
-        callback();
+commandProcessor.call = (interfaceName, methodName, args, callback) => {
+  if (state.client === null) return callback(new Error('Not connected'));
+  state.connection.callMethod(interfaceName, methodName, args, callback);
+};
+
+commandProcessor.event = (interfaceName, eventName, args, callback) => {
+  if (state.client === null) return callback(new Error('Not connected'));
+  state.connection.emitRemoteEvent(interfaceName, eventName, args);
+  callback();
+};
+
+commandProcessor.connect = (host, port, appName, callback) => {
+  state.client = jstp.tcp.createClient({ host, port, secure: true });
+  state.client.connectAndHandshake(appName, null, null,
+      (err, connection) => {
+        if (!err) state.connection = connection;
+        return callback(err);
       });
-    }
-    callback(new Error('Not connected'));
+};
+
+commandProcessor.disconnect = (callback) => {
+  if (state.client !== null) {
+    return state.client.disconnect(() => {
+      state.connection = null;
+      state.client = null;
+      callback();
+    });
   }
+  callback(new Error('Not connected'));
 };
 
 function _splitArgs(token) {
@@ -67,7 +96,7 @@ function _split(str, separator, limit, leaveEmpty) {
     } else {
       limit--;
     }
-    start = split + 1;
+    start = split + separator.length;
   }
   if (!shouldTrim(start, str.length)) {
     result.push(str.slice(start));
@@ -75,66 +104,62 @@ function _split(str, separator, limit, leaveEmpty) {
   return result;
 }
 
-const lineProcessor = {
-  call: (tokens, callback) => {
-    if (tokens === undefined) {
-      return callback(new Error('Not enough arguments'));
-    }
-    const args = _split(tokens, ' ', 2);
-    methodProcessor.call(args[0], args[1], _splitArgs(args[2]),
-        (err, result) => {
-      if (err) return callback(err);
-      callback(null, `Method ${args[0]}.${args[1]} returned: ` +
-        jstp.stringify(result.map(jstp.stringify)));
-    });
-  },
-  event: (tokens, callback) => {
-    if (tokens === undefined) {
-      return callback(new Error('Not enough arguments'));
-    }
-    const args = _split(tokens, ' ', 2);
-    methodProcessor.event(args[0], args[1], _splitArgs(args[2]),
-        (err) => {
-      if (err) return callback(err);
-      callback(null, `Event ${args[0]}.${args[1]} successfully emitted`);
-    });
-  },
-  connect: (tokens, callback) => {
-    if (tokens === undefined) {
-      return callback(new Error('Not enough arguments'));
-    }
-    const args = _split(tokens, ' ', 2);
-    const [host, port] = _split(args[0], ':');
-    const appName = args[1];
-    methodProcessor.connect(host, port, appName, (err) => {
-      if (err) return callback(err);
-      callback(null, 'Connection established');
-    });
-  },
-  disconnect: (_, callback) => {
-    methodProcessor.disconnect((err) => {
-      if (err) return callback('Not connected');
-      callback(null, 'Successful disconnect')
-    });
+lineProcessor.call = (tokens, callback) => {
+  if (tokens === undefined) {
+    return callback(new Error('Not enough arguments'));
   }
+  const args = _split(tokens, ' ', 2);
+  let methodArgs;
+  try {
+    methodArgs = jstp.parse('[' + args[2] + ']');
+  } catch (err) {
+    return callback(err);
+  }
+  commandProcessor.call(args[0], args[1], methodArgs, (err, ...result) => {
+    if (err) return callback(err);
+    callback(null, `Method ${args[0]}.${args[1]} returned: ` +
+                   jstp.stringify(result));
+  });
 };
 
-rl.on('line', (line) => {
-  line = line.trim();
-  const [type, leftover] = _split(line, ' ', 1);
-  lineProcessor[type](leftover, (err, result) => {
-    if (err) logErr(err);
-    else log(result);
-    rl.prompt(true);
+lineProcessor.event = (tokens, callback) => {
+  if (tokens === undefined) {
+    return callback(new Error('Not enough arguments'));
+  }
+  const args = _split(tokens, ' ', 2);
+  let eventArgs;
+  try {
+    eventArgs = jstp.parse('[' + args[2] + ']');
+  } catch (err) {
+    return callback(err);
+  }
+  commandProcessor.event(args[0], args[1], eventArgs, (err) => {
+    if (err) return callback(err);
+    callback(null, `Event ${args[0]}.${args[1]} successfully emitted`);
   });
-});
+};
 
-function completer(line) {
-  return [[], line];
-}
+lineProcessor.connect = (tokens, callback) => {
+  if (tokens === undefined) {
+    return callback(new Error('Not enough arguments'));
+  }
+  const args = _split(tokens, ' ', 2);
+  const [host, port] = _split(args[0], ':');
+  const appName = args[1];
+  if (appName === undefined) {
+    return callback(new Error('Application name is not provided'));
+  }
+  commandProcessor.connect(host, port, appName, (err) => {
+    if (err) return callback(err);
+    callback(null, 'Connection established');
+  });
+};
 
-rl.on('SIGINT', () => {
-  rl.close();
-});
+lineProcessor.disconnect = (_, callback) => {
+  commandProcessor.disconnect((err) => {
+    if (err) return callback('Not connected');
+    callback(null, 'Successful disconnect');
+  });
+};
 
 rl.prompt(true);
