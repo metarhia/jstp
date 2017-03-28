@@ -21,6 +21,9 @@
     "email": "timur.shemsedinov@gmail.com"
   },
   "main": "./jstp.js",
+  "bin": {
+    "jstp-cli": "./tools/cli.js"
+  },
   "browser": {
     "./lib/record-serialization.js": "./lib/record-serialization-fallback.js",
     "./lib/server.js": false,
