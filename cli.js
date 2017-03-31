@@ -62,8 +62,12 @@ commandProcessor.connect = (host, port, appName, callback) => {
   state.client = jstp.tcp.createClient({ host, port, secure: true });
   state.client.connectAndHandshake(appName, null, null,
       (err, connection) => {
-        if (!err) state.connection = connection;
-        return callback(err);
+        if (err) return callback(err);
+        state.connection = connection;
+        connection.on('event', (data) => {
+          log(`Received remote event: ${jstp.stringify(data)}`);
+        });
+        callback();
       });
 };
 
