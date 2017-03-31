@@ -34,9 +34,9 @@ rl.on('line', (line) => {
   rl.prompt(true);
 });
 
-rl.on('SIGINT', () => {
-  rl.close();
-});
+rl.on('SIGINT', () => rl.close());
+
+rl.on('close', () => rl.write('exit\n'));
 
 function completer(line) {
   return [[], line];
@@ -78,9 +78,10 @@ commandProcessor.disconnect = (callback) => {
   callback(new Error('Not connected'));
 };
 
-function _splitArgs(token) {
-  return token && _split(token, ' $ ') || [];
-}
+commandProcessor.exit = () => {
+  rl.close();
+  process.exit();
+};
 
 function _split(str, separator, limit, leaveEmpty) {
   const shouldTrim = (start, split) => !leaveEmpty && start === split;
@@ -161,5 +162,12 @@ lineProcessor.disconnect = (_, callback) => {
     callback(null, 'Successful disconnect');
   });
 };
+
+// map all remaining commands directly
+Object.keys(commandProcessor).map(command => {
+  if (!lineProcessor[command]) {
+    lineProcessor[command] = commandProcessor[command];
+  }
+});
 
 rl.prompt(true);
