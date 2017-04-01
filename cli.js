@@ -5,9 +5,6 @@
 const jstp = require('.');
 const readline = require('readline');
 
-const log = console.log;
-const logErr = console.error;
-
 const commandProcessor = {};
 const lineProcessor = {};
 
@@ -17,6 +14,14 @@ const rl = readline.createInterface({
   completer
 });
 
+const log = msg => {
+  const userInput = rl.line;
+  if (userInput) rl.clearLine();
+  console.log(msg);
+  rl.write('\n');
+  if (userInput) rl.write(userInput);
+};
+
 rl.on('line', (line) => {
   const [type, leftover] = _split(line.trim(), ' ', 1);
   if (!type) {
@@ -24,19 +29,24 @@ rl.on('line', (line) => {
   }
   const processor = lineProcessor[type];
   if (!processor) {
-    logErr(`Unknown command ${type}`);
+    log(`Unknown command ${type}`);
   } else {
     processor(leftover, (err, result) => {
-      if (err) return logErr(`${err.name} occurred: ${err.message}`);
+      if (err) return log(`${err.name} occurred: ${err.message}`);
       log(result);
     });
+    rl.prompt(true);
   }
-  rl.prompt(true);
 });
 
-rl.on('SIGINT', () => rl.close());
+rl.on('SIGINT', () => {
+  rl.close();
+  process.exit();
+});
 
-rl.on('close', () => rl.write('exit\n'));
+rl.on('close', () => {
+  process.exit();
+});
 
 function completer(line) {
   return [[], line];
@@ -64,6 +74,7 @@ commandProcessor.connect = (host, port, appName, callback) => {
       (err, connection) => {
         if (err) return callback(err);
         state.connection = connection;
+        // todo make event registering generic
         connection.on('event', (data) => {
           log(`Received remote event: ${jstp.stringify(data)}`);
         });
