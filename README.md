@@ -82,7 +82,7 @@ Then proceed to the documentation at <https://metarhia.github.io/JSTP/>.
 
 | Implementation | Parser | TCP Client | TCP Server | WebSocket Client | WebSocket Server | Status |
 | --- | :---: | :---: | :---: | :---: | :---: | --- |
-| JavaScript<br>[metarhia/Impress](https://github.com/metarhia/JSTP) | ✓ | ✓ | ✓ | ✓ | ✓ | reference implementation |
+| JavaScript<br>[metarhia/JSTP](https://github.com/metarhia/JSTP) | ✓ | ✓ | ✓ | ✓ | ✓ | reference implementation |
 | C++<br>[NechaiDO/JSTP-cpp](https://github.com/NechaiDO/JSTP-cpp) | ✓ | ✗ | ✗ | ✗ | ✗ | stable |
 | Qt C++<br>[NechaiDO/QJSTP](https://github.com/NechaiDO/QJSTP) | ✓ | ✗ | ✗ | ✗ | ✗ | stable |
 | Swift (iOS)<br>[JSTPMobile/iOS](https://github.com/JSTPMobile/iOS) | ✓ | ✗ | ✗ | ✗ | ✗ | in development |
