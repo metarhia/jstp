@@ -37,8 +37,8 @@ rl.on('line', (line) => {
       if (err) return log(`${err.name} occurred: ${err.message}`);
       log(result);
     });
-    rl.prompt(true);
   }
+  rl.prompt(true);
 });
 
 rl.on('SIGINT', () => {
