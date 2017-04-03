@@ -105,13 +105,14 @@ function _split(str, separator, limit, leaveEmpty) {
   const result = [];
   let start = 0;
 
+  // eslint-disable-next-line no-unmodified-loop-condition
   for (let i = 0; !limit || i < limit; i++) {
     const split = str.indexOf(separator, start);
     if (split === -1) break;
     if (!shouldTrim(start, split)) {
       result.push(str.slice(start, split));
-    } else {
-      limit--;
+    } else  {
+      i--;
     }
     start = split + separator.length;
   }
