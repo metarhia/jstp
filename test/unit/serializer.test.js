@@ -186,7 +186,7 @@ function testSyntaxError(parseFunction) {
       '#+',
       '\'\\u{\'',
       '\'\\u{}\''
-    ].map((input) => jstp[parseFunction].bind(null, input)).forEach((fn) => {
+    ].map(input => jstp[parseFunction].bind(null, input)).forEach((fn) => {
       expect(fn).to.throw();
     });
   });
@@ -218,7 +218,7 @@ describe('JSTP Serializer and Deserializer', () => {
       it('must not allow functions', () => {
         [ '{key:42,fn:function(){}}',
           '{get value() { return 42; }, set value(val) {}}'
-        ].map((input) => jstp.parse.bind(null, input)).forEach((fn) => {
+        ].map(input => jstp.parse.bind(null, input)).forEach((fn) => {
           expect(fn).to.throw();
         });
       });

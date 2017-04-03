@@ -136,6 +136,10 @@ rules:
   no-use-before-define:
     - error
     - functions: false
+  arrow-parens:
+    - error
+    - as-needed
+    - requireForBlockBody: true
   arrow-body-style:
     - error
     - as-needed

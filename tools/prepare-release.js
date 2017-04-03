@@ -96,7 +96,7 @@ function getMetadata(commitHash) {
     const repo = prUrl && prUrl.repo;
     const pr = prUrl && prUrl.id;
 
-    return getSemverTag(repo, pr).then((tag) => ({
+    return getSemverTag(repo, pr).then(tag => ({
       hash: commitHash,
       author,
       message,
