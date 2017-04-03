@@ -14,7 +14,7 @@ const rl = readline.createInterface({
   completer
 });
 
-const log = msg => {
+const log = (msg) => {
   const userInput = rl.line;
   if (userInput) rl.clearLine();
   console.log(msg);
@@ -58,12 +58,12 @@ const state = {
 };
 
 commandProcessor.call = (interfaceName, methodName, args, callback) => {
-  if (state.client === null) return callback(new Error('Not connected'));
+  if (!state.client) return callback(new Error('Not connected'));
   state.connection.callMethod(interfaceName, methodName, args, callback);
 };
 
 commandProcessor.event = (interfaceName, eventName, args, callback) => {
-  if (state.client === null) return callback(new Error('Not connected'));
+  if (!state.client) return callback(new Error('Not connected'));
   state.connection.emitRemoteEvent(interfaceName, eventName, args);
   callback();
 };
@@ -74,16 +74,17 @@ commandProcessor.connect = (host, port, appName, callback) => {
       (err, connection) => {
         if (err) return callback(err);
         state.connection = connection;
-        // todo make event registering generic
+        // TODO: make event registering generic
         connection.on('event', (data) => {
           log(`Received remote event: ${jstp.stringify(data)}`);
         });
         callback();
-      });
+      }
+  );
 };
 
 commandProcessor.disconnect = (callback) => {
-  if (state.client !== null) {
+  if (state.client) {
     return state.client.disconnect(() => {
       state.connection = null;
       state.client = null;
@@ -178,8 +179,8 @@ lineProcessor.disconnect = (_, callback) => {
   });
 };
 
-// map all remaining commands directly
-Object.keys(commandProcessor).map(command => {
+// Map all remaining commands directly
+Object.keys(commandProcessor).map((command) => {
   if (!lineProcessor[command]) {
     lineProcessor[command] = commandProcessor[command];
   }
