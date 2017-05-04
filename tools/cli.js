@@ -177,7 +177,7 @@ lineProcessor.connect = (tokens, callback) => {
 
 lineProcessor.disconnect = (_, callback) => {
   commandProcessor.disconnect((err) => {
-    if (err) return callback('Not connected');
+    if (err) return callback(err);
     callback(null, 'Successful disconnect');
   });
 };
