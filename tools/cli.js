@@ -24,14 +24,64 @@ const log = (msg) => {
   if (userInput) rl.write(userInput);
 };
 
+function completeByFields(input, object) {
+  return Object.keys(object)
+    .filter(c => !c.startsWith('_') && (!input || c.startsWith(input)));
+}
+
+function tryComplete(input, completer) {
+  const completions = completer._complete([input], 0)[0];
+  if (completions.length === 1) return completions[0];
+  return input;
+}
+
+function completer(line) {
+  const inputs = _split(line, ' ', 0, true);
+  const [completions, help] = iterativeCompletion(inputs, 0, commandProcessor);
+  if (help) log('\n' + help);
+  // to allow partial completion, as method above gives
+  // completions for the latest command part
+  const lastPart = inputs.length === 0 ? line : inputs[inputs.length - 1];
+  return [completions, lastPart];
+}
+
+// inputs - array of user inputs
+// depth - level of nested completion (index in inputs array)
+// completer - object that has '_complete(inputs, depth)' function or ._help()
+//             or neither (no completions or help available)
+function iterativeCompletion(inputs, depth, completer) {
+  function helper(depth, oldDepth, completer, completions) {
+    let help = '';
+
+    if (completions.length !== 1) return [completions, help];
+    const nextCompleter = completer[completions[0]];
+    if (!nextCompleter) return [completions, help];
+
+    if (nextCompleter._complete && depth < inputs.length) {
+      const [newCompletions, newDepth] = nextCompleter._complete(inputs, depth);
+      return helper(newDepth, depth, nextCompleter, newCompletions);
+    }
+    if (inputs[oldDepth] === completions[0]) {
+      completions.shift();
+      if (nextCompleter._help) help = nextCompleter._help();
+    }
+    return [completions, help];
+  }
+  const [newCompletions, newDepth] = completer._complete(inputs, depth);
+  return helper(newDepth, depth, completer, newCompletions);
+}
+
 rl.on('line', (line) => {
   const [type, leftover] = _split(line.trim(), ' ', 1);
   if (!type) {
     return rl.prompt(true);
   }
-  const processor = lineProcessor[type];
+
+  const cmd = tryComplete(type, commandProcessor);
+
+  const processor = lineProcessor[cmd];
   if (!processor) {
-    log(`Unknown command ${type}`);
+    log(`Unknown command '${cmd}'`);
   } else {
     processor(leftover, (err, result) => {
       if (err) return log(`${err.name} occurred: ${err.message}`);
@@ -50,13 +100,14 @@ rl.on('close', () => {
   process.exit();
 });
 
-function completer(line) {
-  return [[], line];
-}
-
 const state = {
   client: null,
   connection: null
+};
+
+commandProcessor._complete = (inputs, depth) => {
+  const cmd = inputs[depth];
+  return [completeByFields(cmd, commandProcessor), depth + 1];
 };
 
 commandProcessor.call = (interfaceName, methodName, args, callback) => {
@@ -64,11 +115,19 @@ commandProcessor.call = (interfaceName, methodName, args, callback) => {
   state.connection.callMethod(interfaceName, methodName, args, callback);
 };
 
+commandProcessor.call._help = () => (
+  'call <interfaceName> <methodName> [ <arg> [ , ... ] ]'
+);
+
 commandProcessor.event = (interfaceName, eventName, args, callback) => {
   if (!state.client) return callback(new Error('Not connected'));
   state.connection.emitRemoteEvent(interfaceName, eventName, args);
   callback();
 };
+
+commandProcessor.event._help = () => (
+  'event <interfaceName> <eventName> [ <arg> [ , ... ] ]'
+);
 
 commandProcessor.connect = (host, port, appName, callback) => {
   state.client = jstp.tcp.createClient({ host, port, secure: true });
@@ -84,6 +143,10 @@ commandProcessor.connect = (host, port, appName, callback) => {
       }
   );
 };
+
+commandProcessor.connect._help = () => (
+  'connect <host>:<port> <application name>'
+);
 
 commandProcessor.disconnect = (callback) => {
   if (state.client) {
