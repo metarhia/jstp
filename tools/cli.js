@@ -189,7 +189,7 @@ function _split(str, separator, limit, leaveEmpty) {
   let start = 0;
 
   const shouldPush = end =>
-    start !== end || (leaveEmpty && !result[result.length - 1]);
+    start !== end || (leaveEmpty && result[result.length - 1] !== '');
 
   // eslint-disable-next-line no-unmodified-loop-condition
   while (!limit || result.length < limit) {
