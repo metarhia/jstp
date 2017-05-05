@@ -24,13 +24,13 @@ const log = (msg) => {
   if (userInput) rl.write(userInput);
 };
 
-function completeByFields(input, object) {
-  return Object.keys(object)
-    .filter(c => !c.startsWith('_') && (!input || c.startsWith(input)));
+function complete(input, completions) {
+  if (!input) return completions;
+  return completions.filter(c => c.startsWith(input));
 }
 
 function tryComplete(input, completer) {
-  const completions = completer._complete([input], 0)[0];
+  const completions = completer.complete([input], 0)[0];
   if (completions.length === 1) return completions[0];
   return input;
 }
@@ -57,21 +57,21 @@ function iterativeCompletion(inputs, depth, completer) {
     const nextCompleter = completer[completions[0]];
     if (!nextCompleter) return [completions, help];
 
-    if (nextCompleter._complete && depth < inputs.length) {
-      const [newCompletions, newDepth] = nextCompleter._complete(inputs, depth);
+    if (nextCompleter.complete && depth < inputs.length) {
+      const [newCompletions, newDepth] = nextCompleter.complete(inputs, depth);
       return helper(newDepth, depth, nextCompleter, newCompletions);
     }
     if (inputs[oldDepth] === completions[0]) {
       completions.shift();
-      if (nextCompleter._help) help = nextCompleter._help();
+      if (nextCompleter.help) help = nextCompleter.help();
     }
     return [completions, help];
   }
-  if (completer._complete) {
-    const [newCompletions, newDepth] = completer._complete(inputs, depth);
+  if (completer.complete) {
+    const [newCompletions, newDepth] = completer.complete(inputs, depth);
     return helper(newDepth, depth, completer, newCompletions);
   }
-  if (completer._help) return [[], completer._help()];
+  if (completer.help) return [[], completer.help()];
   return [[], ''];
 }
 
@@ -109,9 +109,10 @@ const state = {
   connection: null
 };
 
-commandProcessor._complete = (inputs, depth) => {
+commandProcessor.complete = (inputs, depth) => {
+  const completions = ['call', 'event', 'connect', 'disconnect', 'exit'];
   const cmd = inputs[depth];
-  return [completeByFields(cmd, commandProcessor), depth + 1];
+  return [complete(cmd, completions), depth + 1];
 };
 
 commandProcessor.call = (interfaceName, methodName, args, callback) => {
@@ -119,7 +120,7 @@ commandProcessor.call = (interfaceName, methodName, args, callback) => {
   state.connection.callMethod(interfaceName, methodName, args, callback);
 };
 
-commandProcessor.call._help = () => (
+commandProcessor.call.help = () => (
   'call <interfaceName> <methodName> [ <arg> [ , ... ] ]'
 );
 
@@ -129,7 +130,7 @@ commandProcessor.event = (interfaceName, eventName, args, callback) => {
   callback();
 };
 
-commandProcessor.event._help = () => (
+commandProcessor.event.help = () => (
   'event <interfaceName> <eventName> [ <arg> [ , ... ] ]'
 );
 
@@ -148,7 +149,7 @@ commandProcessor.connect = (host, port, appName, callback) => {
   );
 };
 
-commandProcessor.connect._help = () => (
+commandProcessor.connect.help = () => (
   'connect <host>:<port> <application name>'
 );
 
