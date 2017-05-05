@@ -62,8 +62,8 @@ function iterativeCompletion(inputs, depth, completer) {
       return helper(newDepth, depth, nextCompleter, newCompletions);
     }
     if (inputs[oldDepth] === completions[0]) {
-      completions.shift();
       if (nextCompleter.help) help = nextCompleter.help();
+      return [[], help];
     }
     return [completions, help];
   }
@@ -185,23 +185,20 @@ commandProcessor.exit = () => {
 //  resulting array as one empty string (''), else they are skipped
 //  and doesn't get counted to limit
 function _split(str, separator, limit, leaveEmpty) {
-  const isLastEmpty = arr => !arr[arr.length - 1];
-
   const result = [];
   let start = 0;
 
+  const shouldPush = end =>
+    start !== end || (leaveEmpty && !result[result.length - 1]);
+
   // eslint-disable-next-line no-unmodified-loop-condition
-  while (!limit || limit - result.length > 0) {
+  while (!limit || result.length < limit) {
     const split = str.indexOf(separator, start);
     if (split === -1) break;
-    if (start !== split || leaveEmpty && !isLastEmpty(result)) {
-      result.push(str.slice(start, split));
-    }
+    if (shouldPush(split)) result.push(str.slice(start, split));
     start = split + separator.length;
   }
-  if (start !== str.length || leaveEmpty && !isLastEmpty(result)) {
-    result.push(str.slice(start));
-  }
+  if (shouldPush(str.length)) result.push(str.slice(start));
   return result;
 }
 
