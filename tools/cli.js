@@ -2,10 +2,10 @@
 
 'use strict';
 
-// TODO: support jstp://server and jstps://server
-
 const jstp = require('..');
 const readline = require('readline');
+
+const DEFAULT_SCHEME = 'jstps';
 
 const commandProcessor = {};
 const lineProcessor = {};
@@ -134,8 +134,25 @@ commandProcessor.event.help = () => (
   'event <interfaceName> <eventName> [ <arg> [ , ... ] ]'
 );
 
-commandProcessor.connect = (host, port, appName, callback) => {
-  state.client = jstp.tcp.createClient({ host, port, secure: true });
+commandProcessor.connect = (protocol, host, port, appName, callback) => {
+  let transport;
+
+  switch (protocol) {
+    case 'jstp':
+    case 'jstps':
+      transport = jstp.tcp;
+      break;
+    case 'ws':
+    case 'wss':
+      transport = jstp.ws;
+      break;
+    default:
+      return callback(new Error(`Unknown protocol '${protocol}'`));
+  }
+
+  const url = `${protocol}://${host}:${port}`;
+
+  state.client = transport.createClient(url);
   state.client.connectAndHandshake(appName, null, null,
       (err, connection) => {
         if (err) return callback(err);
@@ -150,7 +167,7 @@ commandProcessor.connect = (host, port, appName, callback) => {
 };
 
 commandProcessor.connect.help = () => (
-  'connect <host>:<port> <application name>'
+  'connect [<protocol>://]<host>:<port> <application name>'
 );
 
 commandProcessor.disconnect = (callback) => {
@@ -247,12 +264,19 @@ lineProcessor.event = (tokens, callback) => {
 };
 
 lineProcessor.connect = (tokens, callback) => {
-  if (tokens === undefined || tokens.trim().startsWith(':')) {
+  if (tokens === undefined) {
     return callback(reportMissingArgument('Host'));
   }
   const args = _split(tokens, ' ', 2);
-  const [host, portString] = _split(args[0], ':');
-  if (portString === undefined) {
+  let [scheme, authority] = _split(args[0], '://', 1, true);
+  if (authority === undefined) {
+    authority = scheme;
+    scheme = DEFAULT_SCHEME;
+  }
+  const [host, portString] = _split(authority, ':', 2, true);
+  if (!host) {
+    return callback(reportMissingArgument('Host'));
+  } else if (!portString) {
     return callback(reportMissingArgument('Port'));
   }
   const port = Number(portString);
@@ -263,7 +287,7 @@ lineProcessor.connect = (tokens, callback) => {
   if (appName === undefined) {
     return callback(reportMissingArgument('Application name'));
   }
-  commandProcessor.connect(host, port, appName, (err) => {
+  commandProcessor.connect(scheme, host, port, appName, (err) => {
     if (err) return callback(err);
     callback(null, 'Connection established');
   });
