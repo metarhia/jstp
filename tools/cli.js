@@ -110,7 +110,7 @@ const state = {
 };
 
 commandProcessor.complete = (inputs, depth) => {
-  const completions = ['call', 'event', 'connect', 'disconnect', 'exit'];
+  const completions = ['call', 'connect', 'disconnect', 'event', 'exit'];
   const cmd = inputs[depth];
   return [complete(cmd, completions), depth + 1];
 };
@@ -174,7 +174,7 @@ commandProcessor.exit = () => {
 // limit - resulting length of output array - 1 (last one is what's left),
 //         if !limit === true => means no limit and split till no more
 //         separators found
-// leaveEmpty - if true multiple separators in sequence will be added as empty
+// leaveEmpty - if true multiple separators in sequence will be added as
 //              empty string, else they are skipped
 //
 // returns an array of strings
