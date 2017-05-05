@@ -67,8 +67,12 @@ function iterativeCompletion(inputs, depth, completer) {
     }
     return [completions, help];
   }
-  const [newCompletions, newDepth] = completer._complete(inputs, depth);
-  return helper(newDepth, depth, completer, newCompletions);
+  if (completer._complete) {
+    const [newCompletions, newDepth] = completer._complete(inputs, depth);
+    return helper(newDepth, depth, completer, newCompletions);
+  }
+  if (completer._help) return [[], completer._help()];
+  return [[], ''];
 }
 
 rl.on('line', (line) => {
