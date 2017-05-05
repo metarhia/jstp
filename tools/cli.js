@@ -101,24 +101,37 @@ commandProcessor.exit = () => {
   process.exit();
 };
 
+// str - inputs string
+// separator - string to use as a separator
+// limit - resulting length of output array - 1 (last one is what's left),
+//         if !limit === true => means no limit and split till no more
+//         separators found
+// leaveEmpty - if true multiple separators in sequence will be added as empty
+//              empty string, else they are skipped
+//
+// returns an array of strings
+//
+// the behaviour is as follows:
+//  splits 'str' till limit is bound or no more separators left in 'str'
+//  if leaveEmpty is true then multiple separators in sequence are written in
+//  resulting array as one empty string (''), else they are skipped
+//  and doesn't get counted to limit
 function _split(str, separator, limit, leaveEmpty) {
-  const shouldTrim = (start, split) => !leaveEmpty && start === split;
+  const isLastEmpty = arr => !arr[arr.length - 1];
 
   const result = [];
   let start = 0;
 
   // eslint-disable-next-line no-unmodified-loop-condition
-  for (let i = 0; !limit || i < limit; i++) {
+  while (!limit || limit - result.length > 0) {
     const split = str.indexOf(separator, start);
     if (split === -1) break;
-    if (!shouldTrim(start, split)) {
+    if (start !== split || leaveEmpty && !isLastEmpty(result)) {
       result.push(str.slice(start, split));
-    } else  {
-      i--;
     }
     start = split + separator.length;
   }
-  if (!shouldTrim(start, str.length)) {
+  if (start !== str.length || leaveEmpty && !isLastEmpty(result)) {
     result.push(str.slice(start));
   }
   return result;
