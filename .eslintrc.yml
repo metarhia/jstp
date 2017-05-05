@@ -2,6 +2,8 @@ env:
   node: true
   es6: true
 extends: 'eslint:recommended'
+plugins:
+  - import
 rules:
   indent:
     - error
@@ -173,3 +175,6 @@ rules:
   template-curly-spacing:
     - error
     - never
+  import/no-unresolved:
+    - error
+    - commonjs: true
