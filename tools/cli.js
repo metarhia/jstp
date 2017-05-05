@@ -4,7 +4,7 @@
 
 // TODO: support jstp://server and jstps://server
 
-const jstp = require('.');
+const jstp = require('..');
 const readline = require('readline');
 
 const commandProcessor = {};
