@@ -87,7 +87,7 @@ rl.on('line', (line) => {
   if (!processor) {
     log(`Unknown command '${cmd}'`);
   } else {
-    processor(leftover, (err, result) => {
+    processor(leftover.trim(), (err, result) => {
       if (err) return log(`${err.name} occurred: ${err.message}`);
       log(result);
     });
@@ -202,11 +202,17 @@ function _split(str, separator, limit, leaveEmpty) {
   return result;
 }
 
+const reportMissingArgument =
+  missing => new Error(`${missing} is not provided`);
+
 lineProcessor.call = (tokens, callback) => {
   if (tokens === undefined) {
-    return callback(new Error('Not enough arguments'));
+    return callback(reportMissingArgument('Interface name'));
   }
   const args = _split(tokens, ' ', 2);
+  if (args.length === 1) {
+    return callback(reportMissingArgument('Method name'));
+  }
   let methodArgs;
   try {
     methodArgs = jstp.parse('[' + args[2] + ']');
@@ -222,9 +228,12 @@ lineProcessor.call = (tokens, callback) => {
 
 lineProcessor.event = (tokens, callback) => {
   if (tokens === undefined) {
-    return callback(new Error('Not enough arguments'));
+    return callback(reportMissingArgument('Interface name'));
   }
   const args = _split(tokens, ' ', 2);
+  if (args.length === 1) {
+    return callback(reportMissingArgument('Event name'));
+  }
   let eventArgs;
   try {
     eventArgs = jstp.parse('[' + args[2] + ']');
@@ -238,14 +247,17 @@ lineProcessor.event = (tokens, callback) => {
 };
 
 lineProcessor.connect = (tokens, callback) => {
-  if (tokens === undefined) {
-    return callback(new Error('Not enough arguments'));
+  if (tokens === undefined || tokens.startsWith(':')) {
+    return callback(reportMissingArgument('Host'));
   }
   const args = _split(tokens, ' ', 2);
   const [host, port] = _split(args[0], ':');
+  if (port === undefined) {
+    return callback(reportMissingArgument('Port'));
+  }
   const appName = args[1];
   if (appName === undefined) {
-    return callback(new Error('Application name is not provided'));
+    return callback(reportMissingArgument('Application name'));
   }
   commandProcessor.connect(host, port, appName, (err) => {
     if (err) return callback(err);
