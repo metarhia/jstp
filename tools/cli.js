@@ -87,7 +87,7 @@ rl.on('line', (line) => {
   if (!processor) {
     log(`Unknown command '${cmd}'`);
   } else {
-    processor(leftover.trim(), (err, result) => {
+    processor(leftover, (err, result) => {
       if (err) return log(`${err.name} occurred: ${err.message}`);
       log(result);
     });
@@ -247,13 +247,17 @@ lineProcessor.event = (tokens, callback) => {
 };
 
 lineProcessor.connect = (tokens, callback) => {
-  if (tokens === undefined || tokens.startsWith(':')) {
+  if (tokens === undefined || tokens.trim().startsWith(':')) {
     return callback(reportMissingArgument('Host'));
   }
   const args = _split(tokens, ' ', 2);
-  const [host, port] = _split(args[0], ':');
-  if (port === undefined) {
+  const [host, portString] = _split(args[0], ':');
+  if (portString === undefined) {
     return callback(reportMissingArgument('Port'));
+  }
+  const port = Number(portString);
+  if (isNaN(port) || port < 0 || port >= 65536) {
+    return callback(new Error(`Port has incorrect value: ${portString}`));
   }
   const appName = args[1];
   if (appName === undefined) {
