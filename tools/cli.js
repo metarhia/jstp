@@ -47,22 +47,26 @@ function completer(line) {
 
 // inputs - array of user inputs
 // depth - level of nested completion (index in inputs array)
-// completer - object that has '_complete(inputs, depth)' function or ._help()
-//             or neither (no completions or help available)
+// completer - object that has '.complete(inputs, depth)'
+//             function or '.help()' or neither
+//             (no completions or help available)
 function iterativeCompletion(inputs, depth, completer) {
   function helper(depth, oldDepth, completer, completions) {
     let help = '';
+    let showHelp = false;
 
-    if (completions.length !== 1) return [completions, help];
-    const nextCompleter = completer[completions[0]];
-    if (!nextCompleter) return [completions, help];
-
-    if (nextCompleter.complete && depth < inputs.length) {
-      const [newCompletions, newDepth] = nextCompleter.complete(inputs, depth);
-      return helper(newDepth, depth, nextCompleter, newCompletions);
+    if (completions.length === 1 && completer[completions[0]]) {
+      completer = completer[completions[0]];
+      if (depth < inputs.length && completer.complete) {
+        const [newCompletions, newDepth] = completer.complete(inputs, depth);
+        if (newDepth >= inputs.length) return [newCompletions, ''];
+        return helper(newDepth, depth, completer, newCompletions);
+      }
+      showHelp = inputs[oldDepth] === completions[0];
     }
-    if (inputs[oldDepth] === completions[0]) {
-      if (nextCompleter.help) help = nextCompleter.help();
+    if (inputs[depth] === '') completions = [];
+    if (showHelp || !completions[0]) {
+      if (completer.help) help = completer.help();
       return [[], help];
     }
     return [completions, help];
