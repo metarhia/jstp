@@ -38,6 +38,7 @@ using v8::Number;
 using v8::Object;
 using v8::String;
 using v8::True;
+using v8::TryCatch;
 using v8::Undefined;
 using v8::Value;
 
@@ -89,8 +90,17 @@ Local<Value> Parse(Isolate* isolate, const String::Utf8Value& in) {
   }
 
   size_t parsed_size = 0;
-  Local<Value> result =
-      (kParseFunctions[type])(isolate, str + start_pos, end, &parsed_size);
+  Local<Value> result;
+  {
+    TryCatch trycatch(isolate);
+    result =
+        (kParseFunctions[type])(isolate, str + start_pos, end, &parsed_size);
+
+    if (trycatch.HasCaught()) {
+      trycatch.ReThrow();
+      return Undefined(isolate);
+    }
+  }
 
   parsed_size += internal::SkipToNextToken(str + start_pos + parsed_size, end);
   parsed_size += start_pos;
@@ -386,7 +396,7 @@ Local<Value> ParseString(Isolate*    isolate,
                                  result + res_index);
         if (!ok) {
           delete[] result;
-          return Local<String>();
+          return Undefined(isolate);
         }
         i += in_offset - 1;
         res_index += out_offset;
@@ -394,7 +404,7 @@ Local<Value> ParseString(Isolate*    isolate,
     } else if (IsLineTerminatorSequence(begin + i, &in_offset)) {
       delete[] result;
       THROW_EXCEPTION(SyntaxError, "Unexpected line end in string");
-      return Local<String>();
+      return Undefined(isolate);
     } else {
       result[res_index++] = begin[i];
     }
@@ -403,7 +413,7 @@ Local<Value> ParseString(Isolate*    isolate,
   if (!is_ended) {
     delete[] result;
     THROW_EXCEPTION(SyntaxError, "Error while parsing string");
-    return Local<String>();
+    return Undefined(isolate);
   }
 
   Local<String> result_str = String::NewFromUtf8(isolate, result,
@@ -567,11 +577,16 @@ Local<Value> ParseValueInObject(Isolate*    isolate,
   Type current_type;
   bool valid = GetType(begin, end, &current_type);
   if (valid) {
+    TryCatch trycatch(isolate);
     value = (kParseFunctions[current_type])(isolate, begin, end, size);
+    if (trycatch.HasCaught()) {
+      trycatch.ReThrow();
+      return Undefined(isolate);
+    }
     return value;
   } else {
     THROW_EXCEPTION(TypeError, "Invalid type in object");
-    return Object::New(isolate);
+    return Undefined(isolate);
   }
 }
 
@@ -593,35 +608,50 @@ Local<Value> ParseObject(Isolate*    isolate,
         *size = i + 1;
         break;
       }
-      current_key = ParseKeyInObject(isolate,
-                                     begin + i,
-                                     end,
-                                     &current_length);
+      {
+        TryCatch trycatch(isolate);
+        current_key = ParseKeyInObject(isolate,
+                                       begin + i,
+                                       end,
+                                       &current_length);
+        if (trycatch.HasCaught()) {
+          trycatch.ReThrow();
+          return Undefined(isolate);
+        }
+      }
       i += current_length;
       i += SkipToNextToken(begin + i, end);
       if (begin[i] != ':') {
         THROW_EXCEPTION(SyntaxError, "Unexpected token");
-        return Object::New(isolate);
+        return Undefined(isolate);
       }
     } else {
       i += SkipToNextToken(begin + i, end);
-      current_value = ParseValueInObject(isolate,
-                                         begin + i,
-                                         end,
-                                         &current_length);
+      {
+        TryCatch trycatch(isolate);
+        current_value = ParseValueInObject(isolate,
+                                           begin + i,
+                                           end,
+                                           &current_length);
+        if (trycatch.HasCaught()) {
+          trycatch.ReThrow();
+          return Undefined(isolate);
+        }
+      }
       if (!current_value->IsUndefined()) {
         Maybe<bool> is_ok = result->Set(isolate->GetCurrentContext(),
                                         current_key,
                                         current_value);
         if (is_ok.IsNothing()) {
           THROW_EXCEPTION(Error, "Cannot add property to object");
+          return Undefined(isolate);
         }
       }
       i += current_length;
       i += SkipToNextToken(begin + i, end);
       if (begin[i] != ',' && begin[i] != '}') {
         THROW_EXCEPTION(SyntaxError, "Invalid format in object");
-        return Object::New(isolate);
+        return Undefined(isolate);
       } else if (begin[i] == '}') {
         *size = i + 1;
         break;
@@ -654,10 +684,18 @@ Local<Value> ParseArray(Isolate*    isolate,
 
     bool valid = GetType(begin + i, end, &current_type);
     if (valid) {
-      auto t = kParseFunctions[current_type](isolate,
-                                             begin + i,
-                                             end,
-                                             &current_length);
+      Local<Value> t;
+      {
+        TryCatch trycatch(isolate);
+        t = kParseFunctions[current_type](isolate,
+                                          begin + i,
+                                          end,
+                                          &current_length);
+        if (trycatch.HasCaught()) {
+          trycatch.ReThrow();
+          return Undefined(isolate);
+        }
+      }
       if (!(current_type == Type::kUndefined && begin[i] == ']')) {
         array->Set(static_cast<uint32_t>(current_element++), t);
         is_empty = false;
@@ -670,14 +708,14 @@ Local<Value> ParseArray(Isolate*    isolate,
 
       if (begin[i] != ',' && begin[i] != ']') {
         THROW_EXCEPTION(SyntaxError, "Invalid format in array: missed comma");
-        return Array::New(isolate);
+        return Undefined(isolate);
       } else if (begin[i] == ']') {
         *size = i + 1;
         break;
       }
     } else {
       THROW_EXCEPTION(TypeError, "Invalid type in array");
-      return Array::New(isolate);
+      return Undefined(isolate);
     }
   }
 
