@@ -681,6 +681,11 @@ Local<Value> ParseArray(Isolate*    isolate,
     }
   }
 
+  if (is_empty) {
+    THROW_EXCEPTION(SyntaxError, "Invalid format in array");
+    return Undefined(isolate);
+  }
+
   return array;
 }
 
