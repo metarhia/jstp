@@ -51,32 +51,27 @@ function completer(line) {
 //             function or '.help()' or neither
 //             (no completions or help available)
 function iterativeCompletion(inputs, depth, completer) {
-  function helper(depth, oldDepth, completer, completions) {
-    let help = '';
-    let showHelp = false;
-
-    if (completions.length === 1 && completer[completions[0]]) {
-      completer = completer[completions[0]];
-      if (depth < inputs.length && completer.complete) {
-        const [newCompletions, newDepth] = completer.complete(inputs, depth);
-        if (newDepth >= inputs.length) return [newCompletions, ''];
-        return helper(newDepth, depth, completer, newCompletions);
-      }
-      showHelp = inputs[oldDepth] === completions[0];
-    }
-    if (inputs[depth] === '') completions = [];
-    if (showHelp || !completions[0]) {
-      if (completer.help) help = completer.help();
-      return [[], help];
-    }
-    return [completions, help];
-  }
+  let help = '';
+  let completions = [];
+  let newDepth = depth;
   if (completer.complete) {
-    const [newCompletions, newDepth] = completer.complete(inputs, depth);
-    return helper(newDepth, depth, completer, newCompletions);
+    do {
+      depth = newDepth;
+      [completions, newDepth] = completer.complete(inputs, newDepth);
+      if (completions.length === 1 && completer[completions[0]]) {
+        completer = completer[completions[0]];
+      } else {
+        break;
+      }
+    } while (newDepth < inputs.length && completer.complete);
   }
-  if (completer.help) return [[], completer.help()];
-  return [[], ''];
+  if (newDepth <= inputs.length - 1) completions = [];
+  if (!completions[0] ||
+      completions.length === 1 && completions[0] === inputs[depth]) {
+    completions = [];
+    if (completer.help) help = completer.help();
+  }
+  return [completions, help];
 }
 
 rl.on('line', (line) => {
