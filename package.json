@@ -55,12 +55,13 @@
     "remark-cli": "^3.0.0",
     "remark-lint": "^6.0.0",
     "remark-validate-links": "^6.0.0",
+    "tap": "^10.3.2",
     "webpack": "^2.2.1"
   },
   "scripts": {
     "test": "npm run test-unit && npm run test-integration && npm run lint",
     "test-unit": "npm run test-unit-node && npm run test-unit-browser",
-    "test-unit-node": "mocha -R progress test/unit",
+    "test-unit-node": "mocha -R progress test/unit && tap test/node/*.js",
     "test-unit-browser": "karma start",
     "test-integration": "node test/integration/run-tests",
     "test-browser-unit": "karma start",
