@@ -56,24 +56,6 @@ function skipFunctionTests(testCase) {
   });
 }
 
-const marcusRecord = {
-  name: 'Marcus Aurelius',
-  passport: 'AE127095',
-  birth: {
-    date: '1990-02-15T00:00:00.000Z',
-    place: 'Rome'
-  },
-  address: {
-    country: 'Ukraine',
-    city: 'Kiev',
-    zip: '03056',
-    street: 'Pobedy',
-    building: '37',
-    floor: '1',
-    room: '158'
-  }
-};
-
 const marcusObject = {
   name: 'Marcus Aurelius',
   passport: 'AE127095',
@@ -91,11 +73,6 @@ const marcusObject = {
     room: '158'
   }
 };
-
-const marcusRecordString = '{name:\'Marcus Aurelius\',passport:\'AE127095\',' +
-  'birth:{date:\'1990-02-15T00:00:00.000Z\',place:\'Rome\'},' +
-  'address:{country:\'Ukraine\',city:\'Kiev\',zip:\'03056\',' +
-  'street:\'Pobedy\',building:\'37\',floor:\'1\',room:\'158\'}}';
 
 const marcusObjectString = '{name:\'Marcus Aurelius\',passport:\'AE127095\',' +
   'birth:{date:new Date(\'1990-02-15T00:00:00.000Z\'),place:\'Rome\'},' +
@@ -193,50 +170,6 @@ function testSyntaxError(parseFunction) {
 }
 
 describe('JSTP Serializer and Deserializer', () => {
-  describe('JSTP Record Serialization', () => {
-    describe('jstp.stringify', () => {
-      runTestCase('stringify', recordSerializationTestCase);
-      runTestCase('stringify', [
-        ['must serialize dates to strings',
-          new Date(1473249597286), '\'2016-09-07T11:59:57.286Z\''],
-        ['must correctly serialize a complex object', [
-          [marcusRecord, marcusRecordString],
-          [marcusObject, marcusRecordString]
-        ]]
-      ]);
-    });
-
-    describe('jstp.parse', () => {
-      runTestCase('parse', recordDeserializationTestCase);
-      runTestCase('parse', [
-        ['must deserialize sparse arrays to arrays with undefined values',
-          '[1,,3]', [1, undefined, 3]],
-        ['must correctly deserialize a complex object',
-          marcusRecordString, marcusRecord]
-      ]);
-
-      it('must not allow functions', () => {
-        [ '{key:42,fn:function(){}}',
-          '{get value() { return 42; }, set value(val) {}}'
-        ].map(input => jstp.parse.bind(null, input)).forEach((fn) => {
-          expect(fn).to.throw();
-        });
-      });
-
-      testSyntaxError('parse');
-
-      it('must skip undefined values of an object', () => {
-        expect(jstp.parse('{value:undefined}')).to.eql({});
-      });
-
-      it('must not allow old octal literals syntax', () => {
-        expect(() => {
-          jstp.parse('0123');
-        }).to.throw();
-      });
-    });
-  });
-
   describe('JSTP Object Serialization', () => {
     describe('jstp.dump', () => {
       runTestCase('dump', baseObjectSerializationTestCase);
