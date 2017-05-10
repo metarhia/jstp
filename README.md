@@ -89,3 +89,7 @@ Then proceed to the documentation at <https://metarhia.github.io/JSTP/>.
 | Swift<br>[JSTPMobile/iOS](https://github.com/JSTPMobile/iOS) | ✓ | ✓ | ✗ | ✗ | ✗ |
 | Java<br>[JSTPMobile/Java](https://github.com/JSTPMobile/Java) | ✓ | ✓ | ✗ | ✗ | ✗ |
 | Haskell<br>[DzyubSpirit/JSTPHaskell](https://github.com/DzyubSpirit/JSTPHaskell) | ✓ | ✓ | ✓ | ✗ | ✗ |
+
+## Tools
+
+* **JSTP Syntax** – Visual Studio Code plugin which provides syntax support for JSTP in: `.jstp`, `.jsrm`, `.jsrd` and `.jsrs` files. Can be installed from [Visual Studio Marketplace](http://bit.ly/jstp-vscode).
