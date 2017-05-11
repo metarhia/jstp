@@ -8,7 +8,8 @@
     }
   },
   "ignore": [
-    "**/node_modules/**"
+    "**/node_modules/**",
+    "test/fixtures/json5/**"
   ],
   "test": [
     "test/**"
