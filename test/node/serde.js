@@ -4,7 +4,7 @@ const tap = require('tap');
 
 const jstp = require('../..');
 
-const testCases = require('../fixtures/test-cases');
+const testCases = require('../fixtures/serde.test-cases');
 
 testCases.serde.concat(testCases.serialization).forEach((testCase) => {
   tap.test(`must serialize ${testCase.name}`, (test) => {

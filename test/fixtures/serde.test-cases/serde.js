@@ -32,7 +32,7 @@ module.exports = [
     serialized: '3.14'
   },
   {
-    name: 'smallFloat',
+    name: 'small float',
     value: 1e-3,
     serialized: '0.001'
   },
@@ -62,7 +62,7 @@ module.exports = [
     serialized: '\'it\\\'s\''
   },
   {
-    name: 'string with \\u',
+    name: 'string with Unicode escape sequences',
     value: '01\u0000\u0001',
     serialized: '\'01\\u0000\\u0001\''
   },
