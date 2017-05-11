@@ -65,6 +65,7 @@
     "test-unit-browser": "karma start",
     "test-integration": "node test/integration/run-tests",
     "test-browser-unit": "karma start",
+    "test-todo": "tap test/todo",
     "lint": "eslint . && remark .",
     "install": "npm run rebuild-node",
     "build": "npm run build-node && npm run build-browser",
