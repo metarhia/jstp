@@ -2,3 +2,4 @@ node_modules/
 dist/
 site/
 examples/data-formats/*.js
+test/fixtures/json5/**/*.js
