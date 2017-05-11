@@ -23,3 +23,6 @@ mkdocs.yml
 
 # Examples
 examples/
+
+# Tests
+test/
