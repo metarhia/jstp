@@ -1,91 +1,159 @@
-[![Travis CI](https://travis-ci.org/metarhia/JSTP.svg?branch=master)](https://travis-ci.org/metarhia/JSTP)
-[![bitHound Dependencies](https://www.bithound.io/github/metarhia/JSTP/badges/dependencies.svg)](https://www.bithound.io/github/metarhia/JSTP/master/dependencies/npm)
-[![bitHound Score](https://www.bithound.io/github/metarhia/JSTP/badges/score.svg)](https://www.bithound.io/github/metarhia/JSTP)
-[![NPM Version](https://badge.fury.io/js/metarhia-jstp.svg)](https://badge.fury.io/js/metarhia-jstp)
-[![NPM Downloads/Month](https://img.shields.io/npm/dm/metarhia-jstp.svg)](https://www.npmjs.com/package/metarhia-jstp)
-[![NPM Downloads](https://img.shields.io/npm/dt/metarhia-jstp.svg)](https://www.npmjs.com/package/metarhia-jstp)
+<div align="center">
+  <a href="https://github.com/metarhia/JSTP">
+    <img
+      src="https://cdn.rawgit.com/metarhia/Metarhia/master/Logos/metarhia-logo.svg"
+      alt="Metarhia Logo"
+      width="300"
+    />
+  </a>
+  <br />
+  <br />
+  <a href="https://travis-ci.org/metarhia/JSTP">
+    <img
+      src="https://travis-ci.org/metarhia/JSTP.svg?branch=master"
+      alt="Travis CI"
+    />
+  </a>
+  <a href="https://www.bithound.io/github/metarhia/JSTP/master/dependencies/npm">
+    <img
+      src="https://www.bithound.io/github/metarhia/JSTP/badges/dependencies.svg"
+      alt="bitHound Dependencies"
+    />
+  </a>
+  <a href="https://www.bithound.io/github/metarhia/JSTP">
+    <img
+      src="https://www.bithound.io/github/metarhia/JSTP/badges/score.svg"
+      alt="bitHound Score"
+    />
+  </a>
+  <a href="https://badge.fury.io/js/metarhia-jstp">
+    <img
+      src="https://badge.fury.io/js/metarhia-jstp.svg"
+      alt="NPM Version"
+    />
+  </a>
+  <a href="https://www.npmjs.com/package/metarhia-jstp">
+    <img
+      src="https://img.shields.io/npm/dm/metarhia-jstp.svg"
+      alt="NPM Downloads/Month"
+    />
+  </a>
+  <a href="https://www.npmjs.com/package/metarhia-jstp">
+    <img
+      src="https://img.shields.io/npm/dt/metarhia-jstp.svg"
+      alt="NPM Downloads"
+    />
+  </a>
+  <h1>JSTP / JavaScript Transfer Protocol</h1>
+</div>
 
-# JSTP / JavaScript Transfer Protocol
+JSTP is an RPC protocol and framework which provides two-way asynchronous data
+transfer with support of plentiful parallel non-blocking interactions that is so
+transparent that an app may not even distinguish between local async functions
+and remote procedures.
 
-## Concept
+And, as a nice bonus, there's a blazing fast [JSON5](https://github.com/json5)
+implementation bundled in!
 
-JSTP is a family of data formats and corresponding libraries for their
-processing that are based on some simple assumptions:
+**This project is bound by a [Code of Conduct](CODE_OF_CONDUCT.md).**
 
-* it is possible to trasfer data as plain JavaScript code easier and
-  more efficient than using JSON:
-  - in its simplest implementation it doesn't even require a specialized
-    parser since it is already built into transferer and receiver systems;
-  - a human-readable format can be almost as minimalist as a binary one,
-    losing coding efficiency very slightly yet winning from the simplicity
-    of packet inspection;
-  - serialization format and data modeling must be maximally univocal and
-    must answer a question about why someone has done something this way;
-  - there should be possibility to apply different formatting and use
-    comments;
+## Installation
 
-* it is redundant to send a structure along with data each time, the
-  serialization format and the protocol must be optimized to exempt
-  metamodel and send it only when the receiver hasn't got it yet;
-
-* the protocol of interaction between two JavaScript applications must
-  have the following features:
-  - two-way asynchronous data transfer with support of plentiful parallel
-    non-blocking interactions and packet indentifiers allowing, for example,
-    to find the correspondence between a request and a response;
-  - support of RPC and multiple APIs must be so transparent that application
-    shouldn't event know whether a function call is inside the address space
-    of the application or it is a remote call sent to another system for
-    execution;
-  - direct call and response via callback support;
-  - support of translation of named events with bound data and named channels
-    for event grouping;
-  - support of automatic synchronization of objects in applications memory
-    if they are registered for synchronization;
-  - only one of sides can initiate a connection but both sides can send data
-    over open channel;
-  - the transport layer must guarantee reliable data transfer with connection
-    establishment and guaranteed delivery (TCP is the basic transport and we
-    also support WebSocket but anything can be used, even RS232 or USB);
-  - all packet types (call, response, callback, event, data etc.) may be split
-    into several parts if their body is too large;
-  - there should be a possibility to stop data transfer if the data transmitted
-    in parts is too large and the last part hasn't been received yet;
-
-* it is required to minimize the transformation of data while tranferring them
-  between different systems, storing and processing, minimize putting them from
-  one structures to other, to save memory and connection channel;
-
-* amount of data structures needed for most systems is in fact finite and the
-  structures themselves must be standardized as a result of specialists
-  agreement, and there should be possibility of their versioning;
-
-* non-standard data structures can be sent between systems along with metadata
-  that will allow to interprete them and provide universal processing to the
-  possible extent if the remote sides trust each other and formalization of
-  data doesn't make sense.
-
-## Getting Started
-
-JSTP works in Node.js and web browsers. To install it, simply run:
+JSTP works in Node.js and web browsers:
 
 ```sh
 $ npm install --save-dev metarhia-jstp
 ```
 
-Or, alternatively, if you are developing a client-side application for browser
-environment and don't use a module bundler like Webpack,
+Or, alternatively, there are
 [jstp.min.js](https://metarhia.github.io/JSTP/dist/jstp.min.js) and
-[jstp.min.js.map](https://metarhia.github.io/JSTP/dist/jstp.min.js.map) are
-also available.
+[jstp.min.js.map](https://metarhia.github.io/JSTP/dist/jstp.min.js.map)
+available for those browser-based applications that aren't built using a module
+bundler like [webpack](https://webpack.js.org/).
 
-Then proceed to the documentation at <https://metarhia.github.io/JSTP/>.
+We also have official client-side implementations for
+[Swift](https://github.com/JSTPMobile/iOS) and
+[Java](https://github.com/JSTPMobile/Java) that work effortlessly on iOS and
+Android 🎉
 
-## Implementations
+## Getting Started
 
-| Implementation | Parser | TCP Client | TCP Server | WebSocket Client | WebSocket Server |
-| --- | :---: | :---: | :---: | :---: | :---: |
-| JavaScript<br>[metarhia/JSTP](https://github.com/metarhia/JSTP) | ✓ | ✓ | ✓ | ✓ | ✓ |
-| Swift<br>[JSTPMobile/iOS](https://github.com/JSTPMobile/iOS) | ✓ | ✓ | ✗ | ✗ | ✗ |
-| Java<br>[JSTPMobile/Java](https://github.com/JSTPMobile/Java) | ✓ | ✓ | ✗ | ✗ | ✗ |
-| Haskell<br>[DzyubSpirit/JSTPHaskell](https://github.com/DzyubSpirit/JSTPHaskell) | ✓ | ✓ | ✓ | ✗ | ✗ |
+Server:
+
+```js
+'use strict';
+
+const jstp = require('metarhia-jstp');
+
+// Application is the core high-level abstraction of the framework. An app
+// consists of a number of interfaces, and each interface has its methods.
+const app = new jstp.Application('testApp', {
+  someService: {
+    sayHi(connection, name, callback) {
+      callback(null, `Hi, ${name}!`);
+    }
+  }
+});
+
+// Let's create a TCP server for this app. Other available transports are
+// WebSocket and Unix domain sockets. One might notice that an array of
+// applications is passed the `createServer()`. That's because it can serve
+// any number of applications.
+const server = jstp.tcp.createServer(3000, [app]);
+server.listen(() => {
+  console.log('TCP server listening on port 3000 🚀');
+});
+```
+
+Client:
+
+```js
+'use strict';
+
+const jstp = require('metarhia-jstp');
+
+// Create a TCP client. Clients can have applications too for full-duplex RPC,
+// but we don't need that in this example.
+const client = jstp.tcp.createClient({ host: 'localhost', port: 3000 });
+
+// Connect to the `testApp` application. Username and password are both `null`
+// here — that is, the protocol-level authentication is not leveraged in this
+// example. The next argument is an array of interfaces to inspect and build
+// remote proxy objects for.
+client.connectAndInspect('testApp', null, null, ['someService'], handleConnect);
+
+function handleConnect(error, connection, app) {
+  if (error) {
+    console.error(`Could not connect to the server: ${error}`);
+    return;
+  }
+
+  // The `app` object contains remote proxy objects for each interface that has
+  // been requested which allow to use remote APIs as regular async functions.
+  // Remote proxies are also `EventEmitter`s: they can be used to `.emit()`
+  // events to another side of a connection and listen to them using `.on()`.
+  app.someService.sayHi('JSTP', (error, message) => {
+    if (error) {
+      console.error(`Oops, something went wrong: ${error}`);
+      return;
+    }
+    console.log(`Server said "${message}" 😲`);
+  });
+}
+```
+
+## Project Maintainers
+
+Kudos to [@tshemsedinov](https://github.com/tshemsedinov) for the initial idea
+and proof-of-concept implementation. Current project team is:
+
+* [@aqrln](https://github.com/aqrln) &mdash;
+  **Alexey Orlenko** &lt;eaglexrlnk@gmail.com&gt;
+* [@belochub](https://github.com/belochub) &mdash;
+  **Mykola Bilochub** &lt;nbelochub@gmail.com&gt;
+* [@lundibundi](https://github.com/lundibundi) &mdash;
+  **Denys Otrishko** &lt;shishugi@gmail.com&gt;
+* [@nechaido](https://github.com/nechaido) &mdash;
+  **Dmytro Nechai** &lt;nechaido@gmail.com&gt;
+* [@tshemsedinov](https://github.com/tshemsedinov) &mdash;
+  **Timur Shemsedinov** &lt;timur.shemsedinov@gmail.com&gt;
