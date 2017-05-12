@@ -208,7 +208,7 @@ commandProcessor.connect = (
 
 commandProcessor.connect.help = () => (
   'connect [<protocol>://]<host>:<port> <application name> ' +
-  '[ <interface> [ , ... ] ]'
+  '[ <interface> [ ... ] ]'
 );
 
 commandProcessor.disconnect = (callback) => {
