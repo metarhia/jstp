@@ -73,8 +73,8 @@ bundler like [webpack](https://webpack.js.org/).
 
 We also have official client-side implementations for
 [Swift](https://github.com/JSTPMobile/iOS) and
-[Java](https://github.com/JSTPMobile/Java) that work effortlessly on iOS and
-Android 🎉
+[Java](https://github.com/JSTPMobile/Java)
+that work effortlessly on iOS and Android 🎉
 
 ## Getting Started
 
