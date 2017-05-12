@@ -48,7 +48,7 @@
 </div>
 
 JSTP is an RPC protocol and framework which provides two-way asynchronous data
-transfer with support of plentiful parallel non-blocking interactions that is so
+transfer with support of multiple parallel non-blocking interactions that is so
 transparent that an app may not even distinguish between local async functions
 and remote procedures.
 
