@@ -119,14 +119,13 @@ commandProcessor.complete = (inputs, depth) => {
 
 commandProcessor.call = (interfaceName, methodName, args, callback) => {
   if (!state.client) return callback(new Error('Not connected'));
-
   state.connection.callMethod(interfaceName, methodName, args, callback);
 };
 
 commandProcessor.call.complete = (inputs, depth) => {
   if (!state.api) return [[], depth];
 
-  let iface = inputs[depth++];
+  const iface = inputs[depth++];
   let method = inputs[depth];
   // there may be multiple spaces between interface and method names
   // this function completes both of them so handle empty element ('')
@@ -136,23 +135,10 @@ commandProcessor.call.complete = (inputs, depth) => {
   }
 
   let completions = complete(iface, Object.keys(state.api));
-
-  const fullInterfaceMatch = completions.some(el => el === iface);
-
-  // we should show completions if
-  // there is more than one completion and no method provided
-  if (completions.length !== 1 && method === undefined ||
-      // there is more than one completion and neither interface fully matches
-      completions.length !== 1 && !fullInterfaceMatch ||
-      // there is no method name and neither interface fully matches
-      method === undefined && !fullInterfaceMatch) {
+  if (method === undefined || !completions.some(el => el === iface)) {
     return [completions, depth];
   }
 
-  // nothing after full interface name -> show help
-  if (method === undefined) return [[], depth];
-
-  if (!fullInterfaceMatch) iface = completions[0];
   completions = complete(method, state.api[iface]);
   if (completions.length === 1 && method === completions[0]) {
     // full method name -> show help
@@ -342,14 +328,7 @@ lineProcessor.connect = (tokens, callback) => {
   if (appName === undefined) {
     return callback(reportMissingArgument('Application name'));
   }
-  let interfaces = [];
-  if (args[2]) {
-    try {
-      interfaces = jstp.parse('[' + args[2] + ']');
-    } catch (err) {
-      return callback(err);
-    }
-  }
+  const interfaces = args[2] ? _split(args[2], ' ') : [];
   commandProcessor.connect(scheme, host, port, appName, interfaces, (err) => {
     if (err) return callback(err);
     callback(null, 'Connection established');
