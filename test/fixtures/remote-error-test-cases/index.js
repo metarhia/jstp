@@ -1,7 +1,6 @@
 'use strict';
 
 const jstp = require('../../../');
-const RemoteError = jstp.RemoteError;
 
 module.exports = {
   remoteError: require('./remote-error'),

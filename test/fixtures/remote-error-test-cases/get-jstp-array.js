@@ -7,7 +7,7 @@ const remoteErrorTestCases = require('./remote-error');
 
 const defaultErrorCode = 1;
 
-const sampleObject = {sample: 'Object'};
+const sampleObject = { sample: 'Object' };
 
 module.exports = [
   {
