@@ -7,9 +7,9 @@ const testCases = require('../fixtures/message-parser');
 
 testCases.forEach((testCase) => {
   const result = [];
-  const reminder = jstp.parseNetworkPackets(testCase.message, result);
+  const remainder = jstp.parseNetworkPackets(testCase.message, result);
   tap.strictSame(result, testCase.result,
     `must properly parse ${testCase.name}`);
-  tap.strictSame(reminder, testCase.reminder,
-    `must leave a valid reminder after parsing ${testCase.name}`);
+  tap.strictSame(remainder, testCase.remainder,
+    `must leave a valid remainder after parsing ${testCase.name}`);
 });
