@@ -5,7 +5,6 @@ module.exports = jstp;
 
 Object.assign(jstp,
   require('./lib/record-serialization'),
-  require('./lib/object-serialization'),
   require('./lib/errors'),
   require('./lib/applications')
 );
