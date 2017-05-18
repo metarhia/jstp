@@ -735,7 +735,7 @@ Local<Value> ParseArray(Isolate*    isolate,
   }
 
   if (!has_ended) {
-    THROW_EXCEPTION(SyntaxError, "Missing closing brackets in array");
+    THROW_EXCEPTION(SyntaxError, "Missing closing bracket in array");
     return Undefined(isolate);
   }
 
