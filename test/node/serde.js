@@ -17,6 +17,6 @@ testCases.serde.concat(testCases.deserialization).forEach((testCase) => {
 });
 
 testCases.invalidDeserialization.forEach((testCase) => {
-  tap.throws(() => jstp.parse(testCase.serialized),
+  tap.throws(() => jstp.parse(testCase.value),
     `must not allow ${testCase.name}`);
 });
