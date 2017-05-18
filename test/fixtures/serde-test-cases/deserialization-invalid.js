@@ -36,5 +36,17 @@ module.exports = [
   {
     name: 'properties',
     value: '{get value() { return 42; }, set value(val) {}}'
+  },
+  {
+    name: 'missing closing bracket in array',
+    value: '[42,'
+  },
+  {
+    name: 'missing closing brace in object',
+    value: '{key:'
+  },
+  {
+    name: 'missing value in object',
+    value: '{key:,}'
   }
 ];
