@@ -600,12 +600,14 @@ Local<Value> ParseObject(Isolate*    isolate,
   Local<Value> current_value;
   size_t current_length = 0;
   auto result = Object::New(isolate);
+  bool has_ended = false;
 
   for (size_t i = 1; i < *size; i++) {
     if (key_mode) {
       i += SkipToNextToken(begin + i, end);
       if (begin[i] == '}') {
         *size = i + 1;
+        has_ended = true;
         break;
       }
       {
@@ -627,6 +629,10 @@ Local<Value> ParseObject(Isolate*    isolate,
       }
     } else {
       i += SkipToNextToken(begin + i, end);
+      if (begin[i] == ',') {
+        THROW_EXCEPTION(SyntaxError, "Value is missing in object");
+        return Undefined(isolate);
+      }
       {
         TryCatch trycatch(isolate);
         current_value = ParseValueInObject(isolate,
@@ -654,11 +660,18 @@ Local<Value> ParseObject(Isolate*    isolate,
         return Undefined(isolate);
       } else if (begin[i] == '}') {
         *size = i + 1;
+        has_ended = true;
         break;
       }
     }
     key_mode = !key_mode;
   }
+
+  if (!has_ended) {
+    THROW_EXCEPTION(SyntaxError, "Missing closing brace in object");
+    return Undefined(isolate);
+  }
+
   return result;
 }
 
@@ -671,6 +684,7 @@ Local<Value> ParseArray(Isolate*    isolate,
   *size = end - begin;
 
   bool is_empty = true;
+  bool has_ended = false;
 
   size_t current_element = 0;
   Type current_type;
@@ -711,6 +725,7 @@ Local<Value> ParseArray(Isolate*    isolate,
         return Undefined(isolate);
       } else if (begin[i] == ']') {
         *size = i + 1;
+        has_ended = true;
         break;
       }
     } else {
@@ -719,8 +734,8 @@ Local<Value> ParseArray(Isolate*    isolate,
     }
   }
 
-  if (is_empty) {
-    THROW_EXCEPTION(SyntaxError, "Invalid format in array");
+  if (!has_ended) {
+    THROW_EXCEPTION(SyntaxError, "Missing closing brackets in array");
     return Undefined(isolate);
   }
 
