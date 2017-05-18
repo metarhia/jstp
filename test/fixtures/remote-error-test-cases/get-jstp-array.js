@@ -3,48 +3,40 @@
 const jstp = require('../../../');
 const RemoteError = jstp.RemoteError;
 
-const remoteErrorTestCases = require('./remote-error');
-
+const code = jstp.ERR_APP_NOT_FOUND;
+const message = 'Custom Message';
 const defaultErrorCode = 1;
-
 const sampleObject = { sample: 'Object' };
 
 module.exports = [
   {
+    name: 'RemoteError',
+    value: new RemoteError(code),
+    expected: [code]
+  },
+  {
+    name: 'Array',
+    value: [code, message],
+    expected: [code, message]
+  },
+  {
+    name: 'error code',
+    value: code,
+    expected: [code]
+  },
+  {
+    name: 'message',
+    value: message,
+    expected: [defaultErrorCode, message]
+  },
+  {
+    name: 'Error',
     value: new TypeError('Invalid argument'),
     expected: [defaultErrorCode, 'TypeError: Invalid argument']
   },
   {
+    name: 'Object',
     value: sampleObject,
-    expected: [1, sampleObject.toString()]
+    expected: [defaultErrorCode, sampleObject.toString()]
   }
 ];
-
-remoteErrorTestCases.forEach((testCase) => {
-  const error = new RemoteError(testCase.code, testCase.message);
-  module.exports.push({
-    value: error,
-    expected: error.toJstpArray()
-  });
-
-  module.exports.push({
-    value: testCase.code,
-    expected: [testCase.code]
-  });
-
-  const array = [testCase.code];
-  if (testCase.message) {
-    array.push(testCase.message);
-  }
-  module.exports.push({
-    value: array,
-    expected: array
-  });
-
-  if (testCase.message) {
-    module.exports.push({
-      value: testCase.message,
-      expected: [1, testCase.message]
-    });
-  }
-});
