@@ -198,8 +198,10 @@ commandProcessor.connect = (
         state.connection = connection;
         state.api = filterApiCompletions(api);
         // TODO: make event registering generic
-        connection.on('event', (data) => {
-          log(`Received remote event: ${jstp.stringify(data)}`);
+        connection.on('event', (event) => {
+          log(`Received remote event '${event.remoteEventName}'` +
+            ` in interface '${event.interfaceName}':` +
+            ` ${jstp.stringify(event.remoteEventArgs)}`);
         });
         callback();
       }
