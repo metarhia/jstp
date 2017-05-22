@@ -1,6 +1,6 @@
 'use strict';
 
-const jstp = require('../../../');
+const jstp = require('../../');
 const RemoteError = jstp.RemoteError;
 
 const knownErrorCode = jstp.ERR_APP_NOT_FOUND;
