@@ -24,6 +24,10 @@ const log = (msg) => {
   if (userInput) rl.write(userInput);
 };
 
+const logErr = (err) => {
+  log(`${err.name} occurred: ${err.message}`);
+};
+
 function complete(input, completions) {
   if (!input) return completions;
   return completions.filter(c => c.startsWith(input));
@@ -89,7 +93,7 @@ rl.on('line', (line) => {
     log(`Unknown command '${cmd}'`);
   } else {
     processor(leftover, (err, result) => {
-      if (err) return log(`${err.name} occurred: ${err.message}`);
+      if (err) return logErr(err);
       log(result);
     });
   }
@@ -203,6 +207,7 @@ commandProcessor.connect = (
             ` in interface '${event.interfaceName}':` +
             ` ${jstp.stringify(event.remoteEventArgs)}`);
         });
+        connection.on('error', err => logErr(err));
         callback();
       }
   );
