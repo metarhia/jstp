@@ -212,7 +212,11 @@ size_t SkipToCommentEnd(const char* str, const char* end) {
     }
   }
 
-  return pos;
+  if (is_single_line) {
+    return pos;
+  } else {
+    return 0;
+  }
 }
 
 size_t SkipToNextToken(const char* str, const char* end) {
