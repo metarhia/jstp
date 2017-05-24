@@ -26,82 +26,82 @@ size_t SkipToNextToken(const char* str, const char* end);
 // parsed JavaScript value. The `size` is incremented by the number of
 // characters the function has used in the string so that the calling side
 // knows where to continue from.
-v8::Local<v8::Value> ParseUndefined(v8::Isolate* isolate,
-                                    const char*  begin,
-                                    const char*  end,
-                                    std::size_t* size);
+v8::MaybeLocal<v8::Value> ParseUndefined(v8::Isolate* isolate,
+                                         const char*  begin,
+                                         const char*  end,
+                                         std::size_t* size);
 
 // Parses a null value from `begin` but never past `end` and returns the parsed
 // JavaScript value. The `size` is incremented by the number of characters the
 // function has used in the string so that the calling side knows where to
 // continue from.
-v8::Local<v8::Value> ParseNull(v8::Isolate* isolate,
-                               const char*  begin,
-                               const char*  end,
-                               std::size_t* size);
+v8::MaybeLocal<v8::Value> ParseNull(v8::Isolate* isolate,
+                                    const char*  begin,
+                                    const char*  end,
+                                    std::size_t* size);
 
 // Parses a boolean value from `begin` but never past `end` and returns the
 // parsed JavaScript value. The `size` is incremented by the number of
 // characters the function has used in the string so that the calling side
 // knows where to continue from.
-v8::Local<v8::Value> ParseBool(v8::Isolate* isolate,
-                               const char*  begin,
-                               const char*  end,
-                               std::size_t* size);
+v8::MaybeLocal<v8::Value> ParseBool(v8::Isolate* isolate,
+                                    const char*  begin,
+                                    const char*  end,
+                                    std::size_t* size);
 
 // Parses a numeric value from `begin` but never past `end` and returns the
 // parsed JavaScript value. The `size` is incremented by the number of
 // characters the function has used in the string so that the calling side
 // knows where to continue from.
-v8::Local<v8::Value> ParseNumber(v8::Isolate* isolate,
-                                 const char*  begin,
-                                 const char*  end,
-                                 std::size_t* size);
+v8::MaybeLocal<v8::Value> ParseNumber(v8::Isolate* isolate,
+                                      const char*  begin,
+                                      const char*  end,
+                                      std::size_t* size);
 
 // Parses a string value from `begin` but never past `end` and returns the
 // parsed JavaScript value. The `size` is incremented by the number of
 // characters the function has used in the string so that the calling side
 // knows where to continue from.
-v8::Local<v8::Value> ParseString(v8::Isolate* isolate,
-                                 const char*  begin,
-                                 const char*  end,
-                                 std::size_t* size);
+v8::MaybeLocal<v8::Value> ParseString(v8::Isolate* isolate,
+                                      const char*  begin,
+                                      const char*  end,
+                                      std::size_t* size);
 
 // Parses an array from `begin` but never past `end` and returns the parsed
 // JavaScript value. The `size` is incremented by the number of characters the
 // function has used in the string so that the calling side knows where to
 // continue from.
-v8::Local<v8::Value> ParseArray(v8::Isolate* isolate,
-                                const char*  begin,
-                                const char*  end,
-                                std::size_t* size);
+v8::MaybeLocal<v8::Value> ParseArray(v8::Isolate* isolate,
+                                     const char*  begin,
+                                     const char*  end,
+                                     std::size_t* size);
 
 // Parses an object key from `begin` but never past `end` and returns
 // the parsed JavaScript value. The `size` is incremented by the number
 // of characters the function has used in the string so that the calling side
 // knows where to continue from.
-v8::Local<v8::String> ParseKeyInObject(v8::Isolate* isolate,
-                                       const char*  begin,
-                                       const char*  end,
-                                       std::size_t* size);
+v8::MaybeLocal<v8::String> ParseKeyInObject(v8::Isolate* isolate,
+                                            const char*  begin,
+                                            const char*  end,
+                                            std::size_t* size);
 
 // Parses a value corresponding to key inside object from `begin`
 // but never past `end` and returns the parsed JavaScript value.
 // The `size` is incremented by the number of characters the function has used
 // in the string so that the calling side knows where to continue from.
-v8::Local<v8::Value> ParseValueInObject(v8::Isolate* isolate,
-                                        const char*  begin,
-                                        const char*  end,
-                                        std::size_t* size);
+v8::MaybeLocal<v8::Value> ParseValueInObject(v8::Isolate* isolate,
+                                             const char*  begin,
+                                             const char*  end,
+                                             std::size_t* size);
 
 // Parses an object from `begin` but never past `end` and returns the parsed
 // JavaScript value. The `size` is incremented by the number of characters the
 // function has used in the string so that the calling side knows where to
 // continue from.
-v8::Local<v8::Value> ParseObject(v8::Isolate* isolate,
-                                 const char*  begin,
-                                 const char*  end,
-                                 std::size_t* size);
+v8::MaybeLocal<v8::Value> ParseObject(v8::Isolate* isolate,
+                                      const char*  begin,
+                                      const char*  end,
+                                      std::size_t* size);
 
 // Parses a decimal number, either integer or float.
 v8::Local<v8::Value> ParseDecimalNumber(v8::Isolate* isolate,

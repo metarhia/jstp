@@ -32,13 +32,13 @@ using v8::Integer;
 using v8::Isolate;
 using v8::Local;
 using v8::Maybe;
+using v8::MaybeLocal;
 using v8::NewStringType;
 using v8::Null;
 using v8::Number;
 using v8::Object;
 using v8::String;
 using v8::True;
-using v8::TryCatch;
 using v8::Undefined;
 using v8::Value;
 
@@ -63,10 +63,10 @@ static bool GetType(const char* begin, const char* end, Type* type);
 
 // The table of parsing functions indexed with the values of the Type
 // enumeration.
-static constexpr Local<Value> (*kParseFunctions[])(Isolate*,
-                                                   const char*,
-                                                   const char*,
-                                                   size_t*) = {
+static constexpr MaybeLocal<Value> (*kParseFunctions[])(Isolate*,
+                                                        const char*,
+                                                        const char*,
+                                                        size_t*) = {
   &internal::ParseUndefined,
   &internal::ParseNull,
   &internal::ParseBool,
@@ -90,16 +90,11 @@ Local<Value> Parse(Isolate* isolate, const String::Utf8Value& in) {
   }
 
   size_t parsed_size = 0;
-  Local<Value> result;
-  {
-    TryCatch trycatch(isolate);
-    result =
-        (kParseFunctions[type])(isolate, str + start_pos, end, &parsed_size);
+  MaybeLocal<Value> result;
+  result = (kParseFunctions[type])(isolate, str + start_pos, end, &parsed_size);
 
-    if (trycatch.HasCaught()) {
-      trycatch.ReThrow();
-      return Undefined(isolate);
-    }
+  if (result.IsEmpty()) {
+    return Undefined(isolate);
   }
 
   parsed_size += internal::SkipToNextToken(str + start_pos + parsed_size, end);
@@ -110,7 +105,7 @@ Local<Value> Parse(Isolate* isolate, const String::Utf8Value& in) {
     return Undefined(isolate);
   }
 
-  return result;
+  return result.ToLocalChecked();
 }
 
 static bool GetType(const char* begin, const char* end, Type* type) {
@@ -238,33 +233,34 @@ size_t SkipToNextToken(const char* str, const char* end) {
   return pos;
 }
 
-Local<Value> ParseUndefined(Isolate*    isolate,
-                            const char* begin,
-                            const char* end,
-                            size_t*     size) {
+MaybeLocal<Value> ParseUndefined(Isolate*    isolate,
+                                 const char* begin,
+                                 const char* end,
+                                 size_t*     size) {
   if (*begin == ',' || *begin == ']') {
     *size = 0;
   } else if (*begin == 'u') {
     *size = 9;
   } else {
     THROW_EXCEPTION(TypeError, "Invalid format of undefined value");
+    return MaybeLocal<Value>();
   }
   return Undefined(isolate);
 }
 
-Local<Value> ParseNull(Isolate*    isolate,
-                       const char* begin,
-                       const char* end,
-                       size_t*     size) {
+MaybeLocal<Value> ParseNull(Isolate*    isolate,
+                            const char* begin,
+                            const char* end,
+                            size_t*     size) {
   *size = 4;
   return Null(isolate);
 }
 
-Local<Value> ParseBool(Isolate*    isolate,
-                       const char* begin,
-                       const char* end,
-                       size_t*     size) {
-  Local<Value> result;
+MaybeLocal<Value> ParseBool(Isolate*    isolate,
+                            const char* begin,
+                            const char* end,
+                            size_t*     size) {
+  MaybeLocal<Value> result;
   if (begin + 4 <= end && strncmp(begin, "true", 4) == 0) {
     result = True(isolate);
     *size = 4;
@@ -273,7 +269,7 @@ Local<Value> ParseBool(Isolate*    isolate,
     *size = 5;
   } else {
     THROW_EXCEPTION(TypeError, "Invalid format: expected boolean");
-    result = Undefined(isolate);
+    result = MaybeLocal<Value>();
   }
   return result;
 }
@@ -283,10 +279,10 @@ inline bool IsOctalDigit(char character) {
   return character >= '0' && character <= '7';
 }
 
-Local<Value> ParseNumber(Isolate*    isolate,
-                         const char* begin,
-                         const char* end,
-                         size_t*     size) {
+MaybeLocal<Value> ParseNumber(Isolate*    isolate,
+                              const char* begin,
+                              const char* end,
+                              size_t*     size) {
   bool negate_result = false;
   const char* number_start = begin;
 
@@ -302,7 +298,7 @@ Local<Value> ParseNumber(Isolate*    isolate,
 
     if (IsOctalDigit(*number_start)) {
       THROW_EXCEPTION(SyntaxError, "Use new octal literal syntax");
-      return Undefined(isolate);
+      return MaybeLocal<Value>();
     } else if (*number_start == 'b') {
       base = 2;
       number_start++;
@@ -366,10 +362,10 @@ static bool GetControlChar(Isolate*    isolate,
                            size_t*     size,
                            char*       write_to);
 
-Local<Value> ParseString(Isolate*    isolate,
-                         const char* begin,
-                         const char* end,
-                         size_t*     size) {
+MaybeLocal<Value> ParseString(Isolate*    isolate,
+                              const char* begin,
+                              const char* end,
+                              size_t*     size) {
   *size = end - begin;
   char* result = new char[*size + 1];
 
@@ -396,7 +392,7 @@ Local<Value> ParseString(Isolate*    isolate,
                                  result + res_index);
         if (!ok) {
           delete[] result;
-          return Undefined(isolate);
+          return MaybeLocal<Value>();
         }
         i += in_offset - 1;
         res_index += out_offset;
@@ -404,7 +400,7 @@ Local<Value> ParseString(Isolate*    isolate,
     } else if (IsLineTerminatorSequence(begin + i, &in_offset)) {
       delete[] result;
       THROW_EXCEPTION(SyntaxError, "Unexpected line end in string");
-      return Undefined(isolate);
+      return MaybeLocal<Value>();
     } else {
       result[res_index++] = begin[i];
     }
@@ -413,7 +409,7 @@ Local<Value> ParseString(Isolate*    isolate,
   if (!is_ended) {
     delete[] result;
     THROW_EXCEPTION(SyntaxError, "Error while parsing string");
-    return Undefined(isolate);
+    return MaybeLocal<Value>();
   }
 
   Local<String> result_str = String::NewFromUtf8(isolate, result,
@@ -525,10 +521,10 @@ static unsigned int ReadHexNumber(const char* str, size_t len, bool* ok) {
   return result;
 }
 
-Local<String> ParseKeyInObject(Isolate*    isolate,
-                               const char* begin,
-                               const char* end,
-                               size_t*     size) {
+MaybeLocal<String> ParseKeyInObject(Isolate*    isolate,
+                                    const char* begin,
+                                    const char* end,
+                                    size_t*     size) {
   *size = end - begin;
   Local<String> result;
   if (begin[0] == '\'' || begin[0] == '"') {
@@ -536,13 +532,17 @@ Local<String> ParseKeyInObject(Isolate*    isolate,
     bool valid = GetType(begin, end, &current_type);
     if (valid && current_type == Type::kString) {
       size_t offset;
-      result = ParseString(isolate, begin, end, &offset).As<String>();
+      MaybeLocal<Value> key = ParseString(isolate, begin, end, &offset);
+      if (key.IsEmpty()) {
+        return MaybeLocal<String>();
+      }
+      result = key.ToLocalChecked().As<String>();
       *size = offset;
       return result;
     } else {
       THROW_EXCEPTION(SyntaxError,
           "Invalid format in object: key is invalid string");
-      return Local<String>();
+      return MaybeLocal<String>();
     }
   } else {
     size_t current_length = 0;
@@ -560,7 +560,7 @@ Local<String> ParseKeyInObject(Isolate*    isolate,
           break;
         } else {
           THROW_EXCEPTION(SyntaxError, "Unexpected identifier");
-          return Local<String>();
+          return MaybeLocal<String>();
         }
       }
     }
@@ -569,35 +569,28 @@ Local<String> ParseKeyInObject(Isolate*    isolate,
   }
 }
 
-Local<Value> ParseValueInObject(Isolate*    isolate,
-                                const char* begin,
-                                const char* end,
-                                size_t*     size) {
-  Local<Value> value;
+MaybeLocal<Value> ParseValueInObject(Isolate*    isolate,
+                                     const char* begin,
+                                     const char* end,
+                                     size_t*     size) {
   Type current_type;
   bool valid = GetType(begin, end, &current_type);
   if (valid) {
-    TryCatch trycatch(isolate);
-    value = (kParseFunctions[current_type])(isolate, begin, end, size);
-    if (trycatch.HasCaught()) {
-      trycatch.ReThrow();
-      return Undefined(isolate);
-    }
-    return value;
+    return (kParseFunctions[current_type])(isolate, begin, end, size);
   } else {
     THROW_EXCEPTION(TypeError, "Invalid type in object");
-    return Undefined(isolate);
+    return MaybeLocal<Value>();
   }
 }
 
-Local<Value> ParseObject(Isolate*    isolate,
-                         const char* begin,
-                         const char* end,
-                         size_t*     size) {
+MaybeLocal<Value> ParseObject(Isolate*    isolate,
+                              const char* begin,
+                              const char* end,
+                              size_t*     size) {
   bool key_mode = true;
   *size = end - begin;
-  Local<String> current_key;
-  Local<Value> current_value;
+  MaybeLocal<String> current_key;
+  MaybeLocal<Value> current_value;
   size_t current_length = 0;
   auto result = Object::New(isolate);
   bool has_ended = false;
@@ -610,54 +603,47 @@ Local<Value> ParseObject(Isolate*    isolate,
         has_ended = true;
         break;
       }
-      {
-        TryCatch trycatch(isolate);
-        current_key = ParseKeyInObject(isolate,
-                                       begin + i,
-                                       end,
-                                       &current_length);
-        if (trycatch.HasCaught()) {
-          trycatch.ReThrow();
-          return Undefined(isolate);
-        }
+      current_key = ParseKeyInObject(isolate,
+                                     begin + i,
+                                     end,
+                                     &current_length);
+      if (current_key.IsEmpty()) {
+        return MaybeLocal<Value>();
       }
       i += current_length;
       i += SkipToNextToken(begin + i, end);
       if (begin[i] != ':') {
         THROW_EXCEPTION(SyntaxError, "Unexpected token");
-        return Undefined(isolate);
+        return MaybeLocal<Value>();
       }
     } else {
       i += SkipToNextToken(begin + i, end);
       if (begin[i] == ',') {
         THROW_EXCEPTION(SyntaxError, "Value is missing in object");
-        return Undefined(isolate);
+        return MaybeLocal<Value>();
       }
-      {
-        TryCatch trycatch(isolate);
-        current_value = ParseValueInObject(isolate,
-                                           begin + i,
-                                           end,
-                                           &current_length);
-        if (trycatch.HasCaught()) {
-          trycatch.ReThrow();
-          return Undefined(isolate);
-        }
+      current_value = ParseValueInObject(isolate,
+                                         begin + i,
+                                         end,
+                                         &current_length);
+      if (current_value.IsEmpty()) {
+        return current_value;
       }
-      if (!current_value->IsUndefined()) {
+      Local<Value> value = current_value.ToLocalChecked();
+      if (!value->IsUndefined()) {
         Maybe<bool> is_ok = result->Set(isolate->GetCurrentContext(),
-                                        current_key,
-                                        current_value);
+                                        current_key.ToLocalChecked(),
+                                        value);
         if (is_ok.IsNothing()) {
           THROW_EXCEPTION(Error, "Cannot add property to object");
-          return Undefined(isolate);
+          return MaybeLocal<Value>();
         }
       }
       i += current_length;
       i += SkipToNextToken(begin + i, end);
       if (begin[i] != ',' && begin[i] != '}') {
         THROW_EXCEPTION(SyntaxError, "Invalid format in object");
-        return Undefined(isolate);
+        return MaybeLocal<Value>();
       } else if (begin[i] == '}') {
         *size = i + 1;
         has_ended = true;
@@ -669,16 +655,16 @@ Local<Value> ParseObject(Isolate*    isolate,
 
   if (!has_ended) {
     THROW_EXCEPTION(SyntaxError, "Missing closing brace in object");
-    return Undefined(isolate);
+    return MaybeLocal<Value>();
   }
 
   return result;
 }
 
-Local<Value> ParseArray(Isolate*    isolate,
-                        const char* begin,
-                        const char* end,
-                        size_t*     size) {
+MaybeLocal<Value> ParseArray(Isolate*    isolate,
+                             const char* begin,
+                             const char* end,
+                             size_t*     size) {
   auto array = Array::New(isolate);
   size_t current_length = 0;
   *size = end - begin;
@@ -698,20 +684,17 @@ Local<Value> ParseArray(Isolate*    isolate,
 
     bool valid = GetType(begin + i, end, &current_type);
     if (valid) {
-      Local<Value> t;
-      {
-        TryCatch trycatch(isolate);
-        t = kParseFunctions[current_type](isolate,
-                                          begin + i,
-                                          end,
-                                          &current_length);
-        if (trycatch.HasCaught()) {
-          trycatch.ReThrow();
-          return Undefined(isolate);
-        }
+      MaybeLocal<Value> t;
+      t = kParseFunctions[current_type](isolate,
+                                        begin + i,
+                                        end,
+                                        &current_length);
+      if (t.IsEmpty()) {
+        return t;
       }
       if (!(current_type == Type::kUndefined && begin[i] == ']')) {
-        array->Set(static_cast<uint32_t>(current_element++), t);
+        array->Set(static_cast<uint32_t>(current_element++),
+                   t.ToLocalChecked());
         is_empty = false;
       }
 
@@ -722,7 +705,7 @@ Local<Value> ParseArray(Isolate*    isolate,
 
       if (begin[i] != ',' && begin[i] != ']') {
         THROW_EXCEPTION(SyntaxError, "Invalid format in array: missed comma");
-        return Undefined(isolate);
+        return MaybeLocal<Value>();
       } else if (begin[i] == ']') {
         *size = i + 1;
         has_ended = true;
@@ -730,13 +713,13 @@ Local<Value> ParseArray(Isolate*    isolate,
       }
     } else {
       THROW_EXCEPTION(TypeError, "Invalid type in array");
-      return Undefined(isolate);
+      return MaybeLocal<Value>();
     }
   }
 
   if (!has_ended) {
     THROW_EXCEPTION(SyntaxError, "Missing closing bracket in array");
-    return Undefined(isolate);
+    return MaybeLocal<Value>();
   }
 
   return array;

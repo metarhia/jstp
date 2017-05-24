@@ -46,6 +46,10 @@ Local<String> ParseNetworkPackets(Isolate* isolate,
       auto result = ParseObject(isolate, curr_chunk + skipped_size,
           curr_chunk + chunk_size, &parsed_chunk_size);
 
+      if (result.IsEmpty()) {
+        return Local<String>();
+      }
+
       parsed_chunk_size += skipped_size;
       parsed_chunk_size += SkipToNextToken(curr_chunk + parsed_chunk_size,
           curr_chunk + chunk_size);
@@ -55,7 +59,7 @@ Local<String> ParseNetworkPackets(Isolate* isolate,
         return Local<String>();
       }
 
-      out->Set(index++, result);
+      out->Set(index++, result.ToLocalChecked());
       curr_chunk += chunk_size + 1;
     }
   }
