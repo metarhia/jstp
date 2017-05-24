@@ -1,5 +1,5 @@
 <div align="center">
-  <a href="https://github.com/metarhia/JSTP">
+  <a href="https://github.com/metarhia/jstp">
     <img
       src="https://cdn.rawgit.com/metarhia/Metarhia/master/Logos/metarhia-logo.svg"
       alt="Metarhia Logo"
@@ -8,21 +8,21 @@
   </a>
   <br />
   <br />
-  <a href="https://travis-ci.org/metarhia/JSTP">
+  <a href="https://travis-ci.org/metarhia/jstp">
     <img
       src="https://travis-ci.org/metarhia/JSTP.svg?branch=master"
       alt="Travis CI"
     />
   </a>
-  <a href="https://www.bithound.io/github/metarhia/JSTP/master/dependencies/npm">
+  <a href="https://www.bithound.io/github/metarhia/jstp/master/dependencies/npm">
     <img
-      src="https://www.bithound.io/github/metarhia/JSTP/badges/dependencies.svg"
+      src="https://www.bithound.io/github/metarhia/jstp/badges/dependencies.svg"
       alt="bitHound Dependencies"
     />
   </a>
-  <a href="https://www.bithound.io/github/metarhia/JSTP">
+  <a href="https://www.bithound.io/github/metarhia/jstp">
     <img
-      src="https://www.bithound.io/github/metarhia/JSTP/badges/score.svg"
+      src="https://www.bithound.io/github/metarhia/jstp/badges/score.svg"
       alt="bitHound Score"
     />
   </a>
@@ -66,14 +66,14 @@ $ npm install --save-dev metarhia-jstp
 ```
 
 Or, alternatively, there are
-[jstp.min.js](https://metarhia.github.io/JSTP/dist/jstp.min.js) and
-[jstp.min.js.map](https://metarhia.github.io/JSTP/dist/jstp.min.js.map)
+[jstp.min.js](https://metarhia.github.io/jstp/dist/jstp.min.js) and
+[jstp.min.js.map](https://metarhia.github.io/jstp/dist/jstp.min.js.map)
 available for those browser-based applications that aren't built using a module
 bundler like [webpack](https://webpack.js.org/).
 
 We also have official client-side implementations for
-[Swift](https://github.com/JSTPMobile/iOS) and
-[Java](https://github.com/JSTPMobile/Java)
+[Swift](https://github.com/metarhia/jstp-swift) and
+[Java](https://github.com/metarhia/jstp-java)
 that work effortlessly on iOS and Android 🎉
 
 ## Getting Started
