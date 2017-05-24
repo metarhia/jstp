@@ -90,8 +90,10 @@ Local<Value> Parse(Isolate* isolate, const String::Utf8Value& in) {
   }
 
   size_t parsed_size = 0;
-  MaybeLocal<Value> result;
-  result = (kParseFunctions[type])(isolate, str + start_pos, end, &parsed_size);
+  MaybeLocal<Value> result = kParseFunctions[type](isolate,
+                                                   str + start_pos,
+                                                   end,
+                                                   &parsed_size);
 
   if (result.IsEmpty()) {
     return Undefined(isolate);
@@ -269,7 +271,6 @@ MaybeLocal<Value> ParseBool(Isolate*    isolate,
     *size = 5;
   } else {
     THROW_EXCEPTION(TypeError, "Invalid format: expected boolean");
-    result = MaybeLocal<Value>();
   }
   return result;
 }
@@ -684,11 +685,10 @@ MaybeLocal<Value> ParseArray(Isolate*    isolate,
 
     bool valid = GetType(begin + i, end, &current_type);
     if (valid) {
-      MaybeLocal<Value> t;
-      t = kParseFunctions[current_type](isolate,
-                                        begin + i,
-                                        end,
-                                        &current_length);
+      MaybeLocal<Value> t = kParseFunctions[current_type](isolate,
+                                                          begin + i,
+                                                          end,
+                                                          &current_length);
       if (t.IsEmpty()) {
         return t;
       }
