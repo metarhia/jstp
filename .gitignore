@@ -23,3 +23,7 @@ site/
 
 # Python bytecode
 *.pyc
+
+# Test coverage data
+coverage/
+.nyc_output/

@@ -26,3 +26,7 @@ examples/
 
 # Tests
 test/
+
+# Test coverage data
+coverage/
+.nyc_output/
