@@ -1,14 +1,14 @@
 'use strict';
 
-const tap = require('tap');
+const test = require('tap').test;
 
-const jstp = require('../../');
+const jstp = require('../..');
 const RemoteError = jstp.RemoteError;
 
 const testCases = require('../fixtures/remote-error-test-cases');
 
 testCases.forEach((testCase) => {
-  tap.test(`Must properly construct an error with ${testCase.name}`, (test) => {
+  test(`Must properly construct an error with ${testCase.name}`, (test) => {
     const error = new RemoteError(testCase.code, testCase.message);
     test.type(error, Error, 'must be an error');
     test.type(error, RemoteError, 'must be a RemoteError');

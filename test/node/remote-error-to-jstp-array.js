@@ -1,8 +1,8 @@
 'use strict';
 
-const tap = require('tap');
+const test = require('tap').test;
 
-const jstp = require('../../');
+const jstp = require('../..');
 const RemoteError = jstp.RemoteError;
 
 const testCases = require('../fixtures/remote-error-test-cases');
@@ -15,6 +15,9 @@ testCases.forEach((testCase) => {
     expextedJstpArray.push(testCase.expectedMessage);
   }
 
-  tap.strictSame(jstpArray, expextedJstpArray,
-    `Must properly construct jstp array from error with ${testCase.name}`);
+  test(`Must properly construct jstp array from error with ${testCase.name}`,
+    (test) => {
+      test.strictSame(jstpArray, expextedJstpArray);
+      test.end();
+    });
 });

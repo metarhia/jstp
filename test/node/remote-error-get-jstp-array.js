@@ -1,8 +1,8 @@
 'use strict';
 
-const tap = require('tap');
+const test = require('tap').test;
 
-const jstp = require('../../');
+const jstp = require('../..');
 const RemoteError = jstp.RemoteError;
 
 const code = jstp.ERR_APP_NOT_FOUND;
@@ -45,6 +45,8 @@ const testCases = [
 
 testCases.forEach((testCase) => {
   const arr = RemoteError.getJstpArrayFor(testCase.value);
-  tap.strictSame(arr, testCase.expected,
-    `Must properly create an array from ${testCase.name}`);
+  test(`Must properly create an array from ${testCase.name}`, (test) => {
+    test.strictSame(arr, testCase.expected);
+    test.end();
+  });
 });

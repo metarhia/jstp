@@ -1,22 +1,28 @@
 'use strict';
 
-const tap = require('tap');
+const test = require('tap').test;
 
 const jstp = require('../..');
 
 const testCases = require('../fixtures/serde-test-cases');
 
 testCases.serde.concat(testCases.serialization).forEach((testCase) => {
-  tap.strictSame(jstp.stringify(testCase.value), testCase.serialized,
-    `must serialize ${testCase.name}`);
+  test(`must serialize ${testCase.name}`, (test) => {
+    test.strictSame(jstp.stringify(testCase.value), testCase.serialized);
+    test.end();
+  });
 });
 
 testCases.serde.concat(testCases.deserialization).forEach((testCase) => {
-  tap.strictSame(jstp.parse(testCase.serialized), testCase.value,
-    `must deserialize ${testCase.name}`);
+  test(`must deserialize ${testCase.name}`, (test) => {
+    test.strictSame(jstp.parse(testCase.serialized), testCase.value);
+    test.end();
+  });
 });
 
 testCases.invalidDeserialization.forEach((testCase) => {
-  tap.throws(() => jstp.parse(testCase.value),
-    `must not allow ${testCase.name}`);
+  test(`must not allow ${testCase.name}`, (test) => {
+    test.throws(() => jstp.parse(testCase.value));
+    test.end();
+  });
 });

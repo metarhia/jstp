@@ -1,14 +1,14 @@
 'use strict';
 
-const tap = require('tap');
+const test = require('tap').test;
 
-const jstp = require('../../');
+const jstp = require('../..');
 const RemoteError = jstp.RemoteError;
 
 const testCases = require('../fixtures/remote-error-test-cases');
 
 testCases.forEach((testCase) => {
-  tap.test(`Must properly construct an error from array with ${testCase.name}`,
+  test(`Must properly construct an error from array with ${testCase.name}`,
     (test) => {
       const jstpArray = [testCase.code];
       if (testCase.message) {
