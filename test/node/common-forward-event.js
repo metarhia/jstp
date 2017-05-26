@@ -1,61 +1,59 @@
 'use strict';
 
-const tap = require('tap');
-const sinon = require('sinon');
+const test = require('tap').test;
 
 const events = require('events');
 
 const common = require('../../lib/common');
 
-tap.test('must forward a single event', (test) => {
+test('must forward a single event', (test) => {
+  test.plan(1);
+
   const sourceEventEmitter = new events.EventEmitter();
   const targetEventEmitter = new events.EventEmitter();
-
-  const spy = sinon.spy();
 
   common.forwardEvent(sourceEventEmitter, targetEventEmitter, 'testEvent');
-  targetEventEmitter.on('testEvent', spy);
+  targetEventEmitter.on('testEvent', () => {
+    test.pass('event handler must be called');
+  });
 
   sourceEventEmitter.emit('testEvent');
-  test.assert(spy.called, 'event handler must be called');
-  test.end();
 });
 
-tap.test('must forward a single event under a new name', (test) => {
+test('must forward a single event under a new name', (test) => {
+  test.plan(1);
+
   const sourceEventEmitter = new events.EventEmitter();
   const targetEventEmitter = new events.EventEmitter();
-
-  const spy = sinon.spy();
 
   common.forwardEvent(sourceEventEmitter, targetEventEmitter,
                         'testEvent', 'renamedEvent');
-  targetEventEmitter.on('renamedEvent', spy);
+
+  targetEventEmitter.on('renamedEvent', () => {
+    test.pass('event handler must be called');
+  });
 
   sourceEventEmitter.emit('testEvent');
-  test.assert(spy.called, 'event handler must be called');
-  test.end();
 });
 
-tap.test('must forward multiple events', (test) => {
+test('must forward multiple events', (test) => {
+  test.plan(2);
+
   const sourceEventEmitter = new events.EventEmitter();
   const targetEventEmitter = new events.EventEmitter();
-
-  const firstSpy = sinon.spy();
-  const secondSpy = sinon.spy();
 
   common.forwardMultipleEvents(sourceEventEmitter, targetEventEmitter, [
     'event1',
     'event2'
   ]);
 
-  targetEventEmitter.on('event1', firstSpy);
-  targetEventEmitter.on('event2', secondSpy);
+  targetEventEmitter.on('event1', () => {
+    test.pass('first event handler must be called');
+  });
+  targetEventEmitter.on('event2', () => {
+    test.pass('second event handler must be called');
+  });
 
   sourceEventEmitter.emit('event1');
   sourceEventEmitter.emit('event2');
-
-  test.assert(firstSpy.called, 'first event handler must be called');
-  test.assert(secondSpy.called, 'second event handler must be called');
-  test.end();
 });
-
