@@ -3,19 +3,22 @@
 'use strict';
 
 const fs = require('fs');
+const os = require('os');
 const childProcess = require('child_process');
 
 const EXIT_SUCCESS = 0;
 const EXIT_FAIL = 1;
 
 let action = process.argv.includes('--rebuild') ? 'rebuild' : 'build';
+const jobs = `-j${process.env.JOBS || os.cpus().length}`;
 
 fs.access('build', (error) => {
   if (error) {
     action = 'rebuild';
   }
 
-  const nodeGyp = childProcess.spawn('node-gyp', [action], { shell: true });
+  const nodeGyp = childProcess.spawn('node-gyp', [action, jobs],
+    { shell: true });
   const errorLines = [];
 
   nodeGyp.on('error', () => {
