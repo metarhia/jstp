@@ -11,7 +11,7 @@ let rl = null;
 const log = (msg) => {
   const userInput = rl.line;
   if (userInput) rl.clearLine();
-  console.log(msg);
+  rl.output.write(msg);
   rl.write('\n');
   if (userInput) rl.write(userInput);
 };
@@ -31,8 +31,9 @@ rl = readline.createInterface({
   completer: cli.completer.bind(cli)
 });
 
+const prompt = rl.prompt.bind(rl);
 rl.on('line', (line) => {
-  cli.processLine(line, rl.prompt(true));
+  cli.processLine(line, prompt);
 });
 
 rl.on('close', () => finish());
@@ -40,4 +41,3 @@ rl.on('close', () => finish());
 rl.on('SIGINT', () => finish());
 
 rl.prompt(true);
-
