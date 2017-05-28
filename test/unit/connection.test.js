@@ -533,7 +533,7 @@ describe('JSTP Connection', () => {
 
   describe('event', () => {
     testPacketSending('event', (connection, transport) => {
-      const eventArgs = { arg: 'value' };
+      const eventArgs = [ 'value' ];
 
       const sendSpy = chai.spy((data) => {
         const packet = jstp.parse(data);
