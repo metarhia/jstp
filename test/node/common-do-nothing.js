@@ -1,7 +1,7 @@
 'use strict';
 
-const tap = require('tap');
+const test = require('tap');
 
 const common = require('../../lib/common');
 
-tap.equal(common.doNothing(), undefined, 'must not return a value');
+test.equal(common.doNothing(), undefined, 'must not return a value');
