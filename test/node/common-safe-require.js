@@ -4,8 +4,8 @@ const tap = require('tap');
 
 const common = require('../../lib/common');
 
-const existingModule = 'tap';
-const nonExistingModule = 'tp';
+const existingModule = '../..';
+const nonExistingModule = '__non_existinting_module__';
 
 tap.ok(common.safeRequire(existingModule), 'must require existing module');
 
