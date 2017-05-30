@@ -531,53 +531,6 @@ describe('JSTP Connection', () => {
     });
   });
 
-  describe('event', () => {
-    testPacketSending('event', (connection, transport) => {
-      const eventArgs = [ 'value' ];
-
-      const sendSpy = chai.spy((data) => {
-        const packet = jstp.parse(data);
-        expect(packet).to.have.all.keys(['event', constants.TEST_EVENT]);
-
-        expect(packet.event).to.be.an('array');
-        expect(packet.event[0]).to.be.a('number');
-        expect(packet.event[1]).to.equal(constants.TEST_INTERFACE);
-
-        expect(packet[constants.TEST_EVENT]).to.eql(eventArgs);
-      });
-
-      transport.on('dataSent', sendSpy);
-
-      connection.emitRemoteEvent(constants.TEST_INTERFACE,
-        constants.TEST_EVENT, eventArgs);
-
-      expect(sendSpy).to.have.been.called();
-    });
-
-    it('must process event packets', () => {
-      const payload = { key: 'value' };
-
-      const event = {
-        event: [-1, constants.TEST_INTERFACE]
-      };
-
-      event[constants.TEST_EVENT] = payload;
-
-      const handler = chai.spy((eventArgs) => {
-        expect(eventArgs.interfaceName).to.equal(constants.TEST_INTERFACE);
-        expect(eventArgs.remoteEventName).to.equal(constants.TEST_EVENT);
-        expect(eventArgs.remoteEventArgs).to.eql(payload);
-      });
-
-      clientConnection.on('event', handler);
-
-      performHandshakeFromClient(() => {
-        clientTransportMock.emitPacket(event);
-        expect(handler).to.be.called();
-      });
-    });
-  });
-
   describe('state', () => {
     testPacketSending('state', (connection, transport) => {
       const sendSpy = chai.spy((data) => {
