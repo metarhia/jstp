@@ -10,6 +10,9 @@ dev/
 # Project files
 .color_coded
 .idea/
+.ycm_extra_conf.py
+.clang
+compile_commands.json
 
 # OS-specific files
 .DS_Store
