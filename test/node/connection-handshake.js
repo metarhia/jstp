@@ -1,6 +1,6 @@
 'use strict';
 
-const test = require('tap').test;
+const test = require('tap');
 
 const jstp = require('../..');
 
@@ -9,87 +9,70 @@ const application = new jstp.Application(app.name, app.interfaces);
 
 const Transport = require('../unit/mock/transport');
 
-test('must perform an anonymous handshake', (test) => {
-  test.plan(3);
+let server;
+let client;
 
+test.beforeEach((done) => {
   const port = 3333;
-  const server = jstp.tcp.createServer(port, [application], app.authCallback);
+  server = jstp.tcp.createServer(port, [application], app.authCallback);
   server.listen(() => {
-    const client = jstp.tcp.createClient({ host: 'localhost', port });
+    client = jstp.tcp.createClient({ host: 'localhost', port });
+    done();
+  });
+});
 
-    client.connectAndHandshake(app.name, null, null, (error, connection) => {
+test.afterEach((done) => {
+  if (client.connection) {
+    client.disconnect();
+  }
+  server.close();
+  done();
+});
+
+
+test.test('must perform an anonymous handshake', (test) => {
+  client.connectAndHandshake(app.name, null, null, (error, connection) => {
+    test.assertNot(error, 'must be no error');
+    test.equal(connection.username, null, 'username must be null');
+    test.equal(connection.sessionId, app.sessionId,
+      'session id must be equal to the one provided by authCallback');
+    test.end();
+  });
+});
+
+
+test.test('must perform a handshake with credentials', (test) => {
+  client.connectAndHandshake(app.name, app.login, app.password,
+    (error, connection) => {
       test.assertNot(error, 'must be no error');
-      test.equal(connection.username, null, 'username must be null');
+      test.equal(connection.username, app.login,
+        'username must be same as the one passed with handshake');
       test.equal(connection.sessionId, app.sessionId,
         'session id must be equal to the one provided by authCallback');
-      client.disconnect();
-      server.close();
-    });
+      test.end();
+    }
+  );
+});
+
+test.test('must not perform a handshake with invalid credentials', (test) => {
+  client.connectAndHandshake(app.name, app.login, '__incorrect__', (error) => {
+    test.assert(error, 'must be an error');
+    test.equal(error.code, jstp.ERR_AUTH_FAILED,
+      'error code must be ERR_AUTH_FAILED');
+    test.end();
   });
 });
 
-
-test('must perform a handshake with credentials', (test) => {
-  test.plan(3);
-
-  const port = 3334;
-  const server = jstp.tcp.createServer(port, [application], app.authCallback);
-  server.listen(() => {
-    const client = jstp.tcp.createClient({ host: 'localhost', port });
-
-    client.connectAndHandshake(app.name, app.login, app.password,
-      (error, connection) => {
-        test.assertNot(error, 'must be no error');
-        test.equal(connection.username, app.login,
-          'username must be same as the one passed with handshake');
-        test.equal(connection.sessionId, app.sessionId,
-          'session id must be equal to the one provided by authCallback');
-        client.disconnect();
-        server.close();
-      }
-    );
+test.test('must handle nonexistent application error', (test) => {
+  client.connectAndHandshake('nonexistentApp', null, null, (error) => {
+    test.assert(error, 'must be an error');
+    test.equal(error.code, jstp.ERR_APP_NOT_FOUND,
+      'error code must be ERR_APP_NOT_FOUND');
+    test.end();
   });
 });
 
-test('must not perform a handshake with invalid credentials', (test) => {
-  test.plan(2);
-
-  const port = 3335;
-  const server = jstp.tcp.createServer(port, [application], app.authCallback);
-  server.listen(() => {
-    const client = jstp.tcp.createClient({ host: 'localhost', port });
-
-    client.connectAndHandshake(app.name, app.login, 'psssword', (error) => {
-      test.assert(error, 'must be an error');
-      test.equal(error.code, jstp.ERR_AUTH_FAILED,
-        'error code must be ERR_AUTH_FAILED');
-      client.disconnect();
-      server.close();
-    });
-  });
-});
-
-test('must handle inexistent application error', (test) => {
-  test.plan(2);
-
-  const port = 3336;
-  const server = jstp.tcp.createServer(port, [application], app.authCallback);
-  server.listen(() => {
-    const client = jstp.tcp.createClient({ host: 'localhost', port });
-
-    client.connectAndHandshake('inexistentApp', null, null, (error) => {
-      test.assert(error, 'must be an error');
-      test.equal(error.code, jstp.ERR_APP_NOT_FOUND,
-        'error code must be ERR_APP_NOT_FOUND');
-      client.disconnect();
-      server.close();
-    });
-  });
-});
-
-test('must not accept handshakes on a client', (test) => {
-  test.plan(1);
-
+test.test('must not accept handshakes on a client', (test) => {
   const transport = new Transport();
 
   const handshake = {
@@ -102,6 +85,7 @@ test('must not accept handshakes on a client', (test) => {
 
   transport.on('dataSent', (data) => {
     test.equal(data, jstp.stringify(response));
+    test.end();
   });
 
   // `connection` is being used in an implicit way
