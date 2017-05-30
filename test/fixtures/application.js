@@ -24,6 +24,22 @@ const interfaces = {
     doNothing(connection, callback) {
       callback(null);
     }
+  },
+  someService: {
+    sayHi(connection, name, callback) {
+      callback(null, `Hi, ${name}!`);
+    },
+    say(connection, word, callback) {
+      callback(null, word);
+    }
+  },
+  someOtherService: {
+    method(connection, argument, callback) {
+      callback(null, argument);
+    },
+    otherMethod(connection, callback) {
+      callback(null);
+    }
   }
 };
 
