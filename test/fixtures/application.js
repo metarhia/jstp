@@ -24,17 +24,16 @@ const authCallback = (
   }
 
   if (strategy === 'login' &&
-    credentials[0] === login &&
-    credentials[1] === password) {
+      credentials[0] === login &&
+      credentials[1] === password) {
     success = true;
     username = login;
   }
 
   if (success) {
     callback(null, username, sessionId);
-  } else {
-    callback(new jstp.RemoteError(jstp.ERR_AUTH_FAILED));
   }
+  callback(new jstp.RemoteError(jstp.ERR_AUTH_FAILED));
 };
 
 module.exports = {
