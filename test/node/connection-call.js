@@ -4,30 +4,7 @@ const test = require('tap');
 
 const jstp = require('../../');
 
-const name = 'testApp';
-
-const interfaces = {
-  calculator: {
-    answer(connection, callback) {
-      callback(null, 42);
-    },
-    divide(connection, divided, divider, callback) {
-      if (!divider) {
-        callback(new Error('Zero division'));
-      } else {
-        callback(null, divided / divider);
-      }
-    },
-    doNothing(connection, callback) {
-      callback(null);
-    }
-  }
-};
-
-const app = {
-  name,
-  interfaces
-};
+const app = require('../fixtures/application');
 
 const application = new jstp.Application(app.name, app.interfaces);
 
