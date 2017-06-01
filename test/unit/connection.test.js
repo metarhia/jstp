@@ -14,6 +14,8 @@ const ClientMock = require('./mock/client');
 const expect = chai.expect;
 chai.use(chaiSpies);
 
+const { NORMAL: STATE_NORMAL, CLOSING: STATE_CLOSING } = jstp.Connection.STATES;
+
 describe('JSTP Connection', () => {
   let serverTransportMock;
   let clientTransportMock;
@@ -74,7 +76,7 @@ describe('JSTP Connection', () => {
         expect(sessionId).to.equal(constants.TEST_SESSION_ID);
 
         expect(clientConnection.username).to.be.null;
-        expect(clientConnection.handshakeDone).to.be.true;
+        expect(clientConnection.state).to.equal(STATE_NORMAL);
 
         clientTransportMock.send.reset();
       });
@@ -103,7 +105,7 @@ describe('JSTP Connection', () => {
         expect(sessionId).to.equal(constants.TEST_SESSION_ID);
 
         expect(clientConnection.username).to.eql(constants.TEST_USERNAME);
-        expect(clientConnection.handshakeDone).to.be.true;
+        expect(clientConnection.state).to.equal(STATE_NORMAL);
 
         clientTransportMock.send.reset();
       });
@@ -133,7 +135,7 @@ describe('JSTP Connection', () => {
         expect(sessionId).to.not.exist;
 
         expect(clientConnection.username).to.be.null;
-        expect(clientConnection.handshakeDone).to.be.false;
+        expect(clientConnection.state).to.equal(STATE_CLOSING);
       });
 
       clientConnection.handshake('invalidApp', 'user', 'password', callback);
@@ -151,7 +153,7 @@ describe('JSTP Connection', () => {
         expect(sessionId).to.not.exist;
 
         expect(clientConnection.username).to.be.null;
-        expect(clientConnection.handshakeDone).to.be.false;
+        expect(clientConnection.state).to.equal(STATE_CLOSING);
       });
 
       clientConnection.handshake(constants.TEST_APPLICATION,
