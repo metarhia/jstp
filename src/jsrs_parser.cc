@@ -4,6 +4,7 @@
 #include "jsrs_parser.h"
 
 #include <cctype>
+#include <cmath>
 #include <cstddef>
 #include <cstdlib>
 #include <cstring>
@@ -18,6 +19,8 @@ using std::function;
 using std::isalnum;
 using std::isalpha;
 using std::isdigit;
+using std::isinf;
+using std::isnan;
 using std::isxdigit;
 using std::memset;
 using std::ptrdiff_t;
@@ -148,6 +151,11 @@ static bool GetType(const char* begin, const char* end, Type* type) {
       if (begin + 9 <= end) {
         result = (strncmp(begin, "undefined", 9) == 0);
       }
+      break;
+    }
+    case 'N':
+    case 'I': {
+      *type = Type::kNumber;
       break;
     }
     default: {
@@ -318,32 +326,46 @@ MaybeLocal<Value> ParseNumber(Isolate*    isolate,
     }
   }
 
+  MaybeLocal<Value> result;
+
   if (base == 10) {
-    return ParseDecimalNumber(isolate, begin, end, size);
+    result = ParseDecimalNumber(isolate, number_start, end, size,
+                                negate_result);
   } else {
-    auto value = ParseIntegerNumber(isolate, number_start, end, size,
-                                    base, negate_result);
-    auto offset = static_cast<size_t>(number_start - begin);
-    *size += offset;
-    return value;
+    result = ParseIntegerNumber(isolate, number_start, end, size,
+                                base, negate_result);
   }
+  *size += number_start - begin;
+  return result;
 }
 
-Local<Value> ParseDecimalNumber(Isolate*    isolate,
-                                const char* begin,
-                                const char* end,
-                                size_t*     size) {
-  auto result = Number::New(isolate, atof(begin));
-  *size = end - begin;
-  size_t i = 0;
-  while (begin[i] != ',' &&
-         begin[i] != '}' &&
-         begin[i] != ']' &&
-         i < *size) {
-    i++;
+MaybeLocal<Value> ParseDecimalNumber(Isolate*    isolate,
+                                     const char* begin,
+                                     const char* end,
+                                     size_t*     size,
+                                     bool        negate_result) {
+  char* number_end;
+  double number = strtod(begin, &number_end);
+
+  if (negate_result) {
+    number = -number;
   }
-  *size = i;
-  return result;
+
+  // strictly allow only "NaN" and "Infinity"
+  if (isnan(number)) {
+    if (strncmp(begin + 1, "aN", 2) != 0) {
+      THROW_EXCEPTION(SyntaxError, "Invalid format: expected NaN");
+      return MaybeLocal<Value>();
+    }
+  } else if (isinf(number)) {
+    if (strncmp(begin + 1, "nfinity", 7) != 0) {
+      THROW_EXCEPTION(SyntaxError, "Invalid format: expected Infinity");
+      return MaybeLocal<Value>();
+    }
+  }
+
+  *size = number_end - begin;
+  return Number::New(isolate, number);
 }
 
 Local<Value> ParseIntegerNumber(Isolate*    isolate,

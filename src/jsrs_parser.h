@@ -104,10 +104,11 @@ v8::MaybeLocal<v8::Value> ParseObject(v8::Isolate* isolate,
                                       std::size_t* size);
 
 // Parses a decimal number, either integer or float.
-v8::Local<v8::Value> ParseDecimalNumber(v8::Isolate* isolate,
-                                        const char*  begin,
-                                        const char*  end,
-                                        std::size_t* size);
+v8::MaybeLocal<v8::Value> ParseDecimalNumber(v8::Isolate* isolate,
+                                             const char*  begin,
+                                             const char*  end,
+                                             std::size_t* size,
+                                             bool         negate_result);
 
 // Parses an integer number in arbitrary base without prefixes.
 v8::Local<v8::Value> ParseIntegerNumber(v8::Isolate* isolate,
