@@ -2,7 +2,7 @@
 
 const test = require('tap');
 
-const jstp = require('../../');
+const jstp = require('../..');
 
 const app = require('../fixtures/application');
 
@@ -27,49 +27,47 @@ test.afterEach((done) => {
 });
 
 test.test('must perform call with no arguments and no return value', (test) => {
-  client.connectAndInspect(app.name, null, null, ['calculator'],
-    (error, connection, api) => {
-      api.calculator.doNothing((error) => {
-        test.assertNot(error, 'must be no error');
-        test.end();
-      });
-    }
+  client.connectAndHandshake(app.name, null, null, (error, connection) => {
+    connection.callMethod('calculator', 'doNothing', [], (error) => {
+      test.assertNot(error, 'must be no error');
+      test.end();
+    });
+  }
   );
 });
 
 test.test('must perform call with no arguments and return value', (test) => {
-  client.connectAndInspect(app.name, null, null, ['calculator'],
-    (error, connection, api) => {
-      api.calculator.answer((error, result) => {
-        test.assertNot(error, 'must be no error');
-        test.equal(result, 42);
-        test.end();
-      });
-    }
+  client.connectAndHandshake(app.name, null, null, (error, connection) => {
+    connection.callMethod('calculator', 'answer', [], (error, result) => {
+      test.assertNot(error, 'must be no error');
+      test.equal(result, 42);
+      test.end();
+    });
+  }
   );
 });
 
 test.test('must perform call with arguments and return value', (test) => {
-  client.connectAndInspect(app.name, null, null, ['calculator'],
-    (error, connection, api) => {
-      api.calculator.divide(20, 10, (error, sum) => {
+  client.connectAndHandshake(app.name, null, null, (error, connection) => {
+    connection.callMethod('calculator', 'divide', [20, 10],
+      (error, result) => {
         test.assertNot(error, 'must be no error');
-        test.equal(sum, 2);
+        test.equal(result, 2);
         test.end();
-      });
-    }
+      }
+    );
+  }
   );
 });
 
 test.test('must perform call that returns an error', (test) => {
-  client.connectAndInspect(app.name, null, null, ['calculator'],
-    (error, connection, api) => {
-      api.calculator.divide(10, 0, (error) => {
-        test.assert(error, 'must be an error');
-        test.equal(error.code, 1);
-        test.end();
-      });
-    }
+  client.connectAndHandshake(app.name, null, null, (error, connection) => {
+    connection.callMethod('calculator', 'divide', [10, 0], (error) => {
+      test.assert(error, 'must be an error');
+      test.equal(error.code, 1);
+      test.end();
+    });
+  }
   );
 });
 
