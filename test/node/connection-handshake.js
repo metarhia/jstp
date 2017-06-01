@@ -32,7 +32,7 @@ test.afterEach((done) => {
 
 test.test('must perform an anonymous handshake', (test) => {
   client.connectAndHandshake(app.name, null, null, (error, connection) => {
-    test.assertNot(error, 'must be no error');
+    test.assertNot(error, 'must connect to server');
     test.equal(connection.username, null, 'username must be null');
     test.equal(connection.sessionId, app.sessionId,
       'session id must be equal to the one provided by authCallback');
@@ -44,7 +44,7 @@ test.test('must perform an anonymous handshake', (test) => {
 test.test('must perform a handshake with credentials', (test) => {
   client.connectAndHandshake(app.name, app.login, app.password,
     (error, connection) => {
-      test.assertNot(error, 'must be no error');
+      test.assertNot(error, 'must connect to server');
       test.equal(connection.username, app.login,
         'username must be same as the one passed with handshake');
       test.equal(connection.sessionId, app.sessionId,
@@ -56,7 +56,7 @@ test.test('must perform a handshake with credentials', (test) => {
 
 test.test('must not perform a handshake with invalid credentials', (test) => {
   client.connectAndHandshake(app.name, app.login, '__incorrect__', (error) => {
-    test.assert(error, 'must be an error');
+    test.assert(error, 'handshake must return an error');
     test.equal(error.code, jstp.ERR_AUTH_FAILED,
       'error code must be ERR_AUTH_FAILED');
     test.end();
@@ -65,7 +65,7 @@ test.test('must not perform a handshake with invalid credentials', (test) => {
 
 test.test('must handle nonexistent application error', (test) => {
   client.connectAndHandshake('nonexistentApp', null, null, (error) => {
-    test.assert(error, 'must be an error');
+    test.assert(error, 'handshake must return an error');
     test.equal(error.code, jstp.ERR_APP_NOT_FOUND,
       'error code must be ERR_APP_NOT_FOUND');
     test.end();
@@ -84,7 +84,8 @@ test.test('must not accept handshakes on a client', (test) => {
   };
 
   transport.on('dataSent', (data) => {
-    test.equal(data, jstp.stringify(response));
+    test.equal(data, jstp.stringify(response),
+      'client must return ERR_NOT_A_SERVER');
     test.end();
   });
 
