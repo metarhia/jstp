@@ -29,10 +29,22 @@ test.afterEach((done) => {
   done();
 });
 
+test.test('must perform a handshake', (test) => {
+  client.connect((error, connection) => {
+    test.assertNot(error, 'must connect to server');
+    connection.handshake(app.name, null, null, (error, sessionId) => {
+      test.assertNot(error, 'handshake must not return an error');
+      test.equal(connection.username, null, 'username must be null');
+      test.equal(sessionId, app.sessionId,
+        'session id must be equal to the one provided by authCallback');
+      test.end();
+    });
+  });
+});
 
 test.test('must perform an anonymous handshake', (test) => {
   client.connectAndHandshake(app.name, null, null, (error, connection) => {
-    test.assertNot(error, 'must connect to server');
+    test.assertNot(error, 'handshake must not return an error');
     test.equal(connection.username, null, 'username must be null');
     test.equal(connection.sessionId, app.sessionId,
       'session id must be equal to the one provided by authCallback');
@@ -44,7 +56,7 @@ test.test('must perform an anonymous handshake', (test) => {
 test.test('must perform a handshake with credentials', (test) => {
   client.connectAndHandshake(app.name, app.login, app.password,
     (error, connection) => {
-      test.assertNot(error, 'must connect to server');
+      test.assertNot(error, 'handshake must not return an error');
       test.equal(connection.username, app.login,
         'username must be same as the one passed with handshake');
       test.equal(connection.sessionId, app.sessionId,
