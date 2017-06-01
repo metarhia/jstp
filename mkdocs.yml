@@ -1,6 +1,6 @@
 site_name: JSTP
-site_url: https://metarhia.github.io/JSTP/
-repo_url: https://github.com/metarhia/JSTP/
+site_url: https://metarhia.github.io/jstp/
+repo_url: https://github.com/metarhia/jstp/
 edit_uri: edit/master/doc/
 docs_dir: doc
 pages:

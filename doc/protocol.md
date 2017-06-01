@@ -161,7 +161,7 @@ S: {handshake:[0],ok:'f3785d96d46a...def46f73'}
 It may be necessary for registration or public service. Server responds
 with a session ID.
 
-Successful handshake of [Impress](https://github.com/metarhia/Impress) worker
+Successful handshake of [Impress](https://github.com/metarhia/impress) worker
 connecting to a private cloud controller:
 
 ```javascript

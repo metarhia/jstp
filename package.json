@@ -14,10 +14,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/metarhia/JSTP"
+    "url": "https://github.com/metarhia/jstp"
   },
   "bugs": {
-    "url": "https://github.com/metarhia/JSTP/issues",
+    "url": "https://github.com/metarhia/jstp/issues",
     "email": "timur.shemsedinov@gmail.com"
   },
   "main": "./jstp.js",

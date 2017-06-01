@@ -10,7 +10,7 @@
   <br />
   <a href="https://travis-ci.org/metarhia/jstp">
     <img
-      src="https://travis-ci.org/metarhia/JSTP.svg?branch=master"
+      src="https://travis-ci.org/metarhia/jstp.svg?branch=master"
       alt="Travis CI"
     />
   </a>

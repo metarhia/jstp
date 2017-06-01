@@ -1,8 +1,8 @@
 # JSTP / JavaScript Transfer Protocol
 
-[![Travis CI](https://travis-ci.org/metarhia/JSTP.svg?branch=master)](https://travis-ci.org/metarhia/JSTP)
-[![bitHound Dependencies](https://www.bithound.io/github/metarhia/JSTP/badges/dependencies.svg)](https://www.bithound.io/github/metarhia/JSTP/master/dependencies/npm)
-[![bitHound Score](https://www.bithound.io/github/metarhia/JSTP/badges/score.svg)](https://www.bithound.io/github/metarhia/JSTP)
+[![Travis CI](https://travis-ci.org/metarhia/jstp.svg?branch=master)](https://travis-ci.org/metarhia/jstp)
+[![bitHound Dependencies](https://www.bithound.io/github/metarhia/jstp/badges/dependencies.svg)](https://www.bithound.io/github/metarhia/jstp/master/dependencies/npm)
+[![bitHound Score](https://www.bithound.io/github/metarhia/jstp/badges/score.svg)](https://www.bithound.io/github/metarhia/jstp)
 [![NPM Version](https://badge.fury.io/js/metarhia-jstp.svg)](https://badge.fury.io/js/metarhia-jstp)
 [![NPM Downloads/Month](https://img.shields.io/npm/dm/metarhia-jstp.svg)](https://www.npmjs.com/package/metarhia-jstp)
 [![NPM Downloads](https://img.shields.io/npm/dt/metarhia-jstp.svg)](https://www.npmjs.com/package/metarhia-jstp)
@@ -25,8 +25,8 @@ in your code.
 
 Or, alternatively, if you are developing a client-side application for browser
 environment and don't use a module bundler like Webpack, you can grab
-[jstp.min.js](https://metarhia.github.io/JSTP/dist/jstp.min.js) and
-[jstp.min.js.map](https://metarhia.github.io/JSTP/dist/jstp.min.js.map).
+[jstp.min.js](https://metarhia.github.io/jstp/dist/jstp.min.js) and
+[jstp.min.js.map](https://metarhia.github.io/jstp/dist/jstp.min.js.map).
 JSTP will be available globally as `api.jstp`.
 
 ## Concept
@@ -92,7 +92,7 @@ processing that are based on some simple assumptions:
 
 | Implementation | Parser | TCP Client | TCP Server | WebSocket Client | WebSocket Server |
 | --- | :---: | :---: | :---: | :---: | :---: |
-| JavaScript<br>[metarhia/JSTP](https://github.com/metarhia/JSTP) | ✓ | ✓ | ✓ | ✓ | ✓ |
+| JavaScript<br>[metarhia/jstp](https://github.com/metarhia/jstp) | ✓ | ✓ | ✓ | ✓ | ✓ |
 | Swift<br>[JSTPMobile/iOS](https://github.com/JSTPMobile/iOS) | ✓ | ✓ | ✗ | ✗ | ✗ |
 | Java<br>[JSTPMobile/Java](https://github.com/JSTPMobile/Java) | ✓ | ✓ | ✗ | ✗ | ✗ |
 | Haskell<br>[DzyubSpirit/JSTPHaskell](https://github.com/DzyubSpirit/JSTPHaskell) | ✓ | ✓ | ✓ | ✗ | ✗ |
