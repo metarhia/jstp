@@ -1,7 +1,7 @@
 'use strict';
 
 const name = 'testApp';
-
+const expectedErrorMessage = 'Zero division';
 const interfaces = {
   calculator: {
     answer(connection, callback) {
@@ -9,7 +9,7 @@ const interfaces = {
     },
     divide(connection, divided, divider, callback) {
       if (!divider) {
-        callback(new Error('Zero division'));
+        callback(new Error(expectedErrorMessage));
       } else {
         callback(null, divided / divider);
       }
@@ -22,5 +22,6 @@ const interfaces = {
 
 module.exports = {
   name,
-  interfaces
+  interfaces,
+  expectedErrorMessage
 };

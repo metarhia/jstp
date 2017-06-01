@@ -64,7 +64,7 @@ test.test('must perform call that returns an error', (test) => {
   client.connectAndHandshake(app.name, null, null, (error, connection) => {
     connection.callMethod('calculator', 'divide', [10, 0], (error) => {
       test.assert(error, 'callMethod must return an error');
-      test.equal(error.code, 1);
+      test.equal(error.message, `Error: ${app.expectedErrorMessage}`);
       test.end();
     });
   }
