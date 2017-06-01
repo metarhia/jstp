@@ -13,9 +13,9 @@ let server;
 let client;
 
 test.beforeEach((done) => {
-  const port = 3333;
-  server = jstp.tcp.createServer(port, [application], app.authCallback);
+  server = jstp.tcp.createServer(0, [application], app.authCallback);
   server.listen(() => {
+    const port = server.address().port;
     client = jstp.tcp.createClient({ host: 'localhost', port });
     done();
   });
