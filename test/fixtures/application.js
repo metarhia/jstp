@@ -1,6 +1,6 @@
 'use strict';
 
-const jstp = require('../../');
+const jstp = require('../..');
 
 const name = 'testApp';
 const login = 'login';
