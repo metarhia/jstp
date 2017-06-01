@@ -29,7 +29,7 @@ test.afterEach((done) => {
 test.test('must perform call with no arguments and no return value', (test) => {
   client.connectAndHandshake(app.name, null, null, (error, connection) => {
     connection.callMethod('calculator', 'doNothing', [], (error) => {
-      test.assertNot(error, 'must be no error');
+      test.assertNot(error, 'callMethod must not return an error');
       test.end();
     });
   }
@@ -39,7 +39,7 @@ test.test('must perform call with no arguments and no return value', (test) => {
 test.test('must perform call with no arguments and return value', (test) => {
   client.connectAndHandshake(app.name, null, null, (error, connection) => {
     connection.callMethod('calculator', 'answer', [], (error, result) => {
-      test.assertNot(error, 'must be no error');
+      test.assertNot(error, 'callMethod must not return an error');
       test.equal(result, 42);
       test.end();
     });
@@ -51,7 +51,7 @@ test.test('must perform call with arguments and return value', (test) => {
   client.connectAndHandshake(app.name, null, null, (error, connection) => {
     connection.callMethod('calculator', 'divide', [20, 10],
       (error, result) => {
-        test.assertNot(error, 'must be no error');
+        test.assertNot(error, 'callMethod must not return an error');
         test.equal(result, 2);
         test.end();
       }
@@ -63,7 +63,7 @@ test.test('must perform call with arguments and return value', (test) => {
 test.test('must perform call that returns an error', (test) => {
   client.connectAndHandshake(app.name, null, null, (error, connection) => {
     connection.callMethod('calculator', 'divide', [10, 0], (error) => {
-      test.assert(error, 'must be an error');
+      test.assert(error, 'callMethod must return an error');
       test.equal(error.code, 1);
       test.end();
     });
@@ -78,7 +78,7 @@ test.test('must return error on call to nonexistent interface', (test) => {
       '__nonexistent_method__',
       [],
       (error) => {
-        test.assert(error, 'must be an error');
+        test.assert(error, 'callMethod must return an error');
         test.equal(error.code, jstp.ERR_INTERFACE_NOT_FOUND,
           'error must be an ERR_INTERFACE_NOT_FOUND');
         test.end();
@@ -91,7 +91,7 @@ test.test('must return error on call to nonexistent method', (test) => {
   client.connectAndHandshake(app.name, null, null, (error, connection) => {
     connection.callMethod('calculator', '__nonexistent_method__', [],
       (error) => {
-        test.assert(error, 'must be an error');
+        test.assert(error, 'callMethod must return an error');
         test.equal(error.code, jstp.ERR_METHOD_NOT_FOUND,
           'error must be an ERR_METHOD_NOT_FOUND');
         test.end();
