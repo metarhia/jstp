@@ -30,10 +30,10 @@ const authCallback = (
     username = login;
   }
 
-  if (success) {
-    callback(null, username, sessionId);
+  if (!success) {
+    callback(new jstp.RemoteError(jstp.ERR_AUTH_FAILED));
   }
-  callback(new jstp.RemoteError(jstp.ERR_AUTH_FAILED));
+  callback(null, username, sessionId);
 };
 
 module.exports = {
