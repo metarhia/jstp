@@ -10,9 +10,9 @@ const app = new jstp.Application('name', {});
 const path = process.platform === 'win32' ?
   '\\\\.\\pipe\\my-service' :
   '/tmp/my-service.sock';
-const config = { path };
+const config = { path, applications: [app] };
 
-const server = jstp.ipc.createServer(config, [app]);
+const server = jstp.net.createServer(config);
 
 let triedToUnlink = false;
 
@@ -31,8 +31,8 @@ process.on('exit', () => {
 test.assertNot(server.address(),
   'must return null address if server is not listening');
 
-server.listen(() => {
+server.listen(config.path, () => {
   test.strictEqual(server.address(), config.path,
-    'must return correct port address upon listening');
+    'must return correct path address upon listening');
   server.close();
 });

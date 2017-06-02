@@ -27,11 +27,12 @@
   "browser": {
     "./lib/record-serialization.js": "./lib/record-serialization-fallback.js",
     "./lib/server.js": false,
-    "./lib/transport.tcp.js": false,
-    "./lib/transport.ipc.js": false,
-    "./lib/transport.socket.js": false,
-    "./lib/transport.ws.js": "./lib/transport.ws.browser.js",
-    "./lib/simple-auth.js": false
+    "./lib/net.js": false,
+    "./lib/tls.js": false,
+    "./lib/socket.js": false,
+    "./lib/wss.js": false,
+    "./lib/ws.js": "./lib/ws-browser.js",
+    "./lib/simple-auth-policy.js": false
   },
   "dependencies": {
     "websocket": "^1.0.24"
@@ -53,7 +54,7 @@
   "scripts": {
     "test": "npm run lint && npm run test-node && npm run test-integration",
     "test-node": "tap test/node/*.js",
-    "test-integration": "node test/integration/run-tests",
+    "test-integration": "node test/integration/run.js",
     "test-todo": "tap test/todo",
     "test-coverage": "nyc npm run test-node",
     "lint": "eslint . && remark .",

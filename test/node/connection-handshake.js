@@ -1,41 +1,50 @@
 'use strict';
 
 const test = require('tap');
+const net = require('net');
 
 const jstp = require('../..');
 
 const app = require('../fixtures/application');
 const application = new jstp.Application(app.name, app.interfaces);
 
+const serverConfig =
+  { applications: [application], authPolicy: app.authCallback };
+
 const Transport = require('../mock/transport');
 
 let server;
-let client;
+let connection;
 
 test.beforeEach((done) => {
-  server = jstp.tcp.createServer(0, [application], app.authCallback);
-  server.listen(() => {
-    const port = server.address().port;
-    client = jstp.tcp.createClient({ host: 'localhost', port });
-    done();
-  });
+  server = jstp.net.createServer(serverConfig);
+  server.listen(0, () => done());
 });
 
 test.afterEach((done) => {
-  if (client.connection) {
-    client.disconnect();
+  if (connection) {
+    connection.close();
+    connection = null;
   }
   server.close();
   done();
 });
 
-test.test('must perform a handshake', (test) => {
-  client.connect((error, connection) => {
-    test.assertNot(error, 'must connect to server');
-    connection.handshake(app.name, null, null, (error, sessionId) => {
+test.test('must perform an anonymous handshake', (test) => {
+  const client = {
+    application: new jstp.Application('jstp', {}),
+  };
+  const port = server.address().port;
+  const socket = net.connect(port);
+  socket.on('error',
+    () => test.fail('must create socket and connect to server'));
+  socket.on('connect', () => {
+    const transport = new jstp.net.Transport(socket);
+    connection = new jstp.Connection(transport, null, client);
+    connection.handshake(app.name, null, null, (error) => {
       test.assertNot(error, 'handshake must not return an error');
       test.equal(connection.username, null, 'username must be null');
-      test.equal(sessionId, app.sessionId,
+      test.equal(connection.sessionId, app.sessionId,
         'session id must be equal to the one provided by authCallback');
       test.end();
     });
@@ -43,7 +52,9 @@ test.test('must perform a handshake', (test) => {
 });
 
 test.test('must perform an anonymous handshake', (test) => {
-  client.connectAndHandshake(app.name, null, null, (error, connection) => {
+  const port = server.address().port;
+  jstp.net.connect(app.name, null, port, (error, conn) => {
+    connection = conn;
     test.assertNot(error, 'handshake must not return an error');
     test.equal(connection.username, null, 'username must be null');
     test.equal(connection.sessionId, app.sessionId,
@@ -54,20 +65,27 @@ test.test('must perform an anonymous handshake', (test) => {
 
 
 test.test('must perform a handshake with credentials', (test) => {
-  client.connectAndHandshake(app.name, app.login, app.password,
-    (error, connection) => {
-      test.assertNot(error, 'handshake must not return an error');
-      test.equal(connection.username, app.login,
+  const client = {
+    connectPolicy: new jstp.SimpleConnectPolicy(app.login, app.password)
+  };
+  const port = server.address().port;
+  jstp.net.connect(app.name, client, port, (error, conn) => {
+    connection = conn;
+    test.assertNot(error, 'handshake must not return an error');
+    test.equal(connection.username, app.login,
         'username must be same as the one passed with handshake');
-      test.equal(connection.sessionId, app.sessionId,
+    test.equal(connection.sessionId, app.sessionId,
         'session id must be equal to the one provided by authCallback');
-      test.end();
-    }
-  );
+    test.end();
+  });
 });
 
 test.test('must not perform a handshake with invalid credentials', (test) => {
-  client.connectAndHandshake(app.name, app.login, '__incorrect__', (error) => {
+  const client = {
+    connectPolicy: new jstp.SimpleConnectPolicy(app.login, '__incorrect__')
+  };
+  const port = server.address().port;
+  jstp.net.connect(app.name, client, port, (error) => {
     test.assert(error, 'handshake must return an error');
     test.equal(error.code, jstp.ERR_AUTH_FAILED,
       'error code must be ERR_AUTH_FAILED');
@@ -76,7 +94,8 @@ test.test('must not perform a handshake with invalid credentials', (test) => {
 });
 
 test.test('must handle nonexistent application error', (test) => {
-  client.connectAndHandshake('nonexistentApp', null, null, (error) => {
+  const port = server.address().port;
+  jstp.net.connect('__nonexistentApp__', null, port, (error) => {
     test.assert(error, 'handshake must return an error');
     test.equal(error.code, jstp.ERR_APP_NOT_FOUND,
       'error code must be ERR_APP_NOT_FOUND');

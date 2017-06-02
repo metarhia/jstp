@@ -8,19 +8,18 @@ const app = require('../fixtures/application.js');
 const application = new jstp.Application(app.name, app.interfaces);
 
 let server;
-let client;
+let connection;
 
 test.beforeEach((done) => {
-  server = jstp.tcp.createServer(0, [application]);
-  server.listen(() => {
-    const port = server.address().port;
-    client = jstp.tcp.createClient({ host: 'localhost', port });
-    done();
-  });
+  server = jstp.net.createServer([application]);
+  server.listen(0, () => done());
 });
 
 test.afterEach((done) => {
-  client.disconnect();
+  if (connection) {
+    connection.close();
+    connection = null;
+  }
   server.close();
   done();
 });
@@ -31,28 +30,29 @@ test.test('must process inspect packets', (test) => {
     tests + Object.keys(app.interfaces[iface]).length + 1, 1);
 
   test.plan(expectedTests);
-  client.connectAndHandshake(app.name, null, null,
-    (error, connection) => {
-      test.assertNot(error, 'must connect to server');
+  const port = server.address().port;
+  jstp.net.connect(app.name, null, port, (error, conn) => {
+    connection = conn;
+    test.assertNot(error, 'must connect to server');
 
-      expectedInterfaces.forEach((iface) => {
-        connection.inspectInterface(iface, (error, methods) => {
-          test.assertNot(error, `must inspect ${iface}`);
-          Object.keys(app.interfaces[iface]).forEach(method =>
-            test.assert(method in methods,
-              `api.${iface} must include ${method}`)
-          );
-        });
+    expectedInterfaces.forEach((iface) => {
+      connection.inspectInterface(iface, (error, methods) => {
+        test.assertNot(error, `must inspect ${iface}`);
+        Object.keys(app.interfaces[iface]).forEach(method =>
+          test.assert(method in methods, `api.${iface} must include ${method}`)
+        );
       });
-    }
-  );
+    });
+  });
 });
 
 test.test('must generate remote api after inspect', (test) => {
   const expectedInterfaces = Object.keys(app.interfaces);
 
-  client.connectAndInspect(app.name, null, null, expectedInterfaces,
-    (error, connection, api) => {
+  const port = server.address().port;
+  jstp.net.connectAndInspect(app.name, null, expectedInterfaces, port,
+    (error, conn, api) => {
+      connection = conn;
       test.assertNot(error, 'inspect must not return an error');
 
       expectedInterfaces.forEach((iface) => {
@@ -68,8 +68,10 @@ test.test('must generate remote api after inspect', (test) => {
 });
 
 test.test('remote proxy must call a remote method', (test) => {
-  client.connectAndInspect(app.name, null, null, ['someService'],
-    (error, connection, api) => {
+  const port = server.address().port;
+  jstp.net.connectAndInspect(app.name, null, ['someService'], port,
+    (error, conn, api) => {
+      connection = conn;
       test.assertNot(error, 'inspect must not return an error');
       const word = 'word';
       api.someService.say(word, (error, result) => {
@@ -83,12 +85,13 @@ test.test('remote proxy must call a remote method', (test) => {
 });
 
 test.test('must return an error if interface does not exist', (test) => {
-  client.connectAndInspect(app.name, null, null, ['__nonexistent__interface__'],
-    (error) => {
+  const port = server.address().port;
+  jstp.net.connectAndInspect(
+    app.name, null, ['__nonexistent__interface__'], port, (error, conn) => {
+      connection = conn;
       test.assert(error, 'must return an error');
       test.equal(error.code, jstp.ERR_INTERFACE_NOT_FOUND,
         'error must be an ERR_INTERFACE_NOT_FOUND');
       test.end();
-    }
-  );
+    });
 });

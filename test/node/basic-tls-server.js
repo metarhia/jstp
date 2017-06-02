@@ -21,29 +21,20 @@ const app = new jstp.Application('app', {
   }
 });
 
-// TODO(aqrln): change the port to 0 once server.address() API is landed
-// on master.
-const PORT = 4000;
+const server = jstp.tls.createServer({ applications: [app], key, cert });
 
-const server = jstp.tcp.createServer({ port: PORT, key, cert }, [app]);
-
-server.listen(() => {
-  const client = jstp.tcp.createClient({
-    host: 'localhost',
-    port: PORT,
-    secure: true
-  });
-
-  client.connectAndHandshake('app', null, null, (error, connection) => {
+server.listen(0, () => {
+  const port = server.address().port;
+  jstp.tls.connect(app.name, null, port, (error, connection) => {
     if (error) {
       test.threw(error);
-      test.bailout();
+      return test.bailout();
     }
 
     connection.callMethod('service', 'method', [], (error, result) => {
       if (error) {
         test.threw(error);
-        test.bailout();
+        return test.bailout();
       }
 
       test.equal(result, 'ok', 'result is correct');
