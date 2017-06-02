@@ -118,6 +118,15 @@ v8::Local<v8::Value> ParseIntegerNumber(v8::Isolate* isolate,
                                         int          base,
                                         bool         negate_result);
 
+// Parses an integer number, which is too big to be parsed using
+// ParseIntegerNumber, in arbitrary base without prefixes.
+v8::Local<v8::Value> ParseBigIntegerNumber(v8::Isolate* isolate,
+                                           const char*  begin,
+                                           const char*  end,
+                                           std::size_t* size,
+                                           int          base,
+                                           bool         negate_result);
+
 }  // namespace internal
 
 }  // namespace parser

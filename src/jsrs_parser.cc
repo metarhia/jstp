@@ -4,8 +4,10 @@
 #include "jsrs_parser.h"
 
 #include <cctype>
+#include <cerrno>
 #include <cmath>
 #include <cstddef>
+#include <cstdint>
 #include <cstdlib>
 #include <cstring>
 #include <functional>
@@ -28,6 +30,7 @@ using std::size_t;
 using std::strncmp;
 using std::strncpy;
 using std::strtol;
+using std::toupper;
 
 using v8::Array;
 using v8::False;
@@ -375,12 +378,48 @@ Local<Value> ParseIntegerNumber(Isolate*    isolate,
                                 int         base,
                                 bool        negate_result) {
   char* number_end;
-  int32_t value = strtol(begin, &number_end, base);
+  long long value = strtoll(begin, &number_end, base);
+  if (errno == ERANGE) {
+    errno = 0;
+    return ParseBigIntegerNumber(isolate, begin, end, size,
+                                 base, negate_result);
+  }
   if (negate_result) {
     value = -value;
   }
   *size = static_cast<size_t>(number_end - begin);
-  return Integer::New(isolate, value);
+  if (value > INT32_MIN && value < INT32_MAX) {
+    return Integer::New(isolate, value);
+  } else {
+    return Number::New(isolate, value);
+  }
+}
+
+Local<Value> ParseBigIntegerNumber(Isolate*    isolate,
+                                   const char* begin,
+                                   const char* end,
+                                   size_t*     size,
+                                   int         base,
+                                   bool        negate_result) {
+  *size = end - begin;
+  double result = 0.0;
+  char current_digit;
+  double current_digit_value;
+  char base_digit_count = base > 10 ? 10 : base;
+  char base_alpha_count = base > 10 ? base - 10 : 0;
+  for (size_t i = 0; i < *size; i++) {
+    current_digit = toupper(begin[i]);
+    if ((current_digit < '0' || current_digit >= '0' + base_digit_count) &&
+        (current_digit < 'A' || current_digit >= 'A' + base_alpha_count)) {
+      *size = i;
+      break;
+    }
+    current_digit_value = current_digit <= '9' ? current_digit - '0' :
+      current_digit - 'A' + 10;
+    result *= base;
+    result += current_digit_value;
+  }
+  return Number::New(isolate, negate_result ? -result : result);
 }
 
 static bool GetControlChar(Isolate*    isolate,
