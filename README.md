@@ -1,49 +1,37 @@
 <div align="center">
-  <a href="https://github.com/metarhia/jstp">
-    <img
-      src="https://cdn.rawgit.com/metarhia/Metarhia/master/Logos/metarhia-logo.svg"
-      alt="Metarhia Logo"
-      width="300"
-    />
-  </a>
+  <a href="https://github.com/metarhia/jstp"><img
+    src="https://cdn.rawgit.com/metarhia/Metarhia/master/Logos/metarhia-logo.svg"
+    alt="Metarhia Logo"
+    width="300"
+  /></a>
   <br />
   <br />
-  <a href="https://travis-ci.org/metarhia/jstp">
-    <img
-      src="https://travis-ci.org/metarhia/jstp.svg?branch=master"
-      alt="Travis CI"
-    />
-  </a>
-  <a href="https://www.bithound.io/github/metarhia/jstp/master/dependencies/npm">
-    <img
-      src="https://www.bithound.io/github/metarhia/jstp/badges/dependencies.svg"
-      alt="bitHound Dependencies"
-    />
-  </a>
-  <a href="https://www.bithound.io/github/metarhia/jstp">
-    <img
-      src="https://www.bithound.io/github/metarhia/jstp/badges/score.svg"
-      alt="bitHound Score"
-    />
-  </a>
-  <a href="https://badge.fury.io/js/metarhia-jstp">
-    <img
-      src="https://badge.fury.io/js/metarhia-jstp.svg"
-      alt="NPM Version"
-    />
-  </a>
-  <a href="https://www.npmjs.com/package/metarhia-jstp">
-    <img
-      src="https://img.shields.io/npm/dm/metarhia-jstp.svg"
-      alt="NPM Downloads/Month"
-    />
-  </a>
-  <a href="https://www.npmjs.com/package/metarhia-jstp">
-    <img
-      src="https://img.shields.io/npm/dt/metarhia-jstp.svg"
-      alt="NPM Downloads"
-    />
-  </a>
+  <a href="https://travis-ci.org/metarhia/jstp"><img
+    src="https://travis-ci.org/metarhia/jstp.svg?branch=master"
+    alt="Travis CI"
+  /></a>
+  <a
+    href="https://www.bithound.io/github/metarhia/jstp/master/dependencies/npm"
+  ><img
+    src="https://www.bithound.io/github/metarhia/jstp/badges/dependencies.svg"
+    alt="bitHound Dependencies"
+  /></a>
+  <a href="https://www.bithound.io/github/metarhia/jstp"><img
+    src="https://www.bithound.io/github/metarhia/jstp/badges/score.svg"
+    alt="bitHound Score"
+  /></a>
+  <a href="https://badge.fury.io/js/metarhia-jstp"><img
+    src="https://badge.fury.io/js/metarhia-jstp.svg"
+    alt="NPM Version"
+  /></a>
+  <a href="https://www.npmjs.com/package/metarhia-jstp"><img
+    src="https://img.shields.io/npm/dm/metarhia-jstp.svg"
+    alt="NPM Downloads/Month"
+  /></a>
+  <a href="https://www.npmjs.com/package/metarhia-jstp"><img
+    src="https://img.shields.io/npm/dt/metarhia-jstp.svg"
+    alt="NPM Downloads"
+  /></a>
   <h1>JSTP / JavaScript Transfer Protocol</h1>
 </div>
 
