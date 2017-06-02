@@ -62,19 +62,22 @@ testCases.forEach((testCase) => {
         } else if (ext === '.json5') {
           let value;
           test.doesNotThrow(() => value = jstp.parse(file));
-          const expected = extendedEval(file);
-          test.assert(deepEqual(value, expected));
-          if (!test.passing())
-            test.comment(difference(value, expected));
+          if (!test.passing) {
+            const expected = extendedEval(file);
+            test.assert(deepEqual(value, expected));
+            if (!test.passing())
+              test.comment(difference(value, expected));
+          }
         } else if (ext === '.js') {
           const supportedTests = supportedByUs[testCase.name];
           if (supportedTests && supportedTests.includes(testName)) {
             let value;
             test.doesNotThrow(() => value = jstp.parse(file));
-            const expected = extendedEval(file);
-            test.assert(deepEqual(value, expected));
-            if (!test.passing()) {
-              test.comment(difference(value, expected));
+            if (!test.passing) {
+              const expected = extendedEval(file);
+              test.assert(deepEqual(value, expected));
+              if (!test.passing())
+                test.comment(difference(value, expected));
             }
           } else {
             test.throws(() => jstp.parse(file));
