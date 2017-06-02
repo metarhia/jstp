@@ -43,10 +43,13 @@ test.test('server must process an event', (test) => {
     test.assertNot(error, 'must connect to server');
 
     server.getClients()[0].on('event', (event) => {
+      test.strictEqual(event.interfaceName, iface,
+        'event interface must match');
       test.strictEqual(event.remoteEventName, eventName,
         'event name must be equal to the emitted one');
       test.strictDeepEqual(event.remoteEventArgs, args,
         'event arguments must be equal to the passed ones');
+
       test.end();
     });
 
@@ -59,6 +62,8 @@ test.test('client must process an event', (test) => {
     test.assertNot(error, 'must connect to server');
 
     connection.on('event', (event) => {
+      test.strictEqual(event.interfaceName, iface,
+        'event interface must match');
       test.strictEqual(event.remoteEventName, eventName,
         'event name must be equal to the emitted one');
       test.strictDeepEqual(event.remoteEventArgs, args,
@@ -76,6 +81,8 @@ test.test('Remote proxy must emit an event', (test) => {
       test.assertNot(error, 'must connect to server');
 
       server.getClients()[0].on('event', (event) => {
+        test.strictEqual(event.interfaceName, iface,
+          'event interface must match');
         test.strictEqual(event.remoteEventName, eventName,
           'event name must be equal to the emitted one');
         test.strictDeepEqual(event.remoteEventArgs, args,
