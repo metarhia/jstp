@@ -334,6 +334,10 @@ MaybeLocal<Value> ParseNumber(Isolate*    isolate,
   } else {
     result = ParseIntegerNumber(isolate, number_start, end, size,
                                 base, negate_result);
+    if (*size == 0) {
+      THROW_EXCEPTION(SyntaxError, "Empty number value");
+      return MaybeLocal<Value>();
+    }
   }
   *size += number_start - begin;
   return result;
