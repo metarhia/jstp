@@ -38,7 +38,7 @@ const iface = 'iface';
 const eventName = 'someEvent';
 const args = ['firstArgument', 'secondArgument'];
 
-test.test('server mas process an event', (test) => {
+test.test('server must process an event', (test) => {
   client.connectAndHandshake(app.name, null, null, (error, connection) => {
     test.assertNot(error, 'must connect to server');
 
@@ -46,7 +46,7 @@ test.test('server mas process an event', (test) => {
       test.strictEqual(event.remoteEventName, eventName,
         'event name must be equal to the emitted one');
       test.strictDeepEqual(event.remoteEventArgs, args,
-        'event arguments must be equl to the passed ones');
+        'event arguments must be equal to the passed ones');
       test.end();
     });
 
@@ -62,7 +62,7 @@ test.test('client must process an event', (test) => {
       test.strictEqual(event.remoteEventName, eventName,
         'event name must be equal to the emitted one');
       test.strictDeepEqual(event.remoteEventArgs, args,
-        'event arguments must be equl to the passed ones');
+        'event arguments must be equal to the passed ones');
       test.end();
     });
 
@@ -79,7 +79,7 @@ test.test('Remote proxy must emit an event', (test) => {
         test.strictEqual(event.remoteEventName, eventName,
           'event name must be equal to the emitted one');
         test.strictDeepEqual(event.remoteEventArgs, args,
-          'event arguments must be equl to the passed ones');
+          'event arguments must be equal to the passed ones');
         test.end();
       });
 
@@ -88,14 +88,14 @@ test.test('Remote proxy must emit an event', (test) => {
   );
 });
 
-test.test('server mas process an event', (test) => {
+test.test('server must process an event', (test) => {
   client.connectAndInspect(app.name, null, null, [iface],
     (error, connection, api) => {
       test.assertNot(error, 'must connect to server');
 
       api.iface.on(eventName, (...eventArgs) => {
         test.strictDeepEqual(eventArgs, args,
-          'event arguments must be equl to the passed ones');
+          'event arguments must be equal to the passed ones');
         test.end();
       });
       server.getClients()[0].emitRemoteEvent(iface, eventName, args);
