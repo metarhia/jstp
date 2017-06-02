@@ -3,6 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 const tap = require('tap');
+const deepEqual = require('lodash.isequal');
 const jstp = require('../..');
 
 const supportedByUs = {
@@ -55,15 +56,15 @@ testCases.forEach((testCase) => {
       test.test(testName, (test) => {
         switch (ext) {
           case '.json':
-            test.strictSame(jstp.parse(file), JSON.parse(file));
+            test.assert(deepEqual(jstp.parse(file), JSON.parse(file)));
             break;
           case '.json5':
-            test.strictSame(jstp.parse(file), extendedEval(file));
+            test.assert(deepEqual(jstp.parse(file), extendedEval(file)));
             break;
           case '.js': {
             const supportedTests = supportedByUs[testCase.name];
             if (supportedTests && supportedTests.includes(testName)) {
-              test.strictSame(jstp.parse(file), extendedEval(file));
+              test.assert(deepEqual(jstp.parse(file), extendedEval(file)));
             } else {
               test.throws(() => jstp.parse(file));
             }
