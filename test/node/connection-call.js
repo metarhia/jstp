@@ -32,8 +32,7 @@ test.test('must perform call with no arguments and no return value', (test) => {
       test.assertNot(error, 'callMethod must not return an error');
       test.end();
     });
-  }
-  );
+  });
 });
 
 test.test('must perform call with no arguments and return value', (test) => {
@@ -43,8 +42,7 @@ test.test('must perform call with no arguments and return value', (test) => {
       test.equal(result, 42);
       test.end();
     });
-  }
-  );
+  });
 });
 
 test.test('must perform call with arguments and return value', (test) => {
@@ -56,19 +54,18 @@ test.test('must perform call with arguments and return value', (test) => {
         test.end();
       }
     );
-  }
-  );
+  });
 });
 
 test.test('must perform call that returns an error', (test) => {
   client.connectAndHandshake(app.name, null, null, (error, connection) => {
     connection.callMethod('calculator', 'divide', [10, 0], (error) => {
       test.assert(error, 'callMethod must return an error');
-      test.equal(error.message, `Error: ${app.expectedErrorMessage}`);
+      test.equal(error.message,
+        new jstp.RemoteError(new Error(app.expectedErrorMessage)).message);
       test.end();
     });
-  }
-  );
+  });
 });
 
 test.test('must return error on call to nonexistent interface', (test) => {

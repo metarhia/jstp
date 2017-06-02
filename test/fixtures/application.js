@@ -7,11 +7,11 @@ const interfaces = {
     answer(connection, callback) {
       callback(null, 42);
     },
-    divide(connection, divided, divider, callback) {
-      if (!divider) {
+    divide(connection, divident, divisor, callback) {
+      if (!divisor) {
         callback(new Error(expectedErrorMessage));
       } else {
-        callback(null, divided / divider);
+        callback(null, divident / divisor);
       }
     },
     doNothing(connection, callback) {
