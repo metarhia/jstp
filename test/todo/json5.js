@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const tap = require('tap');
 const deepEqual = require('lodash.isequal');
+const difference = require('../util/difference');
 const jstp = require('../..');
 
 const supportedByUs = {
@@ -54,25 +55,32 @@ testCases.forEach((testCase) => {
       const file = fs.readFileSync(testPath, 'utf8');
 
       test.test(testName, (test) => {
-        switch (ext) {
-          case '.json':
-            test.assert(deepEqual(jstp.parse(file), JSON.parse(file)));
-            break;
-          case '.json5':
-            test.assert(deepEqual(jstp.parse(file), extendedEval(file)));
-            break;
-          case '.js': {
-            const supportedTests = supportedByUs[testCase.name];
-            if (supportedTests && supportedTests.includes(testName)) {
-              test.assert(deepEqual(jstp.parse(file), extendedEval(file)));
-            } else {
-              test.throws(() => jstp.parse(file));
+        if (ext === '.json') {
+          let value;
+          test.doesNotThrow(() => value = jstp.parse(file));
+          test.strictSame(value, JSON.parse(file));
+        } else if (ext === '.json5') {
+          let value;
+          test.doesNotThrow(() => value = jstp.parse(file));
+          const expected = extendedEval(file);
+          test.assert(deepEqual(value, expected));
+          if (!test.passing())
+            test.comment(difference(value, expected));
+        } else if (ext === '.js') {
+          const supportedTests = supportedByUs[testCase.name];
+          if (supportedTests && supportedTests.includes(testName)) {
+            let value;
+            test.doesNotThrow(() => value = jstp.parse(file));
+            const expected = extendedEval(file);
+            test.assert(deepEqual(value, expected));
+            if (!test.passing()) {
+              test.comment(difference(value, expected));
             }
-            break;
-          }
-          case '.txt':
+          } else {
             test.throws(() => jstp.parse(file));
-            break;
+          }
+        } else if (ext === '.txt') {
+          test.throws(() => jstp.parse(file));
         }
         test.end();
       });
