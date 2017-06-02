@@ -60,26 +60,4 @@ describe('RemoteProxy', () => {
     expect(callback2).to.have.been.called.exactly(1);
     expect(callback2).to.have.been.called.with('result2');
   });
-
-  it('must emit events through the network and locally', () => {
-    const handler = chai.spy();
-    proxy.on('testEvent', handler);
-    proxy.emit('testEvent', 'payload1', 'payload2');
-
-    expect(eventSpy).to.have.been.called.exactly(1);
-    expect(eventSpy).to.have.been.called.with(
-      'testInterface', 'testEvent', ['payload1', 'payload2']);
-
-    expect(handler).to.have.been.called.exactly(1);
-    expect(handler).to.have.been.called.with('payload1', 'payload2');
-  });
-
-  it('must not re-emit events back', () => {
-    const handler = chai.spy();
-    proxy.on('testEvent', handler);
-    connectionMock.processEventPacket();
-
-    expect(handler).to.have.been.called.with('payload1', 'payload2');
-    expect(eventSpy).to.not.have.been.called();
-  });
 });
