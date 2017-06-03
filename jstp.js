@@ -18,3 +18,4 @@ jstp.ipc = require('./lib/transport.ipc');
 jstp.ws = require('./lib/transport.ws');
 
 jstp.SimpleAuthPolicy = require('./lib/simple-auth-policy');
+jstp.SimpleConnectPolicy = require('./lib/simple-connect-policy');
