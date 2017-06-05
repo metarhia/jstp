@@ -16,20 +16,20 @@ const app = {
 };
 
 const application = new jstp.Application(app.name, app.interfaces);
+
 let server;
-let client;
+let connection;
 
 test.beforeEach((done) => {
-  server = jstp.tcp.createServer(0, [application], app.authCallback);
-  server.listen(() => {
-    const port = server.address().port;
-    client = jstp.tcp.createClient({ host: 'localhost', port });
-    done();
-  });
+  server = jstp.net.createServer([application]);
+  server.listen(0, () => done());
 });
 
 test.afterEach((done) => {
-  client.disconnect();
+  if (connection) {
+    connection.close();
+    connection = null;
+  }
   server.close();
   done();
 });
@@ -39,7 +39,9 @@ const eventName = 'someEvent';
 const args = ['firstArgument', 'secondArgument'];
 
 test.test('server must process an event', (test) => {
-  client.connectAndHandshake(app.name, null, null, (error, connection) => {
+  const port = server.address().port;
+  jstp.net.createConnection(app.name, null, port, (error, conn) => {
+    connection = conn;
     test.assertNot(error, 'must connect to server');
 
     server.getClients()[0].on('event',
@@ -59,7 +61,9 @@ test.test('server must process an event', (test) => {
 });
 
 test.test('client must process an event', (test) => {
-  client.connectAndHandshake(app.name, null, null, (error, connection) => {
+  const port = server.address().port;
+  jstp.net.createConnection(app.name, null, port, (error, conn) => {
+    connection = conn;
     test.assertNot(error, 'must connect to server');
 
     connection.on('event', (interfaceName, remoteName, remoteArgs) => {
@@ -77,8 +81,10 @@ test.test('client must process an event', (test) => {
 });
 
 test.test('remote proxy must emit an event', (test) => {
-  client.connectAndInspect(app.name, null, null, [iface],
-    (error, connection, api) => {
+  const port = server.address().port;
+  jstp.net.createConnectionAndInspect(app.name, null, [iface], port,
+    (error, conn, api) => {
+      connection = conn;
       test.assertNot(error, 'must connect to server');
 
       server.getClients()[0].on('event',
@@ -98,8 +104,10 @@ test.test('remote proxy must emit an event', (test) => {
 });
 
 test.test('remote proxy must process an event', (test) => {
-  client.connectAndInspect(app.name, null, null, [iface],
-    (error, connection, api) => {
+  const port = server.address().port;
+  jstp.net.createConnectionAndInspect(app.name, null, [iface], port,
+    (error, conn, api) => {
+      connection = conn;
       test.assertNot(error, 'must connect to server');
 
       api.iface.on(eventName, (...eventArgs) => {

@@ -6,7 +6,7 @@ const jstp = require('../..');
 
 const app = new jstp.Application('name', {});
 
-const server = jstp.ws.createServer(0, [app]);
+const server = jstp.ws.createServer([app]);
 
 test.assertNot(server.address(),
   'must return null address if server is not listening');
