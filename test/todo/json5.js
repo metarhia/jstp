@@ -55,35 +55,34 @@ testCases.forEach((testCase) => {
       const file = fs.readFileSync(testPath, 'utf8');
 
       test.test(testName, (test) => {
-        if (ext === '.json') {
-          let value;
-          test.doesNotThrow(() => value = jstp.parse(file));
-          test.strictSame(value, JSON.parse(file));
-        } else if (ext === '.json5') {
-          let value;
-          test.doesNotThrow(() => value = jstp.parse(file));
-          if (test.passing()) {
+        switch (ext) {
+          case '.json':
+            test.strictSame(jstp.parse(file), JSON.parse(file));
+            break;
+          case '.json5': {
+            const value = jstp.parse(file);
             const expected = extendedEval(file);
             test.assert(deepEqual(value, expected));
             if (!test.passing())
               console.worn(difference(value, expected));
+            break;
           }
-        } else if (ext === '.js') {
-          const supportedTests = supportedByUs[testCase.name];
-          if (supportedTests && supportedTests.includes(testName)) {
-            let value;
-            test.doesNotThrow(() => value = jstp.parse(file));
-            if (test.passing()) {
+          case '.js': {
+            const supportedTests = supportedByUs[testCase.name];
+            if (supportedTests && supportedTests.includes(testName)) {
+              const value = jstp.parse(file);
               const expected = extendedEval(file);
               test.assert(deepEqual(value, expected));
               if (!test.passing())
                 console.warn(difference(value, expected));
+            } else {
+              test.throws(() => jstp.parse(file));
             }
-          } else {
-            test.throws(() => jstp.parse(file));
+            break;
           }
-        } else if (ext === '.txt') {
-          test.throws(() => jstp.parse(file));
+          case '.txt':
+            test.throws(() => jstp.parse(file));
+            break;
         }
         test.end();
       });
