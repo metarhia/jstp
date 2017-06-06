@@ -62,22 +62,22 @@ test.test('must perform call that returns an error', (test) => {
   connection.callMethod('calculator', 'divide', [10, 0], (error) => {
     test.assert(error, 'callMethod must return an error');
     test.equal(error.message,
-        new jstp.RemoteError(new Error(app.expectedErrorMessage)).message);
+      new jstp.RemoteError(new Error(app.expectedErrorMessage)).message);
     test.end();
   });
 });
 
 test.test('must return error on call to nonexistent interface', (test) => {
   connection.callMethod(
-      '__nonexistent_interface__',
-      '__nonexistent_method__',
-      [],
-      (error) => {
-        test.assert(error, 'callMethod must return an error');
-        test.equal(error.code, jstp.ERR_INTERFACE_NOT_FOUND,
-          'error must be an ERR_INTERFACE_NOT_FOUND');
-        test.end();
-      }
+    '__nonexistent_interface__',
+    '__nonexistent_method__',
+    [],
+    (error) => {
+      test.assert(error, 'callMethod must return an error');
+      test.equal(error.code, jstp.ERR_INTERFACE_NOT_FOUND,
+        'error must be an ERR_INTERFACE_NOT_FOUND');
+      test.end();
+    }
   );
 });
 
@@ -85,7 +85,7 @@ test.test('must return error on call to nonexistent method', (test) => {
   connection.callMethod('calculator', '__nonexistent_method__', [], (error) => {
     test.assert(error, 'callMethod must return an error');
     test.equal(error.code, jstp.ERR_METHOD_NOT_FOUND,
-          'error must be an ERR_METHOD_NOT_FOUND');
+      'error must be an ERR_METHOD_NOT_FOUND');
     test.end();
   });
 });

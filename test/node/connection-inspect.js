@@ -39,9 +39,8 @@ test.test('must process inspect packets', (test) => {
       connection.inspectInterface(iface, (error, methods) => {
         test.assertNot(error, `must inspect ${iface}`);
         Object.keys(app.interfaces[iface]).forEach(method =>
-            test.assert(method in methods,
-              `api.${iface} must include ${method}`)
-          );
+          test.assert(method in methods, `api.${iface} must include ${method}`)
+        );
       });
     });
   });
