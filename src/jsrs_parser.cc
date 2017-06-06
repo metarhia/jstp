@@ -53,7 +53,7 @@ using jstp::unicode_utils::IsWhiteSpaceCharacter;
 using jstp::unicode_utils::IsLineTerminatorSequence;
 using jstp::unicode_utils::Utf8ToCodePoint;
 using jstp::unicode_utils::IsIdStartCodePoint;
-using jstp::unicode_utils::IsIdContinueCodePoint;
+using jstp::unicode_utils::IsIdPartCodePoint;
 
 namespace jstp {
 
@@ -680,13 +680,12 @@ MaybeLocal<String> ParseKeyInObject(Isolate*    isolate,
     }
   } else {
     size_t current_length = 0;
-
     size_t cp_size;
     uint32_t cp;
     while (current_length < *size) {
       cp = Utf8ToCodePoint(begin + current_length, &cp_size);
       if (current_length == 0 ? IsIdStartCodePoint(cp) :
-                                IsIdContinueCodePoint(cp)) {
+                                IsIdPartCodePoint(cp)) {
         current_length += cp_size;
       } else {
         if (current_length != 0) {
