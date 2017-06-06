@@ -51,6 +51,9 @@ using v8::Value;
 using jstp::unicode_utils::CodePointToUtf8;
 using jstp::unicode_utils::IsWhiteSpaceCharacter;
 using jstp::unicode_utils::IsLineTerminatorSequence;
+using jstp::unicode_utils::Utf8ToCodePoint;
+using jstp::unicode_utils::IsIdStartCodePoint;
+using jstp::unicode_utils::IsIdContinueCodePoint;
 
 namespace jstp {
 
@@ -677,11 +680,14 @@ MaybeLocal<String> ParseKeyInObject(Isolate*    isolate,
     }
   } else {
     size_t current_length = 0;
-    for (size_t i = 0; i < *size; i++) {
-      if (begin[i] == '_' || (i != 0 &&
-                              isalnum(begin[i])) ||
-                              isalpha(begin[i])) {
-        current_length++;
+
+    size_t cp_size;
+    uint32_t cp;
+    while (current_length < *size) {
+      cp = Utf8ToCodePoint(begin + current_length, &cp_size);
+      if (current_length == 0 ? IsIdStartCodePoint(cp) :
+                                IsIdContinueCodePoint(cp)) {
+        current_length += cp_size;
       } else {
         if (current_length != 0) {
           result = String::NewFromUtf8(isolate, begin,

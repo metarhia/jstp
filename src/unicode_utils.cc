@@ -4,8 +4,12 @@
 #include "unicode_utils.h"
 
 #include <cstddef>
+#include <cstdint>
+
+#include "unicode_tables.h"
 
 using std::size_t;
+using std::uint32_t;
 
 namespace jstp {
 
@@ -105,6 +109,56 @@ void CodePointToUtf8(unsigned int c, size_t* size, char* write_to) {
     CodePointToUtf8(0xFFFD, size, write_to);
     return;
   }
+}
+
+uint32_t Utf8ToCodePoint(const char* begin, size_t* size) {
+  auto str = reinterpret_cast<const unsigned char*>(begin);
+  uint32_t result = 0;
+  *size = 1;
+  if (*str < 0x80) {
+    return *str;
+  } else if ((*str & 0xE0) == 0xC0) {
+    *size = 2;
+    result += (*str & 0x1F) << 6;
+  } else if ((*str & 0xF0) == 0xE0) {
+    *size = 3;
+    result += (*str & 0x0F) << 12;
+  } else if ((*str & 0xF8) == 0xF0) {
+    *size = 4;
+    result += (*str & 0x07) << 18;
+  } else {
+    return 0xFFFD;
+  }
+  for (size_t i = 2; i <= *size; i++) {
+    str++;
+    if ((*str & 0xC0) != 0x80) {
+      *size = i;
+      return 0xFFFD;
+    }
+    result += (*str & 0x3F) << ((*size - i) * 6);
+  }
+  return result;
+}
+
+bool IsIdStartCodePoint(uint32_t cp) {
+  if (('a' <= cp && cp <= 'z') ||
+      ('A' <= cp && cp <= 'Z') ||
+      cp == '_' ||
+      cp == '$') {
+    return true;
+  }
+  return false;
+}
+
+bool IsIdContinueCodePoint(uint32_t cp) {
+  if (('a' <= cp && cp <= 'z') ||
+      ('A' <= cp && cp <= 'Z') ||
+      ('0' <= cp && cp <= '9') ||
+      cp == '_' ||
+      cp == '$') {
+    return true;
+  }
+  return false;
 }
 
 }  // namespace unicode_utils
