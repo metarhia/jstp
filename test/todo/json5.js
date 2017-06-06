@@ -62,6 +62,8 @@ testCases.forEach((testCase) => {
           case '.json5': {
             const value = jstp.parse(file);
             const expected = extendedEval(file);
+            // Currently tap.strictSame() doesn't work well with NaNs.
+            // That is why we check if lodash.isequal return true.
             test.assert(deepEqual(value, expected));
             if (!test.passing())
               console.worn(difference(value, expected));
@@ -72,6 +74,8 @@ testCases.forEach((testCase) => {
             if (supportedTests && supportedTests.includes(testName)) {
               const value = jstp.parse(file);
               const expected = extendedEval(file);
+              // Currently tap.strictSame() doesn't work well with NaNs.
+              // That is why we check if lodash.isequal return true.
               test.assert(deepEqual(value, expected));
               if (!test.passing())
                 console.warn(difference(value, expected));
