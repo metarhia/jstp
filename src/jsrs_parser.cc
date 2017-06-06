@@ -415,7 +415,7 @@ Local<Value> ParseBigIntegerNumber(Isolate*    isolate,
       break;
     }
     current_digit_value = current_digit <= '9' ? current_digit - '0' :
-      current_digit - 'A' + 10;
+                                                 current_digit - 'A' + 10;
     result *= base;
     result += current_digit_value;
   }
