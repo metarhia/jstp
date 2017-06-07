@@ -554,6 +554,57 @@ MaybeLocal<Value> ParseString(Isolate*    isolate,
 
 static unsigned int ReadHexNumber(const char* str, size_t len, bool* ok);
 
+// Parses a Unicode escape sequence after the '\u' part and returns it's
+// code point value. Supports surrogate pairs. Total size of escape
+// sequence (excluding first '\u') is written in `size`.
+static uint32_t ReadUnicodeEscapeSequence(Isolate* isolate,
+                                          const char* str,
+                                          size_t* size,
+                                          bool* ok) {
+  uint32_t result = 0xFFFD;
+
+  if (isxdigit(str[0])) {
+    result = ReadHexNumber(str, 4, ok);
+    *size = 4;
+  } else if (str[0] == '{') {
+    size_t hex_size;
+    for (hex_size = 1;
+         str[hex_size + 1] != '}';
+         hex_size++) {
+      if (str[hex_size + 1] == '\0') {
+        THROW_EXCEPTION(SyntaxError, "Invalid Unicode code point escape");
+        *ok = false;
+        return 0xFFFD;
+      }
+    }
+    result = ReadHexNumber(str + 1, hex_size, ok);
+    if (!*ok) {
+      return 0xFFFD;
+    }
+    *size = hex_size + 2;
+  } else {
+    THROW_EXCEPTION(SyntaxError, "Expected Unicode code point escape");
+    *ok = false;
+  }
+
+  // check for surrogate pair
+  if (0xD800 <= result && result <= 0xDBFF) {
+    size_t low_size;
+    if (str[*size] == '\\' && str[*size + 1] == 'u') {
+      uint32_t low_sur = ReadUnicodeEscapeSequence(isolate,
+                                                   str + *size + 2,
+                                                   &low_size, ok);
+      if (!*ok || !(0xDC00 <= low_sur && low_sur <= 0xDFFF)) {
+        return result;
+      }
+      result = ((result - 0xD800) << 10) + low_sur - 0xDC00 + 0x10000;
+      *size += low_size + 2;
+    }
+  }
+
+  return result;
+}
+
 // Parses a part of a JavaScript string representation after the backslash
 // character (i.e., an escape sequence without \) into an unescaped control
 // character and writes it to `write_to`.
@@ -603,31 +654,16 @@ static bool GetControlChar(Isolate*    isolate,
     }
 
     case 'u': {
-      unsigned int symb_code;
-      if (isxdigit(str[1])) {
-        symb_code = ReadHexNumber(str + 1, 4, &ok);
-        *size = 5;
-      } else if (str[1] == '{') {
-        size_t hex_size;  // maximal hex is 10FFFF
-        for (hex_size = 1;
-             str[hex_size + 2] != '}' && hex_size <= 6;
-             hex_size++) {
-          if (str[hex_size + 2] == '\0') {
-            THROW_EXCEPTION(SyntaxError, "Invalid Unicode code point escape");
-            return false;
-          }
-        }
-        symb_code = ReadHexNumber(str + 2, hex_size, &ok);
-        *size = hex_size + 3;
-      } else {
-        ok = false;
-      }
+      uint32_t symb_code = ReadUnicodeEscapeSequence(isolate,
+                                                     str + 1,
+                                                     size,
+                                                     &ok);
 
       if (!ok) {
-        THROW_EXCEPTION(SyntaxError, "Invalid Unicode escape sequence");
         return false;
       }
       CodePointToUtf8(symb_code, res_len, write_to);
+      *size += 1;
       break;
     }
 
