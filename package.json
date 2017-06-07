@@ -63,7 +63,7 @@
     "webpack": "^2.6.1"
   },
   "scripts": {
-    "test": "npm run test-unit && npm run test-integration && npm run lint",
+    "test": "npm run lint && npm run test-unit && npm run test-integration",
     "test-unit": "npm run test-unit-node && npm run test-unit-browser",
     "test-unit-node": "mocha -R progress test/unit && tap test/node/*.js",
     "test-unit-browser": "karma start",
