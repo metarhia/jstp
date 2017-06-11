@@ -24,6 +24,7 @@ using std::isdigit;
 using std::isinf;
 using std::isnan;
 using std::isxdigit;
+using std::memcpy;
 using std::memset;
 using std::ptrdiff_t;
 using std::size_t;
@@ -718,17 +719,55 @@ MaybeLocal<String> ParseKeyInObject(Isolate*    isolate,
     size_t current_length = 0;
     size_t cp_size;
     uint32_t cp;
+    bool ok;
+    char* fallback = nullptr;
+    size_t fallback_length;
+    bool is_escape = false;
     while (current_length < *size) {
-      cp = Utf8ToCodePoint(begin + current_length, &cp_size);
+      if (begin[current_length] == '\\' &&
+          begin[current_length + 1] == 'u') {
+        cp = ReadUnicodeEscapeSequence(isolate, begin + current_length + 2,
+                                       &cp_size, &ok);
+        if (!ok) {
+          return MaybeLocal<String>();
+        }
+        cp_size += 2;
+        if (!fallback) {
+          fallback = new char[*size + 1];
+          memcpy(fallback, begin, current_length);
+          fallback_length = current_length;
+        }
+        is_escape = true;
+      } else {
+        cp = Utf8ToCodePoint(begin + current_length, &cp_size);
+        is_escape = false;
+      }
       if (current_length == 0 ? IsIdStartCodePoint(cp) :
                                 IsIdPartCodePoint(cp)) {
+        if (fallback) {
+          if (!is_escape) {
+            memcpy(fallback + fallback_length, begin + current_length, cp_size);
+            fallback_length += cp_size;
+          } else {
+            size_t fallback_cp_size;
+            CodePointToUtf8(cp, &fallback_cp_size, fallback + fallback_length);
+            fallback_length += fallback_cp_size;
+          }
+        }
         current_length += cp_size;
       } else {
         if (current_length != 0) {
-          result = String::NewFromUtf8(isolate, begin,
-                                       NewStringType::kInternalized,
-                                       static_cast<int>(current_length))
-                                           .ToLocalChecked();
+          if (!fallback) {
+            result = String::NewFromUtf8(isolate, begin,
+                                         NewStringType::kInternalized,
+                                         static_cast<int>(current_length))
+                                             .ToLocalChecked();
+          } else {
+            result = String::NewFromUtf8(isolate, fallback,
+                                         NewStringType::kInternalized,
+                                         static_cast<int>(fallback_length))
+                                             .ToLocalChecked();
+          }
           break;
         } else {
           THROW_EXCEPTION(SyntaxError, "Unexpected identifier");
