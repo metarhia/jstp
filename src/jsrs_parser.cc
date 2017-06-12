@@ -462,11 +462,10 @@ MaybeLocal<Value> ParseString(Isolate*    isolate,
     }
 
     if (begin[i] == '\\') {
+      use_fallback(i - 1);
       if (IsLineTerminatorSequence(begin + i + 1, &in_offset)) {
-        use_fallback(i - 1);
         i += in_offset;
       } else {
-        use_fallback(i - 1);
         bool ok = GetControlChar(isolate, begin + ++i, &out_offset, &in_offset,
                                  result + res_index);
         if (!ok) {
