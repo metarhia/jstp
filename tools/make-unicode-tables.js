@@ -2,10 +2,10 @@
 
 'use strict';
 
-const byline = require('byline');
 const fs = require('fs');
 const http = require('http');
 const path = require('path');
+const readline = require('readline');
 
 const UNICODE_VERSION = '9.0.0';
 const UCD_LINK = 'http://www.unicode.org/Public/' + UNICODE_VERSION +
@@ -99,8 +99,8 @@ let idContinueTotalCount = 0;
 const lineRegex = /^([0-9A-F]{4,6})(?:\.\.([0-9A-F]{4,6}))? *; (\w+) #.*$/;
 
 http.get(UCD_LINK, (res) => {
-  const linereader = byline.createStream(res);
-  linereader.on('data', (line) => {
+  const linereader = readline.createInterface({ input: res });
+  linereader.on('line', (line) => {
     const values = lineRegex.exec(line);
     if (values !== null) {
       const [ , start, end, category  ] = values;
@@ -121,7 +121,7 @@ http.get(UCD_LINK, (res) => {
       }
     }
   });
-  linereader.on('end', finish);
+  linereader.on('close', finish);
 });
 
 function createFullTableArray(arrayName, array) {
