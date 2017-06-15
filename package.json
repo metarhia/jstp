@@ -34,8 +34,8 @@
     "./lib/simple-auth.js": false
   },
   "dependencies": {
-    "websocket": "^1.0.24",
-    "metarhia-common": "^0.0.9"
+    "metarhia-common": "0.0.9",
+    "websocket": "^1.0.24"
   },
   "devDependencies": {
     "babel-core": "^6.24.1",
