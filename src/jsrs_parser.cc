@@ -439,13 +439,6 @@ MaybeLocal<Value> ParseString(Isolate*    isolate,
   *size = end - begin;
   char* result = nullptr;
 
-  auto use_fallback = [&result, size, begin](size_t current_length) {
-    if (!result) {
-      result = new char[*size + 1];
-      memcpy(result, begin + 1, current_length);
-    }
-  };
-
   enum { kApostrophe = 0, kQMarks} string_mode = (*begin == '\'') ?
                                                  kApostrophe :
                                                  kQMarks;
@@ -462,7 +455,10 @@ MaybeLocal<Value> ParseString(Isolate*    isolate,
     }
 
     if (begin[i] == '\\') {
-      use_fallback(i - 1);
+      if (!result) {
+        result = new char[*size + 1];
+        memcpy(result, begin + 1, i - 1);
+      }
       if (IsLineTerminatorSequence(begin + i + 1, &in_offset)) {
         i += in_offset;
       } else {
