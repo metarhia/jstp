@@ -42,16 +42,17 @@ test.test('server must process an event', (test) => {
   client.connectAndHandshake(app.name, null, null, (error, connection) => {
     test.assertNot(error, 'must connect to server');
 
-    server.getClients()[0].on('event', (event) => {
-      test.strictEqual(event.interfaceName, iface,
+    server.getClients()[0].on('event',
+      (interfaceName, remoteName, remoteArgs) => {
+        test.strictEqual(interfaceName, iface,
         'event interface must match');
-      test.strictEqual(event.remoteEventName, eventName,
+        test.strictEqual(remoteName, eventName,
         'event name must be equal to the emitted one');
-      test.strictDeepEqual(event.remoteEventArgs, args,
+        test.strictDeepEqual(remoteArgs, args,
         'event arguments must be equal to the passed ones');
 
-      test.end();
-    });
+        test.end();
+      });
 
     connection.emitRemoteEvent(iface, eventName, args);
   });
@@ -61,12 +62,12 @@ test.test('client must process an event', (test) => {
   client.connectAndHandshake(app.name, null, null, (error, connection) => {
     test.assertNot(error, 'must connect to server');
 
-    connection.on('event', (event) => {
-      test.strictEqual(event.interfaceName, iface,
+    connection.on('event', (interfaceName, remoteName, remoteArgs) => {
+      test.strictEqual(interfaceName, iface,
         'event interface must match');
-      test.strictEqual(event.remoteEventName, eventName,
+      test.strictEqual(remoteName, eventName,
         'event name must be equal to the emitted one');
-      test.strictDeepEqual(event.remoteEventArgs, args,
+      test.strictDeepEqual(remoteArgs, args,
         'event arguments must be equal to the passed ones');
       test.end();
     });
@@ -80,15 +81,16 @@ test.test('remote proxy must emit an event', (test) => {
     (error, connection, api) => {
       test.assertNot(error, 'must connect to server');
 
-      server.getClients()[0].on('event', (event) => {
-        test.strictEqual(event.interfaceName, iface,
+      server.getClients()[0].on('event',
+        (interfaceName, remoteName, remoteArgs) => {
+          test.strictEqual(interfaceName, iface,
           'event interface must match');
-        test.strictEqual(event.remoteEventName, eventName,
+          test.strictEqual(remoteName, eventName,
           'event name must be equal to the emitted one');
-        test.strictDeepEqual(event.remoteEventArgs, args,
+          test.strictDeepEqual(remoteArgs, args,
           'event arguments must be equal to the passed ones');
-        test.end();
-      });
+          test.end();
+        });
 
       api.iface.emit(eventName, ...args);
     }
