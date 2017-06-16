@@ -721,6 +721,7 @@ MaybeLocal<Value> ParseObject(Isolate*    isolate,
   bool key_mode = true;
   *size = end - begin;
   MaybeLocal<String> current_key;
+  MaybeLocal<Value> current_numeric_key;
   MaybeLocal<Value> current_value;
   size_t current_length = 0;
   auto result = Object::New(isolate);
@@ -734,10 +735,16 @@ MaybeLocal<Value> ParseObject(Isolate*    isolate,
         has_ended = true;
         break;
       }
-      current_key = ParseKeyInObject(isolate,
-                                     begin + i,
-                                     end,
-                                     &current_length);
+      if (!isdigit(begin[i])) {
+        current_key = ParseKeyInObject(isolate, begin + i, end,
+            &current_length);
+      } else {
+        current_numeric_key = ParseNumber(isolate, begin + i, end,
+            &current_length);
+        current_key = current_numeric_key.IsEmpty() ? MaybeLocal<String>() :
+            current_numeric_key.ToLocalChecked()->ToString(
+                isolate->GetCurrentContext());
+      }
       if (current_key.IsEmpty()) {
         return MaybeLocal<Value>();
       }
