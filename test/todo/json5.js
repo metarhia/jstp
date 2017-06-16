@@ -66,7 +66,7 @@ testCases.forEach((testCase) => {
             // That is why we check if lodash.isequal return true.
             test.assert(deepEqual(value, expected));
             if (!test.passing())
-              console.worn(difference(value, expected));
+              console.warn(difference(value, expected));
             break;
           }
           case '.js': {
