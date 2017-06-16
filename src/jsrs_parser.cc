@@ -290,17 +290,15 @@ MaybeLocal<Value> ParseBool(Isolate*    isolate,
   return result;
 }
 
-// Checks if a character is an octal digit.
-inline bool IsOctalDigit(char character) {
-  return character >= '0' && character <= '7';
-}
-
 MaybeLocal<Value> ParseNumber(Isolate*    isolate,
                               const char* begin,
                               const char* end,
                               size_t*     size) {
   bool negate_result = false;
+  bool is_noctal = false;
   const char* number_start = begin;
+
+  MaybeLocal<Value> result;
 
   if (*begin == '+' || *begin == '-') {
     negate_result = *begin == '-';
@@ -312,10 +310,7 @@ MaybeLocal<Value> ParseNumber(Isolate*    isolate,
   if (*number_start == '0') {
     number_start++;
 
-    if (IsOctalDigit(*number_start)) {
-      THROW_EXCEPTION(SyntaxError, "Use new octal literal syntax");
-      return MaybeLocal<Value>();
-    } else if (*number_start == 'b') {
+    if (*number_start == 'b') {
       base = 2;
       number_start++;
     } else if (*number_start == 'o') {
@@ -324,22 +319,26 @@ MaybeLocal<Value> ParseNumber(Isolate*    isolate,
     } else if (*number_start == 'x') {
       base = 16;
       number_start++;
+    } else if (isdigit(*number_start)) {
+      is_noctal = true;
+      result = ParseNoctalNumber(isolate, number_start, end, size,
+                                 negate_result);
     } else {
       number_start--;
     }
   }
 
-  MaybeLocal<Value> result;
-
-  if (base == 10) {
-    result = ParseDecimalNumber(isolate, number_start, end, size,
-                                negate_result);
-  } else {
-    result = ParseIntegerNumber(isolate, number_start, end, size,
-                                base, negate_result);
-    if (*size == 0) {
-      THROW_EXCEPTION(SyntaxError, "Empty number value");
-      return MaybeLocal<Value>();
+  if (!is_noctal) {
+    if (base == 10) {
+      result = ParseDecimalNumber(isolate, number_start, end, size,
+                                  negate_result);
+    } else {
+      result = ParseIntegerNumber(isolate, number_start, end, size,
+                                  base, negate_result);
+      if (*size == 0) {
+        THROW_EXCEPTION(SyntaxError, "Empty number value");
+        return MaybeLocal<Value>();
+      }
     }
   }
   *size += number_start - begin;
@@ -426,6 +425,55 @@ Local<Value> ParseBigIntegerNumber(Isolate*    isolate,
   return Number::New(isolate, negate_result ? -result : result);
 }
 
+MaybeLocal<Value> ParseNoctalNumber(Isolate*    isolate,
+                                    const char* begin,
+                                    const char* end,
+                                    size_t*     size,
+                                    bool        negate_result) {
+  *size = end - begin;
+  bool is_octal = true;
+  int64_t result = 0;
+  bool int32_overflow = false;
+  double overflow_result = 0.0;
+  char current_digit;
+
+  for (size_t i = 0; i < *size; i++) {
+    if (!isdigit(begin[i])) {
+      *size = i;
+      break;
+    }
+
+    current_digit = begin[i] - '0';
+    if (current_digit > 7) {
+      is_octal = false;
+    }
+
+    if (!int32_overflow) {
+      result *= 10;
+      result += current_digit;
+    } else {
+      overflow_result *= 10.0;
+      overflow_result += current_digit;
+    }
+
+    if (!int32_overflow && (result < INT32_MIN || INT32_MAX < result)) {
+      int32_overflow = true;
+      overflow_result = result;
+    }
+  }
+
+  if (is_octal) {
+    THROW_EXCEPTION(SyntaxError, "Use new octal literal syntax");
+    return MaybeLocal<Value>();
+  }
+
+  if (!int32_overflow) {
+    return Integer::New(isolate, negate_result ? -result : result);
+  } else {
+    return Number::New(isolate, negate_result ? -overflow_result : overflow_result);
+  }
+}
+
 static bool GetControlChar(Isolate*    isolate,
                            const char* str,
                            size_t*     res_len,
@@ -437,7 +485,7 @@ MaybeLocal<Value> ParseString(Isolate*    isolate,
                               const char* end,
                               size_t*     size) {
   *size = end - begin;
-  char* result = new char[*size + 1];
+  char* result = nullptr;
 
   enum { kApostrophe = 0, kQMarks} string_mode = (*begin == '\'') ?
                                                  kApostrophe :
@@ -455,6 +503,10 @@ MaybeLocal<Value> ParseString(Isolate*    isolate,
     }
 
     if (begin[i] == '\\') {
+      if (!result) {
+        result = new char[*size + 1];
+        memcpy(result, begin + 1, i - 1);
+      }
       if (IsLineTerminatorSequence(begin + i + 1, &in_offset)) {
         i += in_offset;
       } else {
@@ -472,7 +524,10 @@ MaybeLocal<Value> ParseString(Isolate*    isolate,
       THROW_EXCEPTION(SyntaxError, "Unexpected line end in string");
       return MaybeLocal<Value>();
     } else {
-      result[res_index++] = begin[i];
+      if (result) {
+        result[res_index] = begin[i];
+      }
+      res_index++;
     }
   }
 
@@ -482,9 +537,15 @@ MaybeLocal<Value> ParseString(Isolate*    isolate,
     return MaybeLocal<Value>();
   }
 
-  Local<String> result_str = String::NewFromUtf8(isolate, result,
-      NewStringType::kNormal, static_cast<int>(res_index)).ToLocalChecked();
-  delete[] result;
+  Local<String> result_str;
+  if (result) {
+    result_str = String::NewFromUtf8(isolate, result,
+        NewStringType::kNormal, static_cast<int>(res_index)).ToLocalChecked();
+    delete[] result;
+  } else {
+    result_str = String::NewFromUtf8(isolate, begin + 1,
+        NewStringType::kNormal, static_cast<int>(*size - 2)).ToLocalChecked();
+  }
   return result_str;
 }
 

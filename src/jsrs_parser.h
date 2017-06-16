@@ -127,6 +127,14 @@ v8::Local<v8::Value> ParseBigIntegerNumber(v8::Isolate* isolate,
                                            int          base,
                                            bool         negate_result);
 
+// Parses a noctal integer number.
+v8::MaybeLocal<v8::Value> ParseNoctalNumber(v8::Isolate* isolate,
+                                            const char*  begin,
+                                            const char*  end,
+                                            std::size_t* size,
+                                            bool         negate_result);
+
+
 }  // namespace internal
 
 }  // namespace parser
