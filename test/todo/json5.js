@@ -4,7 +4,6 @@ const fs = require('fs');
 const path = require('path');
 const tap = require('tap');
 const deepEqual = require('lodash.isequal');
-const difference = require('../util/difference');
 const jstp = require('../..');
 
 const supportedByUs = {
@@ -59,12 +58,11 @@ testCases.forEach((testCase) => {
           case '.json':
             test.strictSame(jstp.parse(file), JSON.parse(file));
             break;
-          case '.json5': {
+          case '.json5':
             // Currently tap.strictSame() doesn't work well with NaNs.
             // That is why we check if lodash.isequal returns true.
             test.assert(deepEqual(jstp.parse(file), extendedEval(file)));
             break;
-          }
           case '.js': {
             const supportedTests = supportedByUs[testCase.name];
             if (supportedTests && supportedTests.includes(testName)) {
