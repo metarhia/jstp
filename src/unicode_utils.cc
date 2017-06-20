@@ -6,8 +6,6 @@
 #include <cstddef>
 #include <cstdint>
 
-#define _JSRS_USE_FULL_TABLES_
-
 #ifdef _JSRS_USE_FULL_TABLES_
 #include "unicode_tables.h"
 #else
