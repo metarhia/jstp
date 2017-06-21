@@ -87,8 +87,8 @@ const app = new jstp.Application('testApp', {
 // WebSocket and Unix domain sockets. One might notice that an array of
 // applications is passed the `createServer()`. That's because it can serve
 // any number of applications.
-const server = jstp.tcp.createServer(3000, [app]);
-server.listen(() => {
+const server = jstp.net.createServer([app]);
+server.listen(3000, () => {
   console.log('TCP server listening on port 3000 🚀');
 });
 ```
@@ -100,15 +100,18 @@ Client:
 
 const jstp = require('metarhia-jstp');
 
-// Create a TCP client. Clients can have applications too for full-duplex RPC,
-// but we don't need that in this example.
-const client = jstp.tcp.createClient({ host: 'localhost', port: 3000 });
-
-// Connect to the `testApp` application. Username and password are both `null`
+// Create a TCP connection to server and connect to the `testApp` application.
+// Clients can have applications too for full-duplex RPC,
+// but we don't need that in this example. Client is `null` in this example,
+// this implies that username and password are both `null`
 // here — that is, the protocol-level authentication is not leveraged in this
 // example. The next argument is an array of interfaces to inspect and build
-// remote proxy objects for.
-client.connectAndInspect('testApp', null, null, ['someService'], handleConnect);
+// remote proxy objects for. Remaining arguments are for
+// net.connect (host and port) and last argument is a callback
+// to be called on successful connection or error.
+const client = jstp.net.connectAndInspect(
+    'testApp', null, ['someService'], 3000, 'localhost', handleConnect
+);
 
 function handleConnect(error, connection, app) {
   if (error) {
