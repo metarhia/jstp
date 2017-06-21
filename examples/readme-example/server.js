@@ -16,7 +16,7 @@ const app = new jstp.Application('testApp', {
 // WebSocket and Unix domain sockets. One might notice that an array of
 // applications is passed the `createServer()`. That's because it can serve
 // any number of applications.
-const server = jstp.tcp.createServer(3000, [app]);
-server.listen(() => {
+const server = jstp.net.createServer([app]);
+server.listen(3000, () => {
   console.log('TCP server listening on port 3000 🚀');
 });
