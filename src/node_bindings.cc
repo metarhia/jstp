@@ -5,7 +5,7 @@
 #include <v8.h>
 
 #include "common.h"
-#include "jsrs_parser.h"
+#include "parser.h"
 #include "packet_parser.h"
 
 using v8::Array;
@@ -65,7 +65,7 @@ void Init(Local<Object> target) {
   NODE_SET_METHOD(target, "parseNetworkPackets", ParseNetworkPackets);
 }
 
-NODE_MODULE(jsrs, Init);
+NODE_MODULE(jstp, Init);
 
 }  // namespace bindings
 

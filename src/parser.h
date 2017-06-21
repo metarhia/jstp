@@ -1,8 +1,8 @@
 // Copyright (c) 2016-2017 JSTP project authors. Use of this source code is
 // governed by the MIT license that can be found in the LICENSE file.
 
-#ifndef SRC_JSRS_PARSER_H_
-#define SRC_JSRS_PARSER_H_
+#ifndef SRC_PARSER_H_
+#define SRC_PARSER_H_
 
 #include <cstddef>
 
@@ -12,8 +12,8 @@ namespace jstp {
 
 namespace parser {
 
-// Deserializes a UTF-8 encoded string in the JSTP Record Serialization format
-// into a JavaScript value and returns a handle to it.
+// Deserializes a UTF-8 encoded string into a JavaScript value
+// and returns a handle to it.
 v8::Local<v8::Value> Parse(v8::Isolate* isolate,
                            const v8::String::Utf8Value& in);
 
@@ -133,4 +133,4 @@ v8::Local<v8::Value> ParseBigIntegerNumber(v8::Isolate* isolate,
 
 }  // namespace jstp
 
-#endif  // SRC_JSRS_PARSER_H_
+#endif  // SRC_PARSER_H_

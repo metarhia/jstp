@@ -9,7 +9,7 @@
 #include <v8.h>
 
 #include "common.h"
-#include "jsrs_parser.h"
+#include "parser.h"
 
 using std::size_t;
 using std::strlen;

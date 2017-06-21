@@ -1,7 +1,7 @@
 // Copyright (c) 2016-2017 JSTP project authors. Use of this source code is
 // governed by the MIT license that can be found in the LICENSE file.
 
-#include "jsrs_parser.h"
+#include "parser.h"
 
 #include <cctype>
 #include <cerrno>

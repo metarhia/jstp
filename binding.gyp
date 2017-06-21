@@ -25,13 +25,13 @@
       'target_name': 'jstp',
       'sources': [
         'src/node_bindings.cc',
-        'src/jsrs_parser.cc',
+        'src/parser.cc',
         'src/packet_parser.cc',
         'src/unicode_utils.cc'
       ],
       'conditions': [
         ['not jstp_use_short_unicode_tables', {
-          'defines': ['_JSRS_USE_FULL_TABLES_']
+          'defines': ['_JSTP_USE_FULL_TABLES_']
         }]
       ],
       'configurations': {

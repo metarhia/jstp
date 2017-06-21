@@ -6,7 +6,7 @@
 #include <cstddef>
 #include <cstdint>
 
-#ifdef _JSRS_USE_FULL_TABLES_
+#ifdef _JSTP_USE_FULL_TABLES_
 #include "unicode_tables.h"
 #else
 #include "unicode_range_tables.h"
@@ -144,7 +144,7 @@ uint32_t Utf8ToCodePoint(const char* begin, size_t* size) {
   return result;
 }
 
-#ifdef _JSRS_USE_FULL_TABLES_
+#ifdef _JSTP_USE_FULL_TABLES_
 
 bool IsIdStartCodePoint(uint32_t cp) {
   return ID_START_FULL[cp];
@@ -154,7 +154,7 @@ bool IsIdPartCodePoint(uint32_t cp) {
   return ID_CONTINUE_FULL[cp];
 }
 
-#undef _JSRS_USE_FULL_TABLES_
+#undef _JSTP_USE_FULL_TABLES_
 #else
 
 bool search_cp(uint32_t cp, const unicode_range* ranges, size_t size) {
