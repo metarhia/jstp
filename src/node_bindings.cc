@@ -6,7 +6,6 @@
 
 #include "common.h"
 #include "jsrs_parser.h"
-#include "jsrs_serializer.h"
 #include "packet_parser.h"
 
 using v8::Array;
@@ -21,20 +20,6 @@ using v8::Value;
 namespace jstp {
 
 namespace bindings {
-
-void Stringify(const FunctionCallbackInfo<Value>& args) {
-  Isolate* isolate = args.GetIsolate();
-
-  if (args.Length() != 1) {
-    THROW_EXCEPTION(TypeError, "Wrong number of arguments");
-    return;
-  }
-
-  HandleScope scope(isolate);
-
-  auto result = jstp::serializer::Stringify(isolate, args[0]);
-  args.GetReturnValue().Set(result);
-}
 
 void Parse(const FunctionCallbackInfo<Value>& args) {
   Isolate* isolate = args.GetIsolate();
@@ -76,7 +61,6 @@ void ParseNetworkPackets(const FunctionCallbackInfo<Value>& args) {
 }
 
 void Init(Local<Object> target) {
-  NODE_SET_METHOD(target, "stringify", Stringify);
   NODE_SET_METHOD(target, "parse", Parse);
   NODE_SET_METHOD(target, "parseNetworkPackets", ParseNetworkPackets);
 }

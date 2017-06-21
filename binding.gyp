@@ -25,7 +25,6 @@
       'target_name': 'jstp',
       'sources': [
         'src/node_bindings.cc',
-        'src/jsrs_serializer.cc',
         'src/jsrs_parser.cc',
         'src/packet_parser.cc',
         'src/unicode_utils.cc'
