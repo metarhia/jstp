@@ -40,7 +40,7 @@ const args = ['firstArgument', 'secondArgument'];
 
 test.test('server must process an event', (test) => {
   const port = server.address().port;
-  jstp.net.createConnection(app.name, null, port, (error, conn) => {
+  jstp.net.connect(app.name, null, port, (error, conn) => {
     connection = conn;
     test.assertNot(error, 'must connect to server');
 
@@ -62,7 +62,7 @@ test.test('server must process an event', (test) => {
 
 test.test('client must process an event', (test) => {
   const port = server.address().port;
-  jstp.net.createConnection(app.name, null, port, (error, conn) => {
+  jstp.net.connect(app.name, null, port, (error, conn) => {
     connection = conn;
     test.assertNot(error, 'must connect to server');
 
@@ -82,7 +82,7 @@ test.test('client must process an event', (test) => {
 
 test.test('remote proxy must emit an event', (test) => {
   const port = server.address().port;
-  jstp.net.createConnectionAndInspect(app.name, null, [iface], port,
+  jstp.net.connectAndInspect(app.name, null, [iface], port,
     (error, conn, api) => {
       connection = conn;
       test.assertNot(error, 'must connect to server');
@@ -105,7 +105,7 @@ test.test('remote proxy must emit an event', (test) => {
 
 test.test('remote proxy must process an event', (test) => {
   const port = server.address().port;
-  jstp.net.createConnectionAndInspect(app.name, null, [iface], port,
+  jstp.net.connectAndInspect(app.name, null, [iface], port,
     (error, conn, api) => {
       connection = conn;
       test.assertNot(error, 'must connect to server');

@@ -35,7 +35,7 @@ test.test('must perform an anonymous handshake', (test) => {
     application: new jstp.Application('jstp', {}),
   };
   const port = server.address().port;
-  const socket = net.createConnection(port);
+  const socket = net.connect(port);
   socket.on('error',
     () => test.fail('must create socket and connect to server'));
   socket.on('connect', () => {
@@ -53,7 +53,7 @@ test.test('must perform an anonymous handshake', (test) => {
 
 test.test('must perform an anonymous handshake', (test) => {
   const port = server.address().port;
-  jstp.net.createConnection(app.name, null, port, (error, conn) => {
+  jstp.net.connect(app.name, null, port, (error, conn) => {
     connection = conn;
     test.assertNot(error, 'handshake must not return an error');
     test.equal(connection.username, null, 'username must be null');
@@ -69,7 +69,7 @@ test.test('must perform a handshake with credentials', (test) => {
     connectPolicy: new jstp.SimpleConnectPolicy(app.login, app.password)
   };
   const port = server.address().port;
-  jstp.net.createConnection(app.name, client, port, (error, conn) => {
+  jstp.net.connect(app.name, client, port, (error, conn) => {
     connection = conn;
     test.assertNot(error, 'handshake must not return an error');
     test.equal(connection.username, app.login,
@@ -85,7 +85,7 @@ test.test('must not perform a handshake with invalid credentials', (test) => {
     connectPolicy: new jstp.SimpleConnectPolicy(app.login, '__incorrect__')
   };
   const port = server.address().port;
-  jstp.net.createConnection(app.name, client, port, (error) => {
+  jstp.net.connect(app.name, client, port, (error) => {
     test.assert(error, 'handshake must return an error');
     test.equal(error.code, jstp.ERR_AUTH_FAILED,
       'error code must be ERR_AUTH_FAILED');
@@ -95,7 +95,7 @@ test.test('must not perform a handshake with invalid credentials', (test) => {
 
 test.test('must handle nonexistent application error', (test) => {
   const port = server.address().port;
-  jstp.net.createConnection('__nonexistentApp__', null, port, (error) => {
+  jstp.net.connect('__nonexistentApp__', null, port, (error) => {
     test.assert(error, 'handshake must return an error');
     test.equal(error.code, jstp.ERR_APP_NOT_FOUND,
       'error code must be ERR_APP_NOT_FOUND');

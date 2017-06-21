@@ -25,7 +25,7 @@ const server = jstp.tls.createServer({ applications: [app], key, cert });
 
 server.listen(0, () => {
   const port = server.address().port;
-  jstp.tls.createConnection(app.name, null, port, (error, connection) => {
+  jstp.tls.connect(app.name, null, port, (error, connection) => {
     if (error) {
       test.threw(error);
       return test.bailout();

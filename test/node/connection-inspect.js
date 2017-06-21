@@ -31,7 +31,7 @@ test.test('must process inspect packets', (test) => {
 
   test.plan(expectedTests);
   const port = server.address().port;
-  jstp.net.createConnection(app.name, null, port, (error, conn) => {
+  jstp.net.connect(app.name, null, port, (error, conn) => {
     connection = conn;
     test.assertNot(error, 'must connect to server');
 
@@ -50,7 +50,7 @@ test.test('must generate remote api after inspect', (test) => {
   const expectedInterfaces = Object.keys(app.interfaces);
 
   const port = server.address().port;
-  jstp.net.createConnectionAndInspect(app.name, null, expectedInterfaces, port,
+  jstp.net.connectAndInspect(app.name, null, expectedInterfaces, port,
     (error, conn, api) => {
       connection = conn;
       test.assertNot(error, 'inspect must not return an error');
@@ -69,7 +69,7 @@ test.test('must generate remote api after inspect', (test) => {
 
 test.test('remote proxy must call a remote method', (test) => {
   const port = server.address().port;
-  jstp.net.createConnectionAndInspect(app.name, null, ['someService'], port,
+  jstp.net.connectAndInspect(app.name, null, ['someService'], port,
     (error, conn, api) => {
       connection = conn;
       test.assertNot(error, 'inspect must not return an error');
@@ -86,7 +86,7 @@ test.test('remote proxy must call a remote method', (test) => {
 
 test.test('must return an error if interface does not exist', (test) => {
   const port = server.address().port;
-  jstp.net.createConnectionAndInspect(
+  jstp.net.connectAndInspect(
     app.name, null, ['__nonexistent__interface__'], port, (error, conn) => {
       connection = conn;
       test.assert(error, 'must return an error');
