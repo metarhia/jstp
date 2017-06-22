@@ -1,1 +1,3 @@
 src/*.h linguist-language=c++
+src/unicode_range_tables.h linguist-generated=true
+src/unicode_tables.h linguist-generated=true
