@@ -20,7 +20,7 @@ testCases.serde.concat(testCases.deserialization).forEach((testCase) => {
   });
 });
 
-testCases.invalidDeserialization.forEach((testCase) => {
+testCases.invalid.forEach((testCase) => {
   test(`must not allow ${testCase.name}`, (test) => {
     test.throws(() => jstp.parse(testCase.value));
     test.end();
