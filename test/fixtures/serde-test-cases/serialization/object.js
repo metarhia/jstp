@@ -15,5 +15,10 @@ module.exports = [
     name: 'object with non-identifier keys',
     value: { '*': 42 },
     serialized: '{\'*\':42}'
+  },
+  {
+    name: 'object with keyword as key',
+    value: { while: true },
+    serialized: '{while:true}'
   }
 ];
