@@ -7,7 +7,7 @@ const http = require('http');
 const path = require('path');
 const readline = require('readline');
 
-const UNICODE_VERSION = '9.0.0';
+const UNICODE_VERSION = '10.0.0';
 const UCD_LINK = 'http://www.unicode.org/Public/' + UNICODE_VERSION +
   '/ucd/DerivedCoreProperties.txt';
 const fullTablesFilename = 'unicode_tables.h';
