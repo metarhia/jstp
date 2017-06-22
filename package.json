@@ -35,6 +35,7 @@
     "./lib/simple-auth-policy.js": false
   },
   "dependencies": {
+    "metarhia-common": "0.0.9",
     "websocket": "^1.0.24"
   },
   "devDependencies": {
