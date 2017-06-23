@@ -48,5 +48,9 @@ module.exports = [
   {
     name: 'missing value in object',
     value: '{key:,}'
+  },
+  {
+    name: 'overflow in Unicode escape sequence',
+    value: '\'\\u{420420}\''
   }
 ];
