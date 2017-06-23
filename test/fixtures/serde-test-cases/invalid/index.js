@@ -22,7 +22,7 @@ module.exports = [
     value: '\'\\u{\''
   },
   {
-    name: 'illegal input $6',
+    name: 'illegal input #6',
     value: '\'\\u{}\''
   },
   {
