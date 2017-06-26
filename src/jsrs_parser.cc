@@ -314,13 +314,13 @@ MaybeLocal<Value> ParseNumber(Isolate*    isolate,
   if (*number_start == '0') {
     number_start++;
 
-    if (*number_start == 'b') {
+    if (*number_start == 'b' || *number_start == 'B') {
       base = 2;
       number_start++;
-    } else if (*number_start == 'o') {
+    } else if (*number_start == 'o' || *number_start == 'O') {
       base = 8;
       number_start++;
-    } else if (*number_start == 'x') {
+    } else if (*number_start == 'x' || *number_start == 'X') {
       base = 16;
       number_start++;
     } else if (isdigit(*number_start)) {
