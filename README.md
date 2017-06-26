@@ -109,7 +109,7 @@ const jstp = require('metarhia-jstp');
 // remote proxy objects for. Remaining arguments are for
 // net.connect (host and port) and last argument is a callback
 // to be called on successful connection or error.
-const client = jstp.net.connectAndInspect(
+jstp.net.connectAndInspect(
   'testApp', null, ['someService'], 3000, 'localhost', handleConnect
 );
 
