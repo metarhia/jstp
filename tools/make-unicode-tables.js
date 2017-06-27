@@ -17,7 +17,7 @@ const getHeaderGuard = filename =>
 const getOutputPath = filename => path.join(__dirname, '../src', filename);
 
 const getFileHeader = filename =>
-`// Copyright (c) 2017 JSTP project authors. Use of this source code is
+  `// Copyright (c) 2017 JSTP project authors. Use of this source code is
 // governed by the MIT license that can be found in the LICENSE file.
 //
 //
