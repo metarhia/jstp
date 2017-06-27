@@ -9,12 +9,6 @@ const supportedByUs = {
   arrays: [
     'leading-comma-array',
     'lone-trailing-comma-array'
-  ],
-  numbers: [
-    'negative-noctal',
-    'noctal-with-leading-octal-digit',
-    'noctal',
-    'positive-noctal'
   ]
 };
 
