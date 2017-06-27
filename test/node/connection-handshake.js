@@ -73,9 +73,9 @@ test.test('must perform a handshake with credentials', (test) => {
     connection = conn;
     test.assertNot(error, 'handshake must not return an error');
     test.equal(connection.username, app.login,
-        'username must be same as the one passed with handshake');
+      'username must be same as the one passed with handshake');
     test.equal(connection.sessionId, app.sessionId,
-        'session id must be equal to the one provided by authCallback');
+      'session id must be equal to the one provided by authCallback');
     test.end();
   });
 });

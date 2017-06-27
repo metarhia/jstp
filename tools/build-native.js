@@ -17,8 +17,8 @@ fs.access('build', (error) => {
     action = 'rebuild';
   }
 
-  const nodeGyp = childProcess.spawn('node-gyp', [action, jobs],
-                                     { shell: true });
+  const nodeGyp = childProcess.spawn(
+    'node-gyp', [action, jobs], { shell: true });
   const errorLines = [];
 
   nodeGyp.on('error', () => {
