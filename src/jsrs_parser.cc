@@ -301,8 +301,6 @@ MaybeLocal<Value> ParseNumber(Isolate*    isolate,
   bool negate_result = false;
   const char* number_start = begin;
 
-  MaybeLocal<Value> result;
-
   if (*begin == '+' || *begin == '-') {
     negate_result = *begin == '-';
     number_start++;
@@ -330,6 +328,8 @@ MaybeLocal<Value> ParseNumber(Isolate*    isolate,
       number_start--;
     }
   }
+
+  MaybeLocal<Value> result;
 
   if (base == 10) {
     result = ParseDecimalNumber(isolate, number_start, end, size,
