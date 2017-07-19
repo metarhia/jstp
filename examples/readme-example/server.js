@@ -8,8 +8,8 @@ const app = new jstp.Application('testApp', {
   someService: {
     sayHi(connection, name, callback) {
       callback(null, `Hi, ${name}!`);
-    }
-  }
+    },
+  },
 });
 
 // Let's create a TCP server for this app. Other available transports are

@@ -17,8 +17,8 @@ const app = new jstp.Application('app', {
   service: {
     method(connection, callback) {
       callback(null, 'ok');
-    }
-  }
+    },
+  },
 });
 
 const server = jstp.tls.createServer({ applications: [app], key, cert });

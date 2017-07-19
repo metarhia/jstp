@@ -9,32 +9,32 @@ const license = fs.readFileSync(path.join(__dirname, 'LICENSE')).toString();
 module.exports = {
   entry: [
     'babel-polyfill',
-    './jstp'
+    './jstp',
   ],
   output: {
     path: path.join(__dirname, 'dist'),
     filename: 'jstp.min.js',
     sourceMapFilename: 'jstp.min.js.map',
     libraryTarget: 'assign',
-    library: ['api', 'jstp']
+    library: ['api', 'jstp'],
   },
   module: {
     rules: [{
       test: /\.js$/,
       loader: 'babel-loader',
       options: {
-        cacheDirectory: true
-      }
-    }]
+        cacheDirectory: true,
+      },
+    }],
   },
   devtool: 'source-map',
   bail: true,
   plugins: [
     new webpack.optimize.UglifyJsPlugin({
-      sourceMap: true
+      sourceMap: true,
     }),
     new webpack.BannerPlugin({
-      banner: license
-    })
-  ]
+      banner: license,
+    }),
+  ],
 };

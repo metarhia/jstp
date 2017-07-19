@@ -7,12 +7,12 @@ const jstp = require('../..');
 const name = 'testApp';
 
 const interfaces = {
-  iface: {}
+  iface: {},
 };
 
 const app = {
   name,
-  interfaces
+  interfaces,
 };
 
 const application = new jstp.Application(app.name, app.interfaces);
