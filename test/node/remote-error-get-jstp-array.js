@@ -14,33 +14,33 @@ const testCases = [
   {
     name: 'RemoteError',
     value: new RemoteError(code),
-    expected: [code]
+    expected: [code],
   },
   {
     name: 'Array',
     value: [code, message],
-    expected: [code, message]
+    expected: [code, message],
   },
   {
     name: 'error code',
     value: code,
-    expected: [code]
+    expected: [code],
   },
   {
     name: 'message',
     value: message,
-    expected: [defaultErrorCode, message]
+    expected: [defaultErrorCode, message],
   },
   {
     name: 'Error',
     value: new TypeError('Invalid argument'),
-    expected: [defaultErrorCode, 'TypeError: Invalid argument']
+    expected: [defaultErrorCode, 'TypeError: Invalid argument'],
   },
   {
     name: 'Object',
     value: sampleObject,
-    expected: [defaultErrorCode, sampleObject.toString()]
-  }
+    expected: [defaultErrorCode, sampleObject.toString()],
+  },
 ];
 
 testCases.forEach((testCase) => {

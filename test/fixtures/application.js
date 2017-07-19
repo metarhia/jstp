@@ -23,7 +23,7 @@ const interfaces = {
     },
     doNothing(connection, callback) {
       callback(null);
-    }
+    },
   },
   someService: {
     sayHi(connection, name, callback) {
@@ -31,7 +31,7 @@ const interfaces = {
     },
     say(connection, word, callback) {
       callback(null, word);
-    }
+    },
   },
   someOtherService: {
     method(connection, argument, callback) {
@@ -39,8 +39,8 @@ const interfaces = {
     },
     otherMethod(connection, callback) {
       callback(null);
-    }
-  }
+    },
+  },
 };
 
 const authCallback = (
@@ -77,5 +77,5 @@ module.exports = {
   password,
   sessionId,
   authCallback,
-  expectedErrorMessage
+  expectedErrorMessage,
 };

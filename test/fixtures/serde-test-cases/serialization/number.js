@@ -4,16 +4,16 @@ module.exports = [
   {
     name: 'NaN',
     value: NaN,
-    serialized: 'NaN'
+    serialized: 'NaN',
   },
   {
     name: 'Infinity',
     value: Infinity,
-    serialized: 'Infinity'
+    serialized: 'Infinity',
   },
   {
     name: '-Infinity',
     value: -Infinity,
-    serialized: '-Infinity'
-  }
+    serialized: '-Infinity',
+  },
 ];

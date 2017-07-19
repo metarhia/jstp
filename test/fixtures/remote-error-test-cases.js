@@ -15,25 +15,25 @@ module.exports = [
     code: knownErrorCode,
     message: customMessage,
     expectedCode: knownErrorCode,
-    expectedMessage: customMessage
+    expectedMessage: customMessage,
   },
   {
     name: 'known errorCode and no message',
     code: knownErrorCode,
     expectedCode: knownErrorCode,
-    expectedMessage: defaultMessage
+    expectedMessage: defaultMessage,
   },
   {
     name: 'unknown error code and custom message',
     code: unknownErrorCode,
     message: unknownMessage,
     expectedCode: unknownErrorCode,
-    expectedMessage: unknownMessage
+    expectedMessage: unknownMessage,
   },
   {
     name: 'unknown error code and no message',
     code: unknownErrorCode,
     expectedCode: unknownErrorCode,
-    expectedMessage: unknownErrorCode.toString()
-  }
+    expectedMessage: unknownErrorCode.toString(),
+  },
 ];

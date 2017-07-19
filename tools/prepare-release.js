@@ -102,7 +102,7 @@ function getMetadata(commitHash) {
       message,
       repo,
       pr,
-      semver: tag
+      semver: tag,
     }));
   });
 }
@@ -113,7 +113,7 @@ function parsePrUrl(prUrl) {
   const match = prUrl.match(regex);
   return match && {
     repo: match[1] + '/' + match[2],
-    id: match[3]
+    id: match[3],
   };
 }
 
@@ -133,7 +133,7 @@ function getSemverTag(repo, id) {
 
 function httpsGetJson(options) {
   options = Object.assign({
-    headers: { 'User-Agent': 'metarhia-jstp-release-tool' }
+    headers: { 'User-Agent': 'metarhia-jstp-release-tool' },
   }, options);
   if (token) {
     options.headers['Authorization'] = `token ${token}`;
@@ -216,7 +216,7 @@ function processCommits(commits) {
 
   return Promise.all([
     writeFile(`${branch}-apply-commits.sh`, script),
-    writeFile(`${branch}-commits.md`, changelog)
+    writeFile(`${branch}-commits.md`, changelog),
   ]);
 }
 
@@ -224,7 +224,7 @@ function filterCommits(commits, semverMax) {
   const levels = {
     patch: 0,
     minor: 1,
-    major: 2
+    major: 2,
   };
   return commits.filter(commit => levels[commit.semver] <= levels[semverMax]);
 }

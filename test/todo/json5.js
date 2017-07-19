@@ -8,8 +8,8 @@ const jstp = require('../..');
 const supportedByUs = {
   arrays: [
     'leading-comma-array',
-    'lone-trailing-comma-array'
-  ]
+    'lone-trailing-comma-array',
+  ],
 };
 
 // Parses a JavaScript object, and if it's a sparse array,
@@ -30,7 +30,7 @@ const testCasesPath = path.resolve(__dirname, '../fixtures/json5');
 const testCases = fs.readdirSync(testCasesPath)
   .map(caseName => ({
     name: caseName,
-    path: path.join(testCasesPath, caseName)
+    path: path.join(testCasesPath, caseName),
   }))
   .filter(testCase => fs.statSync(testCase.path).isDirectory());
 

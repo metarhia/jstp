@@ -66,7 +66,7 @@ test.test('must perform an anonymous handshake', (test) => {
 
 test.test('must perform a handshake with credentials', (test) => {
   const client = {
-    connectPolicy: new jstp.SimpleConnectPolicy(app.login, app.password)
+    connectPolicy: new jstp.SimpleConnectPolicy(app.login, app.password),
   };
   const port = server.address().port;
   jstp.net.connect(app.name, client, port, (error, conn) => {
@@ -82,7 +82,7 @@ test.test('must perform a handshake with credentials', (test) => {
 
 test.test('must not perform a handshake with invalid credentials', (test) => {
   const client = {
-    connectPolicy: new jstp.SimpleConnectPolicy(app.login, '__incorrect__')
+    connectPolicy: new jstp.SimpleConnectPolicy(app.login, '__incorrect__'),
   };
   const port = server.address().port;
   jstp.net.connect(app.name, client, port, (error) => {
@@ -111,7 +111,7 @@ test.test('must not accept handshakes on a client', (test) => {
   };
   const response = {
     handshake: [0],
-    error: [jstp.ERR_NOT_A_SERVER]
+    error: [jstp.ERR_NOT_A_SERVER],
   };
 
   transport.on('dataSent', (data) => {

@@ -28,7 +28,7 @@ cli.on('exit', () => finish());
 rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
-  completer: cli.completer.bind(cli)
+  completer: cli.completer.bind(cli),
 });
 
 const prompt = rl.prompt.bind(rl);

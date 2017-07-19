@@ -44,7 +44,7 @@ test('must forward multiple events', (test) => {
 
   common.forwardMultipleEvents(sourceEventEmitter, targetEventEmitter, [
     'event1',
-    'event2'
+    'event2',
   ]);
 
   targetEventEmitter.on('event1', () => {
