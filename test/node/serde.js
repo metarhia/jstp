@@ -3,6 +3,7 @@
 const test = require('tap').test;
 
 const jstp = require('../..');
+const jsParser = require('../../lib/serde-fallback');
 
 const testCases = require('../fixtures/serde-test-cases');
 
@@ -14,15 +15,29 @@ testCases.serde.concat(testCases.serialization).forEach((testCase) => {
 });
 
 testCases.serde.concat(testCases.deserialization).forEach((testCase) => {
-  test(`must deserialize ${testCase.name}`, (test) => {
-    test.strictSame(jstp.parse(testCase.serialized), testCase.value);
-    test.end();
-  });
+  const runTest = (parserName, parser) => {
+    test(
+      `must deserialize ${testCase.name} using ${parserName} parser`,
+      (test) => {
+        test.strictSame(parser.parse(testCase.serialized), testCase.value);
+        test.end();
+      }
+    );
+  };
+  runTest('native', jstp);
+  runTest('js', jsParser);
 });
 
 testCases.invalid.forEach((testCase) => {
-  test(`must not allow ${testCase.name}`, (test) => {
-    test.throws(() => jstp.parse(testCase.value));
-    test.end();
-  });
+  const runTest = (parserName, parser) => {
+    test(
+      `must not allow ${testCase.name} using ${parserName} parser`,
+      (test) => {
+        test.throws(() => parser.parse(testCase.value));
+        test.end();
+      }
+    );
+  };
+  runTest('native', jstp);
+  runTest('js', jsParser);
 });

@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const tap = require('tap');
 const jstp = require('../..');
+const jsParser = require('../../lib/serde-fallback');
 
 const supportedByUs = {
   arrays: [
@@ -46,29 +47,38 @@ testCases.forEach((testCase) => {
       const testPath = path.join(testCase.path, filename);
       const file = fs.readFileSync(testPath, 'utf8');
 
-      test.test(testName, (test) => {
-        switch (ext) {
-          case '.json':
-            test.strictSame(jstp.parse(file), JSON.parse(file));
-            break;
-          case '.json5':
-            test.strictSame(jstp.parse(file), extendedEval(file));
-            break;
-          case '.js': {
-            const supportedTests = supportedByUs[testCase.name];
-            if (supportedTests && supportedTests.includes(testName)) {
-              test.strictSame(jstp.parse(file), extendedEval(file));
-            } else {
-              test.throws(() => jstp.parse(file));
-            }
-            break;
+      const testCases = {
+        json(test, parser) {
+          test.strictSame(parser.parse(file), JSON.parse(file));
+        },
+
+        json5(test, parser) {
+          test.strictSame(parser.parse(file), extendedEval(file));
+        },
+
+        js(test, parser) {
+          const supportedTests = supportedByUs[testCase.name];
+          if (supportedTests && supportedTests.includes(testName)) {
+            test.strictSame(parser.parse(file), extendedEval(file));
+          } else {
+            test.throws(() => parser.parse(file));
           }
-          case '.txt':
-            test.throws(() => jstp.parse(file));
-            break;
-        }
-        test.end();
-      });
+        },
+
+        txt(test, parser) {
+          test.throws(() => parser.parse(file));
+        },
+      };
+
+      const runTest = (parserName, parser) => {
+        test.test(`${testName} (${parserName} parser)`, (test) => {
+          testCases[ext.slice(1)](test, parser);
+          test.end();
+        });
+      };
+
+      runTest('native', jstp);
+      runTest('js', jsParser);
     });
     test.end();
   });
