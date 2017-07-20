@@ -99,7 +99,7 @@ let idContinueTotalCount = 0;
 const lineRegex = /^([0-9A-F]{4,6})(?:\.\.([0-9A-F]{4,6}))? *; (\w+) #.*$/;
 
 http.get(UCD_LINK, (res) => {
-  const linereader = readline.createInterface({ input: res });
+  const linereader = readline.createInterface({ input: res, historySize: 0 });
   linereader.on('line', (line) => {
     const values = lineRegex.exec(line);
     if (values !== null) {
