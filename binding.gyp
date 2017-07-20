@@ -31,7 +31,7 @@
       ],
       'conditions': [
         ['not jstp_use_short_unicode_tables', {
-          'defines': ['_JSTP_USE_FULL_TABLES_']
+          'defines': ['_PARSER_USE_FULL_TABLES_']
         }]
       ],
       'configurations': {
