@@ -136,11 +136,11 @@ test.test(
     });
 
     const port = server.address().port;
-    net.connect(port, (error) => {
+    const connection = net.connect(port, (error) => {
       test.assertNot(error, 'must connect to server');
-      server.getClients()[0].on('close', () => {
-        test.pass('connection must be closed');
-      });
+    });
+    connection.on('close', () => {
+      test.pass('connection must be closed');
     });
   }
 );
