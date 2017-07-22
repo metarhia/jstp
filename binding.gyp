@@ -50,7 +50,10 @@
       },
       'cflags_cc': ['<@(jstp_base_ccflags)'],
       'xcode_settings': {
-        'OTHER_CPLUSPLUSFLAGS': ['<@(jstp_base_ccflags)']
+        'OTHER_CPLUSPLUSFLAGS': [
+          '<@(jstp_base_ccflags)',
+          '-stdlib=libc++'
+        ]
       }
     }
   ]
