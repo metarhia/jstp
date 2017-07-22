@@ -21,8 +21,6 @@ using std::function;
 using std::isalnum;
 using std::isalpha;
 using std::isdigit;
-using std::isinf;
-using std::isnan;
 using std::isxdigit;
 using std::memcpy;
 using std::memset;
@@ -359,12 +357,12 @@ MaybeLocal<Value> ParseDecimalNumber(Isolate*    isolate,
   }
 
   // strictly allow only "NaN" and "Infinity"
-  if (isnan(number)) {
+  if (std::isnan(number)) {
     if (strncmp(begin + 1, "aN", 2) != 0) {
       THROW_EXCEPTION(SyntaxError, "Invalid format: expected NaN");
       return MaybeLocal<Value>();
     }
-  } else if (isinf(number)) {
+  } else if (std::isinf(number)) {
     if (strncmp(begin + 1, "nfinity", 7) != 0) {
       THROW_EXCEPTION(SyntaxError, "Invalid format: expected Infinity");
       return MaybeLocal<Value>();
