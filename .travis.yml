@@ -25,6 +25,16 @@ node_js:
   - "7.10"
   - "8.0"
   - "8.1"
+matrix:
+  include:
+    - os: osx
+      osx_image: xcode8.3
+      node_js: 6
+      env:
+    - os: osx
+      osx_image: xcode8.3
+      node_js: 8
+      env:
 env:
   - CXX=g++-6
 addons:
@@ -35,7 +45,7 @@ addons:
       - g++-6
   firefox: latest
 before_script:
-  - export DISPLAY=:99.0
-  - sh -e /etc/init.d/xvfb start
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export DISPLAY=:99.0; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sh -e /etc/init.d/xvfb start; fi
 script:
   - npm test
