@@ -8,16 +8,21 @@ const jsParser = require('../../lib/serde-fallback');
 const testCases = require('../fixtures/serde-test-cases');
 
 testCases.serde.concat(testCases.serialization).forEach((testCase) => {
-  test(`must serialize ${testCase.name}`, (test) => {
-    test.strictSame(jstp.stringify(testCase.value), testCase.serialized);
-    test.end();
-  });
+  test(
+    `must serialize ${testCase.name}`,
+    { todo: !!testCase.todo },
+    (test) => {
+      test.strictSame(jstp.stringify(testCase.value), testCase.serialized);
+      test.end();
+    }
+  );
 });
 
 testCases.serde.concat(testCases.deserialization).forEach((testCase) => {
   const runTest = (parserName, parser) => {
     test(
       `must deserialize ${testCase.name} using ${parserName} parser`,
+      { todo: !!testCase.todo },
       (test) => {
         test.strictSame(parser.parse(testCase.serialized), testCase.value);
         test.end();
