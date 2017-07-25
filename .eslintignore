@@ -3,3 +3,5 @@ dist/
 site/
 examples/data-formats/*.js
 test/fixtures/json5/**/*.js
+.nyc_output/
+coverage/
