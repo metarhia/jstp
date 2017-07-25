@@ -1,7 +1,7 @@
 // Copyright (c) 2016-2017 JSTP project authors. Use of this source code is
 // governed by the MIT license that can be found in the LICENSE file.
 
-#include "packet_parser.h"
+#include "message_parser.h"
 
 #include <cstddef>
 #include <cstring>
@@ -24,9 +24,9 @@ using jstp::parser::internal::SkipToNextToken;
 
 namespace jstp {
 
-namespace packet_parser {
+namespace message_parser {
 
-Local<String> ParseNetworkPackets(Isolate* isolate,
+Local<String> ParseNetworkMessages(Isolate* isolate,
                                   const String::Utf8Value& in,
                                   Local<Array> out) {
   const size_t total_size = in.length();
@@ -68,6 +68,6 @@ Local<String> ParseNetworkPackets(Isolate* isolate,
   return rest;
 }
 
-}  // namespace packet_parser
+}  // namespace message_parser
 
 }  // namespace jstp

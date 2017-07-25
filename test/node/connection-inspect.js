@@ -24,7 +24,7 @@ test.afterEach((done) => {
   done();
 });
 
-test.test('must process inspect packets', (test) => {
+test.test('must process inspect messages', (test) => {
   const expectedInterfaces = Object.keys(app.interfaces);
   const expectedTests = expectedInterfaces.reduce((tests, iface) =>
     tests + Object.keys(app.interfaces[iface]).length + 1, 1);

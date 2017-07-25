@@ -6,7 +6,7 @@
 
 #include "common.h"
 #include "parser.h"
-#include "packet_parser.h"
+#include "message_parser.h"
 
 using v8::Array;
 using v8::FunctionCallbackInfo;
@@ -40,7 +40,7 @@ void Parse(const FunctionCallbackInfo<Value>& args) {
   args.GetReturnValue().Set(result);
 }
 
-void ParseNetworkPackets(const FunctionCallbackInfo<Value>& args) {
+void ParseNetworkMessages(const FunctionCallbackInfo<Value>& args) {
   Isolate* isolate = args.GetIsolate();
 
   if (args.Length() != 2) {
@@ -56,13 +56,13 @@ void ParseNetworkPackets(const FunctionCallbackInfo<Value>& args) {
 
   String::Utf8Value str(args[0]->ToString());
   auto array = args[1].As<Array>();
-  auto result = jstp::packet_parser::ParseNetworkPackets(isolate, str, array);
+  auto result = jstp::message_parser::ParseNetworkMessages(isolate, str, array);
   args.GetReturnValue().Set(result);
 }
 
 void Init(Local<Object> target) {
   NODE_SET_METHOD(target, "parse", Parse);
-  NODE_SET_METHOD(target, "parseNetworkPackets", ParseNetworkPackets);
+  NODE_SET_METHOD(target, "parseNetworkMessages", ParseNetworkMessages);
 }
 
 NODE_MODULE(jstp, Init);

@@ -26,7 +26,7 @@
       'sources': [
         'src/node_bindings.cc',
         'src/parser.cc',
-        'src/packet_parser.cc',
+        'src/message_parser.cc',
         'src/unicode_utils.cc'
       ],
       'conditions': [

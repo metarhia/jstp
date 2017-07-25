@@ -124,7 +124,7 @@ test.test('must not accept handshakes on a client', (test) => {
   // `connection._processHandshakeRequest` is being tested
   // eslint-disable-next-line no-unused-vars
   const connection = new jstp.Connection(transport, null, {});
-  transport.emitPacket(handshake);
+  transport.emitMessage(handshake);
 });
 
 test.test(

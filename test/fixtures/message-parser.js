@@ -14,13 +14,13 @@ module.exports = [
     remainder: '',
   },
   {
-    name: 'whole packet followed by a half-packet',
+    name: 'whole message followed by a half-message',
     message: '{a:1}\0{b:',
     result: [{ a: 1 }],
     remainder: '{b:',
   },
   {
-    name: 'a whole packet followed by a whole packet',
+    name: 'a whole message followed by a whole message',
     message: '{a:1}\0{b:2}\0',
     result: [{ a: 1 }, { b: 2 }],
     remainder: '',
