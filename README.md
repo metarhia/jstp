@@ -11,15 +11,13 @@
     src="https://travis-ci.org/metarhia/jstp.svg?branch=master"
     alt="Travis CI"
   /></a>
-  <a
-    href="https://www.bithound.io/github/metarhia/jstp/master/dependencies/npm"
-  ><img
-    src="https://www.bithound.io/github/metarhia/jstp/badges/dependencies.svg"
-    alt="bitHound Dependencies"
+  <a href="https://ci.appveyor.com/project/metarhia/jstp"><img
+    src="https://ci.appveyor.com/api/projects/status/rev863t5a909ltuq/branch/master?svg=true"
+    alt="AppVeyor CI"
   /></a>
-  <a href="https://www.bithound.io/github/metarhia/jstp"><img
-    src="https://www.bithound.io/github/metarhia/jstp/badges/score.svg"
-    alt="bitHound Score"
+  <a href="https://coveralls.io/github/metarhia/jstp?branch=master"><img
+    src="https://coveralls.io/repos/github/metarhia/jstp/badge.svg?branch=master"
+    alt="Coverage Status"
   /></a>
   <a href="https://badge.fury.io/js/metarhia-jstp"><img
     src="https://badge.fury.io/js/metarhia-jstp.svg"
