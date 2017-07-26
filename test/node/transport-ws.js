@@ -14,7 +14,6 @@ const interfaces = Object.keys(app.interfaces);
 let server;
 let connection;
 
-
 test.beforeEach((done) => {
   server = jstp.ws.createServer([application]);
   server.listen(0, done);
@@ -77,10 +76,7 @@ const runTest = (transport, transportName) => {
     const address = transportName === 'WebSocket' ? [null] : [];
     address.push('__illegal__url__');
 
-    const connect = () => transport.connect(
-      app.name,
-      null,
-      ...address,
+    const connect = () => transport.connect(app.name, null, ...address,
       (error) => {
         test.assert(error, 'connect must return an error');
       }
