@@ -26,8 +26,7 @@ let server;
 let connection;
 
 test.beforeEach((done) => {
-  server = jstp.wss.createServer(
-    { applications: [application], key, cert });
+  server = jstp.wss.createServer({ applications: [application], key, cert });
   server.listen(0, done);
 });
 
@@ -88,10 +87,7 @@ const runTest = (transport, transportName) => {
     const address = transportName === 'WebSocket' ? [null] : [];
     address.push('__illegal__url__');
 
-    const connect = () => transport.connect(
-      app.name,
-      null,
-      ...address,
+    const connect = () => transport.connect(app.name, null, ...address,
       (error) => {
         test.assert(error, 'connect must return an error');
       }
