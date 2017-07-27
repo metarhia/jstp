@@ -40,10 +40,16 @@ let connection;
 test.afterEach((done) => {
   if (connection) {
     connection.close();
-    connection = null;
+    connection.once('close', () => {
+      connection = null;
+
+      if (server) server.close();
+      done();
+    });
+  } else {
+    if (server) server.close();
+    done();
   }
-  if (server) server.close();
-  done();
 });
 
 test.test('must allow to specify version in application name', (test) => {
