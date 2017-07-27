@@ -28,10 +28,10 @@ test.afterEach((done) => {
   done();
 });
 
-const webSocketAdress = (adress, transport) => {
-  const address = transport === 'WebSocket' ? [null] : [];
-  address.push(`ws://localhost:${adress.port}`);
-  return address;
+const webSocketAddress = (address, transport) => {
+  const addr = transport === 'WebSocket' ? [null] : [];
+  addr.push(`ws://localhost:${address.port}`);
+  return addr;
 };
 
 const runTest = (transport, transportName) => {
@@ -39,7 +39,7 @@ const runTest = (transport, transportName) => {
     transport.connect(
       app.name,
       null,
-      ...webSocketAdress(server.address(), transportName),
+      ...webSocketAddress(server.address(), transportName),
       (error, conn) => {
         connection = conn;
         test.assertNot(error, 'connect must not return an error');
@@ -53,7 +53,7 @@ const runTest = (transport, transportName) => {
       app.name,
       null,
       interfaces,
-      ...webSocketAdress(server.address(), transportName),
+      ...webSocketAddress(server.address(), transportName),
       (error, conn, api) => {
         connection = conn;
         test.assertNot(error, 'connectAndInspect must not return an error');
