@@ -15,8 +15,7 @@ build/
 
 # Docs
 doc/
-site/
-mkdocs.yml
+_book/
 
 # Python bytecode
 *.pyc

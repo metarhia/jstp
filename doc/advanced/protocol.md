@@ -1,5 +1,7 @@
 # JavaScript Transfer Protocol
 
+**WARNING: THIS DOCUMENT IS VASTLY OUTDATED AND MISLEADING.**
+
 JSTP is a data transfer protocol that uses JavaScript objects syntax as the
 encoding format and supports metadata. The protocol has 8 types of packets:
 

@@ -22,7 +22,7 @@ build/
 dist/
 
 # Built docs
-site/
+_book/
 
 # Python bytecode
 *.pyc
