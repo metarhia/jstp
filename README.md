@@ -50,7 +50,7 @@ implementation bundled in!
 JSTP works in Node.js and web browsers:
 
 ```sh
-$ npm install --save-dev metarhia-jstp
+$ npm install --save metarhia-jstp
 ```
 
 Or, alternatively, there are
