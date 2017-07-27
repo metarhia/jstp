@@ -39,7 +39,7 @@ test.afterEach((done) => {
 
 test.test('must emit server and client events upon anonymous handshake',
   (test) => {
-    test.plan(8);
+    test.plan(7);
 
     const client = {
       application: new jstp.Application('jstp', {}),
@@ -67,15 +67,12 @@ test.test('must emit server and client events upon anonymous handshake',
 
       connection.on('handshake', (error, ok) => {
         test.assertNot(error, 'handshake must not return an error');
-        test.equal(ok, app.sessionId,
-          'session id must be equal to the one provided by authCallback');
+        test.assert(ok, 'handshake must return ok');
       });
 
       connection.handshake(app.name, null, null, (error) => {
         test.assertNot(error, 'handshake must not return an error');
         test.equal(connection.username, null, 'username must be null');
-        test.equal(connection.sessionId, app.sessionId,
-          'session id must be equal to the one provided by authCallback');
         connection.close();
       });
     });
@@ -84,7 +81,7 @@ test.test('must emit server and client events upon anonymous handshake',
 
 test.test('must emit server and client events login authentication strategy',
   (test) => {
-    test.plan(8);
+    test.plan(7);
 
     const client = {
       application: new jstp.Application('jstp', {}),
@@ -112,15 +109,12 @@ test.test('must emit server and client events login authentication strategy',
 
       connection.on('handshake', (error, ok) => {
         test.assertNot(error, 'handshake must not return an error');
-        test.equal(ok, app.sessionId,
-          'session id must be equal to the one provided by authCallback');
+        test.assert(ok, 'handshake must return ok');
       });
 
       connection.handshake(app.name, app.login, app.password, (error) => {
         test.assertNot(error, 'handshake must not return an error');
         test.equal(connection.username, app.login, 'username must match');
-        test.equal(connection.sessionId, app.sessionId,
-          'session id must be equal to the one provided by authCallback');
         connection.close();
       });
     });

@@ -30,7 +30,7 @@ test.afterEach((done) => {
   done();
 });
 
-test.test('must perform an anonymous handshake', (test) => {
+test.test('must perform an anonymous handshake manually', (test) => {
   const client = {
     application: new jstp.Application('jstp', {}),
   };
@@ -41,11 +41,11 @@ test.test('must perform an anonymous handshake', (test) => {
   socket.on('connect', () => {
     const transport = new jstp.net.Transport(socket);
     connection = new jstp.Connection(transport, null, client);
-    connection.handshake(app.name, null, null, (error) => {
+    connection.handshake(app.name, null, null, (error, session) => {
       test.assertNot(error, 'handshake must not return an error');
       test.equal(connection.username, null, 'username must be null');
-      test.equal(connection.sessionId, app.sessionId,
-        'session id must be equal to the one provided by authCallback');
+      test.assert(session instanceof jstp.Session,
+        'session must be an instance of jstp.Session');
       test.end();
     });
   });
@@ -53,12 +53,12 @@ test.test('must perform an anonymous handshake', (test) => {
 
 test.test('must perform an anonymous handshake', (test) => {
   const port = server.address().port;
-  jstp.net.connect(app.name, null, port, (error, conn) => {
+  jstp.net.connect(app.name, null, port, (error, conn, session) => {
     connection = conn;
     test.assertNot(error, 'handshake must not return an error');
     test.equal(connection.username, null, 'username must be null');
-    test.equal(connection.sessionId, app.sessionId,
-      'session id must be equal to the one provided by authCallback');
+    test.assert(session instanceof jstp.Session,
+      'session must be an instance of jstp.Session');
     test.end();
   });
 });
@@ -69,13 +69,15 @@ test.test('must perform a handshake with credentials', (test) => {
     connectPolicy: new jstp.SimpleConnectPolicy(app.login, app.password),
   };
   const port = server.address().port;
-  jstp.net.connect(app.name, client, port, (error, conn) => {
+  jstp.net.connect(app.name, client, port, (error, conn, session) => {
     connection = conn;
     test.assertNot(error, 'handshake must not return an error');
     test.equal(connection.username, app.login,
       'username must be same as the one passed with handshake');
-    test.equal(connection.sessionId, app.sessionId,
-      'session id must be equal to the one provided by authCallback');
+    test.assert(session instanceof jstp.Session,
+      'session must be an instance of jstp.Session');
+    test.equal(session.username, app.login,
+      'session username must be same as the one passed with handshake');
     test.end();
   });
 });

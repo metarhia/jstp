@@ -5,7 +5,6 @@ const jstp = require('../..');
 const name = 'testApp';
 const login = 'login';
 const password = 'password';
-const sessionId = '12892e85-5bd7-4c77-a0c5-a0aecfcbc93a';
 
 const expectedErrorMessage = 'Zero division';
 
@@ -53,10 +52,6 @@ const authCallback = (
   let username = null;
   let success = false;
 
-  if (strategy === 'anonymous') {
-    success = true;
-  }
-
   if (strategy === 'login' &&
       credentials[0] === login &&
       credentials[1] === password) {
@@ -67,7 +62,7 @@ const authCallback = (
   if (!success) {
     callback(new jstp.RemoteError(jstp.ERR_AUTH_FAILED));
   }
-  callback(null, username, sessionId);
+  callback(null, username);
 };
 
 module.exports = {
@@ -75,7 +70,6 @@ module.exports = {
   interfaces,
   login,
   password,
-  sessionId,
   authCallback,
   expectedErrorMessage,
 };
