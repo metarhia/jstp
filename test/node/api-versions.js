@@ -144,7 +144,8 @@ test.test('must return an error on connect to nonexistent version', (test) => {
   server.listen(0, () => {
     const port = server.address().port;
     const nonexistentApp = { name: app.name, version: '9999' };
-    jstp.net.connect(nonexistentApp, null, port, (error) => {
+    jstp.net.connect(nonexistentApp, null, port, (error, conn) => {
+      connection = conn;
       test.assert(error, 'connect must return an error');
       test.equal(error.code, jstp.ERR_APP_NOT_FOUND,
         'error must be an ERR_APP_NOT_FOUND');
@@ -160,7 +161,8 @@ test.test('must return an error on connect to invalid version', (test) => {
   server.listen(0, () => {
     const port = server.address().port;
     const application = { name: app.name, version: '__invalid_version__' };
-    jstp.net.connect(application, null, port, (error) => {
+    jstp.net.connect(application, null, port, (error, conn) => {
+      connection = conn;
       test.assert(error, 'connect must return an error');
       test.equal(error.message, 'Invalid semver version range');
       test.end();
