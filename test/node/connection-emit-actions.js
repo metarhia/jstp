@@ -5,8 +5,6 @@ const net = require('net');
 
 const jstp = require('../..');
 
-require('../tap-oneOf');
-
 const app = require('../fixtures/application');
 
 const application = new jstp.Application(app.name, app.interfaces);
@@ -173,29 +171,40 @@ test.test('must emit event upon inspect packet', (test) => {
 });
 
 test.test('must emit packets in development mode', (test) => {
-  // 4 packets from call below and 4 from 1 heartbeat
-  test.plan(8);
+  test.plan(4);
 
-  const clientSentPackets = [{}, { call: [1, 'calculator'], answer: [] }];
-  const serverSentPackets = [{}, { callback: [1], ok: [42] }];
+  const clientSentPacket = { call: [1, 'calculator'], answer: [] };
+  const serverSentPacket = { callback: [1], ok: [42] };
 
-  addEmitPacketCheck(
-    test, server.getClients()[0], 'sentPacket', serverSentPackets
-  );
-  addEmitPacketCheck(
-    test, server.getClients()[0], 'receivedPacket', clientSentPackets
-  );
-  addEmitPacketCheck(test, connection, 'sentPacket', clientSentPackets);
-  addEmitPacketCheck(test, connection, 'receivedPacket', serverSentPackets);
+  server.getClients()[0].on('sentPacket', (packet) => {
+    test.strictSame(packet, serverSentPacket,
+      'Server sent packet must match');
+  });
+  server.getClients()[0].on('receivedPacket', (packet) => {
+    test.strictSame(packet, clientSentPacket,
+      'Server received packet must match the one sent from client');
+  });
+  connection.on('sentPacket', (packet) => {
+    test.strictSame(packet, clientSentPacket,
+      'Client sent packet must match');
+  });
+  connection.on('receivedPacket', (packet) => {
+    test.strictSame(packet, serverSentPacket,
+      'Client received packet must match the one sent from server');
+  });
 
   connection.callMethod('calculator', 'answer', []);
-  connection.startHeartbeat(100);
 });
 
-function addEmitPacketCheck(test, connection, event, allowedPackets) {
-  connection.on(event, (packet) => {
-    test.oneOf(packet, allowedPackets,
-      'must emit one of the specified packets');
-  });
-}
+test.test('must emit heartbeat packets in development mode', (test) => {
+  test.plan(2);
 
+  server.getClients()[0].on('heartbeat', (packet) => {
+    test.strictSame(packet, {}, 'Heartbeat packet must match on server side');
+  });
+  connection.on('heartbeat', (packet) => {
+    test.strictSame(packet, {}, 'Heartbeat packet must match on client side');
+  });
+
+  connection.startHeartbeat(100);
+});
