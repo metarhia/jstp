@@ -155,7 +155,7 @@ test.test('must emit event on call without arguments and with a return value',
   }
 );
 
-test.test('must emit event upon inspect packet', (test) => {
+test.test('must emit event upon inspect message', (test) => {
   const expectedInterfaces = Object.keys(app.interfaces);
   const expectedTests = expectedInterfaces.length;
 
@@ -170,40 +170,40 @@ test.test('must emit event upon inspect packet', (test) => {
   });
 });
 
-test.test('must emit packets in development mode', (test) => {
+test.test('must emit messages in development mode', (test) => {
   test.plan(4);
 
-  const clientSentPacket = { call: [1, 'calculator'], answer: [] };
-  const serverSentPacket = { callback: [1], ok: [42] };
+  const clientSentMessage = { call: [1, 'calculator'], answer: [] };
+  const serverSentMessage = { callback: [1], ok: [42] };
 
-  server.getClients()[0].on('sentPacket', (packet) => {
-    test.strictSame(packet, serverSentPacket,
-      'Server sent packet must match');
+  server.getClients()[0].on('sentMessage', (message) => {
+    test.strictSame(message, serverSentMessage,
+      'Server sent message must match');
   });
-  server.getClients()[0].on('receivedPacket', (packet) => {
-    test.strictSame(packet, clientSentPacket,
-      'Server received packet must match the one sent from client');
+  server.getClients()[0].on('receivedMessage', (message) => {
+    test.strictSame(message, clientSentMessage,
+      'Server received message must match the one sent from client');
   });
-  connection.on('sentPacket', (packet) => {
-    test.strictSame(packet, clientSentPacket,
-      'Client sent packet must match');
+  connection.on('sentMessage', (message) => {
+    test.strictSame(message, clientSentMessage,
+      'Client sent message must match');
   });
-  connection.on('receivedPacket', (packet) => {
-    test.strictSame(packet, serverSentPacket,
-      'Client received packet must match the one sent from server');
+  connection.on('receivedMessage', (message) => {
+    test.strictSame(message, serverSentMessage,
+      'Client received message must match the one sent from server');
   });
 
   connection.callMethod('calculator', 'answer', []);
 });
 
-test.test('must emit heartbeat packets in development mode', (test) => {
+test.test('must emit heartbeat messages in development mode', (test) => {
   test.plan(2);
 
-  server.getClients()[0].on('heartbeat', (packet) => {
-    test.strictSame(packet, {}, 'Heartbeat packet must match on server side');
+  server.getClients()[0].on('heartbeat', (message) => {
+    test.strictSame(message, {}, 'Heartbeat message must match on server side');
   });
-  connection.on('heartbeat', (packet) => {
-    test.strictSame(packet, {}, 'Heartbeat packet must match on client side');
+  connection.on('heartbeat', (message) => {
+    test.strictSame(message, {}, 'Heartbeat message must match on client side');
   });
 
   connection.startHeartbeat(100);
