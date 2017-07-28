@@ -55,6 +55,9 @@ rules:
   func-call-spacing:
     - error
     - never
+  handle-callback-err:
+    - error
+    - '^.*(e|E)rr'
   key-spacing:
     - error
     - beforeColon: false
