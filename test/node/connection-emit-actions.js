@@ -173,24 +173,24 @@ test.test('must emit event upon inspect message', (test) => {
 test.test('must emit messages in development mode', (test) => {
   test.plan(4);
 
-  const clientSentMessage = { call: [1, 'calculator'], answer: [] };
-  const serverSentMessage = { callback: [1], ok: [42] };
+  const clientOutgoingMessage = { call: [1, 'calculator'], answer: [] };
+  const serverOutgoingMessage = { callback: [1], ok: [42] };
 
-  server.getClients()[0].on('sentMessage', (message) => {
-    test.strictSame(message, serverSentMessage,
-      'Server sent message must match');
+  server.getClients()[0].on('outgoingMessage', (message) => {
+    test.strictSame(message, serverOutgoingMessage,
+      'server outgoing message must match');
   });
-  server.getClients()[0].on('receivedMessage', (message) => {
-    test.strictSame(message, clientSentMessage,
-      'Server received message must match the one sent from client');
+  server.getClients()[0].on('incomingMessage', (message) => {
+    test.strictSame(message, clientOutgoingMessage,
+      'server incoming message must match the one sent from client');
   });
-  connection.on('sentMessage', (message) => {
-    test.strictSame(message, clientSentMessage,
-      'Client sent message must match');
+  connection.on('outgoingMessage', (message) => {
+    test.strictSame(message, clientOutgoingMessage,
+      'client outgoing message must match');
   });
-  connection.on('receivedMessage', (message) => {
-    test.strictSame(message, serverSentMessage,
-      'Client received message must match the one sent from server');
+  connection.on('incomingMessage', (message) => {
+    test.strictSame(message, serverOutgoingMessage,
+      'client incoming message must match the one sent from server');
   });
 
   connection.callMethod('calculator', 'answer', []);
@@ -200,10 +200,10 @@ test.test('must emit heartbeat messages in development mode', (test) => {
   test.plan(2);
 
   server.getClients()[0].on('heartbeat', (message) => {
-    test.strictSame(message, {}, 'Heartbeat message must match on server side');
+    test.strictSame(message, {}, 'heartbeat message must match on server side');
   });
   connection.on('heartbeat', (message) => {
-    test.strictSame(message, {}, 'Heartbeat message must match on client side');
+    test.strictSame(message, {}, 'heartbeat message must match on client side');
   });
 
   connection.startHeartbeat(100);
