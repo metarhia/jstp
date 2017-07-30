@@ -201,6 +201,7 @@ test.test('must set biggest version as latest versions', (test) => {
     const port = server.address().port;
     jstp.net.connect(app.name, null, port, (error, conn) => {
       connection = conn;
+      test.assertNot(error, 'connect must not return an error');
       connection.callMethod('calculator', 'answer', [], (error, result) => {
         test.assertNot(error, 'callMethod must not return an error');
         test.strictSame(result, 24);
