@@ -58,80 +58,103 @@ test.test('must allow to specify version in application name', (test) => {
   test.end();
 });
 
-test.test('must handle specific versions', (test) => {
+test.test('must call latest version if no version specified', (test) => {
   const serverConfig = {
     applications: [appV1, appV2, appVlatest], authPolicy: app.authCallback,
   };
   server = jstp.net.createServer(serverConfig);
   server.listen(0, () => {
-    test.plan(9);
-
     const port = server.address().port;
-
-    // latest
     const appLatest = { name: app.name };
     jstp.net.connect(appLatest, null, port, (error, conn) => {
+      connection = conn;
       test.assertNot(error, 'connect must not return an error');
-      conn.callMethod('calculator', 'answer', [], (error, result) => {
+      connection.callMethod('calculator', 'answer', [], (error, result) => {
         test.assertNot(error, 'callMethod must not return an error');
         test.strictSame(result, 13);
-        conn.close();
-      });
-    });
-
-    // v1
-    const appV1 = { name: app.name, version: '1' };
-    jstp.net.connect(appV1, null, port, (error, conn) => {
-      test.assertNot(error, 'connect must not return an error');
-      conn.callMethod('calculator', 'answer', [], (error, result) => {
-        test.assertNot(error, 'callMethod must not return an error');
-        test.strictSame(result, 42);
-        conn.close();
-      });
-    });
-
-    // v2
-    const appV2 = { name: app.name, version: '2' };
-    jstp.net.connect(appV2, null, port, (error, conn) => {
-      test.assertNot(error, 'connect must not return an error');
-      conn.callMethod('calculator', 'answer', [], (error, result) => {
-        test.assertNot(error, 'callMethod must not return an error');
-        test.strictSame(result, 24);
-        conn.close();
+        test.end();
       });
     });
   });
 });
 
-test.test('must handle version ranges', (test) => {
+test.test('must call specific version when specified (v1)', (test) => {
   const serverConfig = {
     applications: [appV1, appV2, appVlatest], authPolicy: app.authCallback,
   };
   server = jstp.net.createServer(serverConfig);
   server.listen(0, () => {
-    test.plan(6);
-
     const port = server.address().port;
-
-    // ^1.0.0
-    const appV1Compatible = { name: app.name, version: '^1.0.0' };
-    jstp.net.connect(appV1Compatible, null, port, (error, conn) => {
+    const appV1 = { name: app.name, version: '1' };
+    jstp.net.connect(appV1, null, port, (error, conn) => {
+      connection = conn;
       test.assertNot(error, 'connect must not return an error');
-      conn.callMethod('calculator', 'answer', [], (error, result) => {
+      connection.callMethod('calculator', 'answer', [], (error, result) => {
         test.assertNot(error, 'callMethod must not return an error');
         test.strictSame(result, 42);
-        conn.close();
+        test.end();
       });
     });
+  });
+});
 
-    // > v1.0.0
-    const appV1Higher = { name: app.name, version: '>1.0.0' };
-    jstp.net.connect(appV1Higher, null, port, (error, conn) => {
+test.test('must call specific version when specified (v2)', (test) => {
+  const serverConfig = {
+    applications: [appV1, appV2, appVlatest], authPolicy: app.authCallback,
+  };
+  server = jstp.net.createServer(serverConfig);
+  server.listen(0, () => {
+    const port = server.address().port;
+    const appV2 = { name: app.name, version: '2' };
+    jstp.net.connect(appV2, null, port, (error, conn) => {
+      connection = conn;
       test.assertNot(error, 'connect must not return an error');
-      conn.callMethod('calculator', 'answer', [], (error, result) => {
+      connection.callMethod('calculator', 'answer', [], (error, result) => {
         test.assertNot(error, 'callMethod must not return an error');
         test.strictSame(result, 24);
-        conn.close();
+        test.end();
+      });
+    });
+  });
+});
+
+test.test('must handle version ranges (^1.0.0)', (test) => {
+  const serverConfig = {
+    applications: [appV1, appV2, appVlatest], authPolicy: app.authCallback,
+  };
+  server = jstp.net.createServer(serverConfig);
+  server.listen(0, () => {
+    const port = server.address().port;
+    const appV1Compatible = { name: app.name, version: '^1.0.0' };
+    // must connect to appV1
+    jstp.net.connect(appV1Compatible, null, port, (error, conn) => {
+      connection = conn;
+      test.assertNot(error, 'connect must not return an error');
+      connection.callMethod('calculator', 'answer', [], (error, result) => {
+        test.assertNot(error, 'callMethod must not return an error');
+        test.strictSame(result, 42);
+        test.end();
+      });
+    });
+  });
+});
+
+test.test('must handle version ranges (>1.0.0)', (test) => {
+  const serverConfig = {
+    applications: [appV1, appV2, appVlatest], authPolicy: app.authCallback,
+  };
+  server = jstp.net.createServer(serverConfig);
+  server.listen(0, () => {
+    const port = server.address().port;
+    const appV1Higher = { name: app.name, version: '>1.0.0' };
+    // must connect to appV2
+    jstp.net.connect(appV1Higher, null, port, (error, conn) => {
+      connection = conn;
+      test.assertNot(error, 'connect must not return an error');
+      connection.callMethod('calculator', 'answer', [], (error, result) => {
+        test.assertNot(error, 'callMethod must not return an error');
+        test.strictSame(result, 24);
+        test.end();
       });
     });
   });
