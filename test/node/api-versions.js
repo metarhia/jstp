@@ -30,8 +30,8 @@ const interfacesVLatest = {
   },
 };
 
-const appV1 = new jstp.Application(app.name, interfacesV1, null, '1.0.0');
-const appV2 = new jstp.Application(app.name, interfacesV2, null, '2.0.0');
+const appV1 = new jstp.Application(app.name, interfacesV1, {}, '1.0.0');
+const appV2 = new jstp.Application(app.name, interfacesV2, {}, '2.0.0');
 const appVlatest = new jstp.Application(app.name, interfacesVLatest);
 
 let server;
@@ -223,7 +223,7 @@ test.test('must throw an error on invalid version in application name',
 test.test('must throw an error on invalid version in application parameter',
   (test) => {
     test.throws(() => {
-      new jstp.Application('app', interfacesV1, null, '__invalid__');
+      new jstp.Application('app', interfacesV1, {}, '__invalid__');
     }, TypeError, 'Invalid semver version');
     test.end();
   }

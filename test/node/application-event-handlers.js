@@ -23,7 +23,7 @@ test.test('must call event handler in application on remote event', (test) => {
 
   const eventHandlers = {
     someService: {
-      name: (connection, name) => {
+      name(connection, name) {
         test.assert(connection, 'must pass connection to event handler');
         test.equals(name, expectedName, 'must pass correct argument');
         test.end();
