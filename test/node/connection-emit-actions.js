@@ -39,22 +39,22 @@ test.afterEach((done) => {
 
 test.test('must emit server and client events upon anonymous handshake',
   (test) => {
-    test.plan(7);
+    test.plan(8);
 
     const client = {
       application: new jstp.Application('jstp', {}),
     };
 
-    server.once('connect', (serverConnection) => {
-      serverConnection.on('handshakeRequest',
-        (applicationName, authStrategy) => {
-          test.equal(applicationName, app.name,
-            'application name must match');
-          test.equal(authStrategy, 'anonymous',
-            'auth strategy must be anonymous by default');
-        }
-      );
-    });
+    server.once(
+      'handshakeRequest',
+      (serverConnection, applicationName, authStrategy) => {
+        test.assert(serverConnection, 'must return connection object');
+        test.equal(applicationName, app.name,
+          'application name must match');
+        test.equal(authStrategy, 'anonymous',
+          'auth strategy must be anonymous by default');
+      }
+    );
 
     const port = server.address().port;
     const socket = net.connect(port);
@@ -84,22 +84,22 @@ test.test('must emit server and client events upon anonymous handshake',
 
 test.test('must emit server and client events login authentication strategy',
   (test) => {
-    test.plan(7);
+    test.plan(8);
 
     const client = {
       application: new jstp.Application('jstp', {}),
     };
 
-    server.once('connect', (serverConnection) => {
-      serverConnection.on('handshakeRequest',
-        (applicationName, authStrategy) => {
-          test.equal(applicationName, app.name,
-            'application name must match');
-          test.equal(authStrategy, 'login',
-            'authentication strategy must be \'login\'');
-        }
-      );
-    });
+    server.once(
+      'handshakeRequest',
+      (serverConnection, applicationName, authStrategy) => {
+        test.assert(serverConnection, 'must return connection object');
+        test.equal(applicationName, app.name,
+          'application name must match');
+        test.equal(authStrategy, 'login',
+          'authentication strategy must be \'login\'');
+      }
+    );
 
     const port = server.address().port;
     const socket = net.connect(port);
