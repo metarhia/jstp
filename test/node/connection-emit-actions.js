@@ -135,7 +135,7 @@ test.test('must emit event on call without arguments and with a return value',
     const methodName = 'answer';
     const args = [];
 
-    server.getClients()[0].on('call',
+    server.getClientsArray()[0].on('call',
       (actualInterfaceName, actualMethodName, actualArgs) => {
         test.equal(actualInterfaceName, iface,
           'method interface must match');
@@ -160,7 +160,7 @@ test.test('must emit event upon inspect message', (test) => {
   const expectedTests = expectedInterfaces.length;
 
   test.plan(expectedTests);
-  server.getClients()[0].on('inspect', (interfaceName) => {
+  server.getClientsArray()[0].on('inspect', (interfaceName) => {
     test.assert(expectedInterfaces.includes(interfaceName),
       'inspect event interface must be one of expected');
   });
@@ -176,11 +176,11 @@ test.test('must emit messages in development mode', (test) => {
   const clientOutgoingMessage = { call: [1, 'calculator'], answer: [] };
   const serverOutgoingMessage = { callback: [1], ok: [42] };
 
-  server.getClients()[0].on('outgoingMessage', (message) => {
+  server.getClientsArray()[0].on('outgoingMessage', (message) => {
     test.strictSame(message, serverOutgoingMessage,
       'server outgoing message must match');
   });
-  server.getClients()[0].on('incomingMessage', (message) => {
+  server.getClientsArray()[0].on('incomingMessage', (message) => {
     test.strictSame(message, clientOutgoingMessage,
       'server incoming message must match the one sent from client');
   });
@@ -199,7 +199,7 @@ test.test('must emit messages in development mode', (test) => {
 test.test('must emit heartbeat messages in development mode', (test) => {
   test.plan(2);
 
-  server.getClients()[0].on('heartbeat', (message) => {
+  server.getClientsArray()[0].on('heartbeat', (message) => {
     test.strictSame(message, {}, 'heartbeat message must match on server side');
   });
   connection.on('heartbeat', (message) => {
