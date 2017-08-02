@@ -1,4 +1,11 @@
 // Regression test for https://github.com/metarhia/jstp/issues/217
+//
+// A confusing thing about this test is that it doesn't seem to have any
+// assertions except the one that tests if `jstp.net.connect()` has succeeded.
+// In fact, the crux of the test is that it just must complete.  When the
+// subject bug is present, it will crash with an unhandled exception.  This
+// exception happens in an asynchronous context, so `tap.doesNotThrow()` isn't
+// used here, tap will handle it top-level via a domain.
 
 'use strict';
 
