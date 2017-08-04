@@ -12,6 +12,7 @@ server.listen(0, () => {
   const port = server.address().port;
   jstp.net.connect(app.name, null, port, (error, connection) => {
     tap.pass('must call callback once');
+    if (error) return;
     connection.getTransport().destroy();
     connection.on('error', () => {
       // dismiss
