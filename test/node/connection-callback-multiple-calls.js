@@ -29,9 +29,13 @@ test.test('must call connect callback once on successful connect', (test) => {
   });
 });
 
+const invalidAddress = {
+  host: '__invalid_host__',
+};
+
 test.test('must call connect callback once on error on connect', (test) => {
   test.plan(1);
-  jstp.net.connect(app.name, null, 0, (error) => {
+  jstp.net.connect(app.name, null, invalidAddress, (error) => {
     test.assert(error, 'must return error');
   });
 });
