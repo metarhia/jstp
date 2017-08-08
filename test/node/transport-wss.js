@@ -4,8 +4,6 @@ const test = require('tap');
 
 const fs = require('fs');
 const path = require('path');
-global.WebSocket = require('websocket').w3cwebsocket;
-const wsBrowser = require('../../lib/ws-browser');
 
 const jstp = require('../..');
 
@@ -39,67 +37,48 @@ test.afterEach((done) => {
   done();
 });
 
-const webSocketAddress = (address, transport) => {
-  const addr = transport === 'WebSocket' ? [null] : [];
-  addr.push(`wss://localhost:${address.port}`);
-  return addr;
-};
-
-const runTest = (transport, transportName) => {
-  test.test(`${transportName} must connect to server`, (test) => {
-    transport.connect(
-      app.name,
-      null,
-      ...webSocketAddress(server.address(), transportName),
-      (error, conn) => {
-        connection = conn;
-        test.assertNot(error, 'connect must not return an error');
-        test.end();
-      }
-    );
-  });
-
-  test.test(`${transportName} must connect and inspect`, (test) => {
-    transport.connectAndInspect(
-      app.name,
-      null,
-      interfaces,
-      ...webSocketAddress(server.address(), transportName),
-      (error, conn, api) => {
-        connection = conn;
-        test.assertNot(error, 'connectAndInspect must not return an error');
-
-        interfaces.forEach((iface) => {
-          test.assert(iface in api, `api must include '${iface}'`);
-          Object.keys(app.interfaces[iface]).forEach(method =>
-            test.assert(method in api[iface],
-              `api.${iface} must include ${method}`)
-          );
-        });
-
-        test.end();
-      }
-    );
-  });
-
-  test.test(`${transportName} must throw an error on illegal url`, (test) => {
-    test.plan(1);
-    const address = transportName === 'WebSocket' ? [null] : [];
-    address.push('__illegal__url__');
-
-    const connect = () => transport.connect(app.name, null, ...address,
-      (error) => {
-        test.assert(error, 'connect must return an error');
-      }
-    );
-
-    if (transportName === 'WebSocket') {
-      test.throws(connect, 'connect must throw an error');
-    } else {
-      connect();
+test.test('WSS connection must connect to server', (test) => {
+  jstp.wss.connect(
+    app.name,
+    null,
+    null,
+    `wss://localhost:${server.address().port}`,
+    (error, conn) => {
+      connection = conn;
+      test.assertNot(error, 'connect must not return an error');
+      test.end();
     }
-  });
-};
+  );
+});
 
-runTest(jstp.wss, 'WebSocket');
-runTest(wsBrowser, 'W3C WebSocket');
+test.test('WSS connection must connect and inspect', (test) => {
+  jstp.wss.connectAndInspect(
+    app.name,
+    null,
+    interfaces,
+    null,
+    `wss://localhost:${server.address().port}`,
+    (error, conn, api) => {
+      connection = conn;
+      test.assertNot(error, 'connectAndInspect must not return an error');
+
+      interfaces.forEach((iface) => {
+        test.assert(iface in api, `api must include '${iface}'`);
+        Object.keys(app.interfaces[iface]).forEach((method) => {
+          test.assert(method in api[iface],
+            `api.${iface} must include ${method}`);
+        });
+      });
+
+      test.end();
+    }
+  );
+});
+
+test.test('WSS connection must connect and inspect', (test) => {
+  test.plan(1);
+
+  test.throws(() => jstp.wss.connect(
+    app.name, null, null, '__illegal__url__'
+  ), 'connect must throw an error');
+});

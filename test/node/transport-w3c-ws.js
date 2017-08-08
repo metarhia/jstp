@@ -1,6 +1,8 @@
 'use strict';
 
 const test = require('tap');
+global.WebSocket = require('websocket').w3cwebsocket;
+const w3c = require('../../lib/ws-browser');
 
 const jstp = require('../..');
 
@@ -26,10 +28,9 @@ test.afterEach((done) => {
   done();
 });
 
-test.test('WebSocket connection must connect to server', (test) => {
-  jstp.ws.connect(
+test.test('W3C WebSocket connection must connect to server', (test) => {
+  w3c.connect(
     app.name,
-    null,
     null,
     `ws://localhost:${server.address().port}`,
     (error, conn) => {
@@ -40,12 +41,11 @@ test.test('WebSocket connection must connect to server', (test) => {
   );
 });
 
-test.test('WebSocket connection must connect and inspect', (test) => {
-  jstp.ws.connectAndInspect(
+test.test('W3C WebSocket connection must connect and inspect', (test) => {
+  w3c.connectAndInspect(
     app.name,
     null,
     interfaces,
-    null,
     `ws://localhost:${server.address().port}`,
     (error, conn, api) => {
       connection = conn;
@@ -64,10 +64,12 @@ test.test('WebSocket connection must connect and inspect', (test) => {
   );
 });
 
-test.test('WebSocket connection must connect and inspect', (test) => {
+test.test('W3C WebSocket connection must connect and inspect', (test) => {
   test.plan(1);
 
-  test.throws(() => jstp.ws.connect(
-    app.name, null, null, '__illegal__url__'
-  ), 'connect must throw an error');
+  w3c.connect(app.name, null, '__illegal__url__',
+    (error) => {
+      test.assert(error, 'connect must return an error');
+    }
+  );
 });
