@@ -69,6 +69,7 @@
     "rebuild-node": "node tools/build-native --rebuild",
     "build-browser": "webpack --progress --colors",
     "build-doc": "gitbook-local build",
+    "serve-doc": "gitbook-local serve",
     "prepublish": "npm run build-browser",
     "pretest": "npm run build-node"
   },
