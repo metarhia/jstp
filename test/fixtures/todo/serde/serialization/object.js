@@ -15,6 +15,6 @@ module.exports = [
     name: 'object with identifier name, ' +
       'containing non-latin Unicode literals, as a key',
     value: { ümlåût: 'that\'s not really an ümlaüt, but this is' },
-    serialized: '{ümlåût: \'that\\\'s not really an ümlaüt, but this is\'}',
+    serialized: '{ümlåût:\'that\\\'s not really an ümlaüt, but this is\'}',
   },
 ];
