@@ -71,14 +71,10 @@ testCases.forEach((testCase) => {
       };
 
       const runTest = (parserName, parser) => {
-        test.test(
-          `${testName} (${parserName} parser)`,
-          { todo: true },
-          (test) => {
-            testCases[ext.slice(1)](test, parser);
-            test.end();
-          }
-        );
+        test.test(`${testName} (${parserName} parser)`, (test) => {
+          testCases[ext.slice(1)](test, parser);
+          test.end();
+        });
       };
 
       runTest('native', jstp);
