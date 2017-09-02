@@ -44,7 +44,7 @@
     "babel-loader": "^7.1.2",
     "babel-polyfill": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
-    "eslint": "^4.5.0",
+    "eslint": "^4.6.0",
     "eslint-plugin-import": "^2.7.0",
     "gitbook": "^3.2.3",
     "gitbook-commander": "^1.1.2",
