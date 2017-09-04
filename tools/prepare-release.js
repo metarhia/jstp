@@ -5,7 +5,7 @@
 const https = require('https');
 const path = require('path');
 
-const { getCommandOutput, writeFile } = require('./common');
+const { getCommandOutput, writeFile } = require('./helpers');
 
 const commandName = path.relative('.', __filename);
 const help = `\

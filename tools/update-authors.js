@@ -3,7 +3,7 @@
 'use strict';
 
 const path = require('path');
-const { getCommandOutput, writeFile } = require('./common');
+const { getCommandOutput, writeFile } = require('./helpers');
 
 const AUTHORS_PATH = path.resolve(__dirname, '..', 'AUTHORS');
 
