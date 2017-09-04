@@ -75,7 +75,6 @@ const {
 } = parsedServerAddress;
 
 let timer;
-let startTimeHR = null;
 const application = {
   server: {
     method: (connection, argument, callback) => {
@@ -99,7 +98,6 @@ server.maxConnections = 100000;
 
 server.listen(listenAddress, () => {
   console.log(`Server listening on ${address}`);
-  startTimeHR = process.hrtime();
 
   jstp[masterTransport].connectAndInspect(
     'master', null, ['master'], ...masterAddress, (error, connection, api) => {
@@ -118,14 +116,13 @@ server.listen(listenAddress, () => {
         }
 
         timer = setInterval(() => {
-          const timePassedHR = process.hrtime(startTimeHR);
           server.getConnections((error, count) => {
             if (error) {
               console.log(error);
               return;
             }
             console.log(`Connections to server: ${count}`);
-            api.master.emit('serverReport', count, timePassedHR);
+            api.master.emit('serverReport', count);
           });
         }, reportInterval);
       });
