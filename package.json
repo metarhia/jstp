@@ -49,8 +49,8 @@
     "gitbook": "^3.2.3",
     "gitbook-commander": "^1.1.2",
     "remark-cli": "^4.0.0",
-    "remark-lint": "^6.0.1",
-    "remark-validate-links": "^6.1.0",
+    "remark-preset-lint-metarhia": "^1.0.1",
+    "remark-validate-links": "^7.0.0",
     "tap": "^10.7.2",
     "webpack": "^3.5.5",
     "yargs": "^8.0.2"
