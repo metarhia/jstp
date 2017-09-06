@@ -33,7 +33,7 @@ Packet structure:
 * the first one is a header, the name of this key is the packet type,
   its elements are:
 
-  - `[0]` — unique number that identifies the packet inside the connection;
+  * `[0]` — unique number that identifies the packet inside the connection;
     packet with ID `0` is sent by a client (the side that initiated the
     connection) and the client increments it by `1` with each request;
     a server has a separate counter that is being decremented by `1` with
@@ -41,25 +41,25 @@ Packet structure:
     request (like `call` or `inspect`), another one responds with a
     `callback` packet with the same ID.
 
-  - `[1]` — resource identifier:
+  * `[1]` — resource identifier:
 
-    - in `call`, `event` and `inspect` — name of an interface;
-    - in `state` — identifier of the mutating object;
+    * in `call`, `event` and `inspect` — name of an interface;
+    * in `state` — identifier of the mutating object;
 
-- the second key is identifier:
+* the second key is identifier:
 
-  - in `call` — method name;
+  * in `call` — method name;
 
-  - in `callback` - response status (`ok` or `error`);
+  * in `callback` - response status (`ok` or `error`);
 
-  - in `event` — event name;
+  * in `event` — event name;
 
-  - in `state` — method identifier (`inc`, `dec`, `delete`, `let`, `push`,
+  * in `state` — method identifier (`inc`, `dec`, `delete`, `let`, `push`,
     `pop`, `shift`, `unshift`);
 
-  - in `inspect` — no value;
+  * in `inspect` — no value;
 
-  - in `stream` — no value.
+  * in `stream` — no value.
 
 ## Remote Call Packet `call`
 

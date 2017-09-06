@@ -1,4 +1,4 @@
-*Note*: this is forked from https://github.com/json5/json5-tests
+*Note*: this is forked from <https://github.com/json5/json5-tests>
 
 # Parse Test Cases for JSON5
 

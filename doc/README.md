@@ -1,3 +1,4 @@
+<!-- lint ignore -->
 <div align="center">
   <a href="https://github.com/metarhia/jstp"><img
     src="https://cdn.rawgit.com/metarhia/Metarhia/master/Logos/metarhia-logo.svg"
