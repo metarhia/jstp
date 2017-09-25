@@ -27,6 +27,7 @@ const server = jstp.net.createServer(serverConfig);
 client.on('message', ([message, ...args]) => {
   switch (message) {
     case 'error':
+      console.error(args[0].message);
       test.fail('must not encounter an error');
       break;
     case 'session':
@@ -50,7 +51,7 @@ function session(serializedSession) {
   client.on('message', ([message, ...args]) => {
     switch (message) {
       case 'error':
-        console.log(args[0].message);
+        console.error(args[0].message);
         test.fail('must not encounter an error');
         break;
       case 'event':
