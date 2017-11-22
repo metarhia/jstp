@@ -7,10 +7,13 @@ const jstp = require('../..');
 
 const app = require('../fixtures/application');
 
+const HEARTBEAT_INTERVAL = 100;
+
 const application = new jstp.Application(app.name, app.interfaces);
 const serverConfig = {
   applications: [application],
   authPolicy: app.authCallback,
+  heartbeatInterval: HEARTBEAT_INTERVAL,
 };
 
 let server;
@@ -191,14 +194,34 @@ test.test('must emit messages in development mode', (test) => {
 });
 
 test.test('must emit heartbeat messages in development mode', (test) => {
-  test.plan(2);
+  test.plan(4);
+  const received = {
+    serverPing: false,
+    serverPong: false,
+    clientPing: false,
+    clientPong: false,
+  };
 
-  server.getClientsArray()[0].on('heartbeat', (message) => {
-    test.strictSame(message, {}, 'heartbeat message must match on server side');
+  server.getClientsArray()[0].on('incomingMessage', (message) => {
+    if (message.ping !== undefined) {
+      received.serverPing = true;
+    } else if (message.pong !== undefined) {
+      received.serverPong = true;
+    }
   });
-  connection.on('heartbeat', (message) => {
-    test.strictSame(message, {}, 'heartbeat message must match on client side');
+  connection.on('incomingMessage', (message) => {
+    if (message.ping !== undefined) {
+      received.clientPing = true;
+    } else if (message.pong !== undefined) {
+      received.clientPong = true;
+    }
   });
 
-  connection.startHeartbeat(100);
+  connection.startHeartbeat(HEARTBEAT_INTERVAL);
+  setTimeout(() => {
+    test.assert(received.serverPing, 'server must receive ping message');
+    test.assert(received.serverPong, 'server must receive pong message');
+    test.assert(received.clientPing, 'client must receive ping message');
+    test.assert(received.clientPing, 'client must receive pong message');
+  }, 2 * HEARTBEAT_INTERVAL);
 });
