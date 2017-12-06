@@ -42,7 +42,7 @@ test.afterEach((done) => {
 
 test.test('must update API', (test) => {
   const port = server.address().port;
-  server.updateApi([newApplication]);
+  server.updateApplications([newApplication]);
   jstp.net.connect(newApi.name, null, port, 'localhost',
     (error, connection) => {
       test.assertNot(error, 'must connect to a new application');
