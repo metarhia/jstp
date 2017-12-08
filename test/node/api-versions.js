@@ -22,17 +22,8 @@ const interfacesV2 = {
   },
 };
 
-const interfacesVLatest = {
-  calculator: {
-    answer(connection, callback) {
-      callback(null, 13);
-    },
-  },
-};
-
 const appV1 = new jstp.Application(app.name, interfacesV1, {}, '1.0.0');
 const appV2 = new jstp.Application(app.name, interfacesV2, {}, '2.0.0');
-const appVlatest = new jstp.Application(app.name, interfacesVLatest);
 
 let server;
 let connection;
@@ -58,9 +49,15 @@ test.test('must allow to specify version in application name', (test) => {
   test.end();
 });
 
+test.test('must set version to (1.0.0) if none was provided', (test) => {
+  const app = new jstp.Application('app', interfacesV1);
+  test.strictSame(app.version, '1.0.0');
+  test.end();
+});
+
 test.test('must call latest version if no version specified', (test) => {
   const serverConfig = {
-    applications: [appV1, appV2, appVlatest], authPolicy: app.authCallback,
+    applications: [appV1, appV2], authPolicy: app.authCallback,
   };
   server = jstp.net.createServer(serverConfig);
   server.listen(0, () => {
@@ -71,7 +68,7 @@ test.test('must call latest version if no version specified', (test) => {
       test.assertNot(error, 'connect must not return an error');
       connection.callMethod('calculator', 'answer', [], (error, result) => {
         test.assertNot(error, 'callMethod must not return an error');
-        test.strictSame(result, 13);
+        test.strictSame(result, 24);
         test.end();
       });
     });
@@ -80,7 +77,7 @@ test.test('must call latest version if no version specified', (test) => {
 
 test.test('must call specific version when specified (v1)', (test) => {
   const serverConfig = {
-    applications: [appV1, appV2, appVlatest], authPolicy: app.authCallback,
+    applications: [appV1, appV2], authPolicy: app.authCallback,
   };
   server = jstp.net.createServer(serverConfig);
   server.listen(0, () => {
@@ -100,7 +97,7 @@ test.test('must call specific version when specified (v1)', (test) => {
 
 test.test('must call specific version when specified (v2)', (test) => {
   const serverConfig = {
-    applications: [appV1, appV2, appVlatest], authPolicy: app.authCallback,
+    applications: [appV1, appV2], authPolicy: app.authCallback,
   };
   server = jstp.net.createServer(serverConfig);
   server.listen(0, () => {
@@ -120,7 +117,7 @@ test.test('must call specific version when specified (v2)', (test) => {
 
 test.test('must handle version ranges (^1.0.0)', (test) => {
   const serverConfig = {
-    applications: [appV1, appV2, appVlatest], authPolicy: app.authCallback,
+    applications: [appV1, appV2], authPolicy: app.authCallback,
   };
   server = jstp.net.createServer(serverConfig);
   server.listen(0, () => {
@@ -141,7 +138,7 @@ test.test('must handle version ranges (^1.0.0)', (test) => {
 
 test.test('must handle version ranges (>1.0.0)', (test) => {
   const serverConfig = {
-    applications: [appV1, appV2, appVlatest], authPolicy: app.authCallback,
+    applications: [appV1, appV2], authPolicy: app.authCallback,
   };
   server = jstp.net.createServer(serverConfig);
   server.listen(0, () => {
@@ -162,7 +159,7 @@ test.test('must handle version ranges (>1.0.0)', (test) => {
 
 test.test('must return an error on connect to nonexistent version', (test) => {
   const serverConfig =
-    { applications: [appV1, appV2, appVlatest], authPolicy: app.authCallback };
+    { applications: [appV1, appV2], authPolicy: app.authCallback };
   server = jstp.net.createServer(serverConfig);
   server.listen(0, () => {
     const port = server.address().port;
@@ -179,7 +176,7 @@ test.test('must return an error on connect to nonexistent version', (test) => {
 
 test.test('must return an error on connect to invalid version', (test) => {
   const serverConfig =
-    { applications: [appV1, appV2, appVlatest], authPolicy: app.authCallback };
+    { applications: [appV1, appV2], authPolicy: app.authCallback };
   server = jstp.net.createServer(serverConfig);
   server.listen(0, () => {
     const port = server.address().port;
@@ -189,24 +186,6 @@ test.test('must return an error on connect to invalid version', (test) => {
       test.assert(error, 'connect must return an error');
       test.equal(error.message, 'Invalid semver version range');
       test.end();
-    });
-  });
-});
-
-test.test('must set biggest version as latest versions', (test) => {
-  const serverConfig =
-    { applications: [appV1, appV2], authPolicy: app.authCallback };
-  server = jstp.net.createServer(serverConfig);
-  server.listen(0, () => {
-    const port = server.address().port;
-    jstp.net.connect(app.name, null, port, (error, conn) => {
-      connection = conn;
-      test.assertNot(error, 'connect must not return an error');
-      connection.callMethod('calculator', 'answer', [], (error, result) => {
-        test.assertNot(error, 'callMethod must not return an error');
-        test.strictSame(result, 24);
-        test.end();
-      });
     });
   });
 });
@@ -228,3 +207,16 @@ test.test('must throw an error on invalid version in application parameter',
     test.end();
   }
 );
+
+test.test('must not allow the same app with duplicate versions', (test) => {
+  const serverConfig = {
+    applications: [appV1, appV1], authPolicy: app.authCallback,
+  };
+  test.throws(() => {
+    jstp.net.createServer(serverConfig);
+  }, {
+    message: `Multiple instances of application: ${appV1.name} ` +
+      `with version: ${appV1.version}`,
+  });
+  test.end();
+});
