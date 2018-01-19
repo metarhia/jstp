@@ -11,6 +11,14 @@
     src="https://travis-ci.org/metarhia/jstp.svg?branch=master"
     alt="Travis CI"
   /></a>
+  <a href="https://ci.appveyor.com/project/metarhia/jstp"><img
+    src="https://ci.appveyor.com/api/projects/status/rev863t5a909ltuq/branch/master?svg=true"
+    alt="AppVeyor CI"
+  /></a>
+  <a href="https://coveralls.io/github/metarhia/jstp?branch=master"><img
+    src="https://coveralls.io/repos/github/metarhia/jstp/badge.svg?branch=master"
+    alt="Coverage Status"
+  /></a>
   <a
     href="https://www.bithound.io/github/metarhia/jstp/master/dependencies/npm"
   ><img
@@ -20,18 +28,6 @@
   <a href="https://www.bithound.io/github/metarhia/jstp"><img
     src="https://www.bithound.io/github/metarhia/jstp/badges/score.svg"
     alt="bitHound Score"
-  /></a>
-  <a href="https://badge.fury.io/js/metarhia-jstp"><img
-    src="https://badge.fury.io/js/metarhia-jstp.svg"
-    alt="NPM Version"
-  /></a>
-  <a href="https://www.npmjs.com/package/metarhia-jstp"><img
-    src="https://img.shields.io/npm/dm/metarhia-jstp.svg"
-    alt="NPM Downloads/Month"
-  /></a>
-  <a href="https://www.npmjs.com/package/metarhia-jstp"><img
-    src="https://img.shields.io/npm/dt/metarhia-jstp.svg"
-    alt="NPM Downloads"
   /></a>
   <h1>JSTP / JavaScript Transfer Protocol</h1>
 </div>
@@ -46,7 +42,21 @@ implementation bundled in!
 
 **This project is bound by a [Code of Conduct](CODE_OF_CONDUCT.md).**
 
-## Installation
+<div align="center">
+  <h2>Installation</h2>
+  <a href="https://badge.fury.io/js/metarhia-jstp"><img
+    src="https://badge.fury.io/js/metarhia-jstp.svg"
+    alt="NPM Version"
+  /></a>
+  <a href="https://www.npmjs.com/package/metarhia-jstp"><img
+    src="https://img.shields.io/npm/dm/metarhia-jstp.svg"
+    alt="NPM Downloads/Month"
+  /></a>
+  <a href="https://www.npmjs.com/package/metarhia-jstp"><img
+    src="https://img.shields.io/npm/dt/metarhia-jstp.svg"
+    alt="NPM Downloads"
+  /></a>
+</div>
 
 JSTP works in Node.js and web browsers:
 
@@ -65,7 +75,7 @@ We also have official client-side implementations for
 [Java](https://github.com/metarhia/jstp-java)
 that work effortlessly on iOS and Android 🎉
 
-## Getting Started
+<h2 align="center">Getting Started</h2>
 
 Server:
 
@@ -134,7 +144,7 @@ function handleConnect(error, connection, app) {
 }
 ```
 
-## Project Maintainers
+<h2 align="center">Project Maintainers</h2>
 
 Kudos to [@tshemsedinov](https://github.com/tshemsedinov) for the initial idea
 and proof-of-concept implementation. Current project team is:
