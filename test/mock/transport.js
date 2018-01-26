@@ -11,13 +11,10 @@ function TransportMock() {
   events.EventEmitter.call(this);
   this.buffer = '';
   this.closed = false;
+  this.remoteAddress = '127.0.0.1';
 }
 
 util.inherits(TransportMock, events.EventEmitter);
-
-TransportMock.prototype.getRemoteAddress = function() {
-  return '127.0.0.1';
-};
 
 TransportMock.prototype.send = function(data) {
   if (!this.closed) {
@@ -36,4 +33,8 @@ TransportMock.prototype.end = function(data) {
 
 TransportMock.prototype.emitMessage = function(message) {
   this.emit('message', message);
+};
+
+TransportMock.prototype.getRawTransport = function() {
+  return this;
 };
