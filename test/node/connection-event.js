@@ -80,6 +80,25 @@ test.test('client must process an event', (test) => {
   });
 });
 
+test.test('connection must reject events having not array as arguments',
+  (test) => {
+    const port = server.address().port;
+    jstp.net.connect(app.name, null, port, (error, conn) => {
+      connection = conn;
+      test.assertNot(error, 'must connect to server');
+
+      connection.on('messageRejected', () => {
+        test.pass('event message must be rejected');
+        test.end();
+      });
+
+      const invalidArgs = { invalid: 0 };
+      server.getClientsArray()[0].emitRemoteEvent(
+        iface, eventName, invalidArgs
+      );
+    });
+  });
+
 test.test('remote proxy must emit an event', (test) => {
   const port = server.address().port;
   jstp.net.connectAndInspect(app.name, null, [iface], port,
