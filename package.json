@@ -58,7 +58,7 @@
   },
   "scripts": {
     "test": "npm run lint && npm run test-node && npm run test-integration",
-    "test-node": "tap test/node/*.js",
+    "test-node": "node tools/run-node-tests.js",
     "test-integration": "node test/integration/run.js",
     "test-todo": "tap test/todo",
     "test-coverage": "nyc npm run test-node",
