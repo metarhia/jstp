@@ -30,12 +30,12 @@ const sendSession = () => {
 
 const reconnect = (port, serializedSession) => {
   client.session = jstp.Session.fromString(serializedSession);
-  jstp.net.connect(appName, client, port, (error, conn, session) => {
+  jstp.net.connect(appName, client, port, (error, conn) => {
     if (error) {
       process.send(['error', error]);
     }
     connection = conn;
-    client.session = session;
+
     connection.on('event', (iface, event) => {
       process.send(['event', iface, event]);
     });
