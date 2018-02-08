@@ -44,7 +44,7 @@ fs.access('build', (error) => {
 });
 
 function handleBuildError(code) {
-  if (process.env.TRAVIS) {
+  if (process.env.CI) {
     process.exit(code);
   } else {
     console.warn('Could not build JSTP native extensions, ' +
