@@ -174,18 +174,30 @@ test.test('must emit messages in development mode', (test) => {
   const serverOutgoingMessage = { callback: [1], ok: [42] };
 
   server.getClientsArray()[0].on('outgoingMessage', (message) => {
+    if (message.ping || message.pong) {
+      return;
+    }
     test.strictSame(message, serverOutgoingMessage,
       'server outgoing message must match');
   });
   server.getClientsArray()[0].on('incomingMessage', (message) => {
+    if (message.ping || message.pong) {
+      return;
+    }
     test.strictSame(message, clientOutgoingMessage,
       'server incoming message must match the one sent from client');
   });
   connection.on('outgoingMessage', (message) => {
+    if (message.ping || message.pong) {
+      return;
+    }
     test.strictSame(message, clientOutgoingMessage,
       'client outgoing message must match');
   });
   connection.on('incomingMessage', (message) => {
+    if (message.ping || message.pong) {
+      return;
+    }
     test.strictSame(message, serverOutgoingMessage,
       'client incoming message must match the one sent from server');
   });
