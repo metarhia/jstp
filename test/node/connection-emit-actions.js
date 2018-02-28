@@ -46,6 +46,7 @@ test.test('must emit server and client events upon anonymous handshake',
 
     const client = {
       application: new jstp.Application('jstp', {}),
+      reconnector: () => {},
     };
 
     server.once(
@@ -88,6 +89,7 @@ test.test('must emit server and client events login authentication strategy',
 
     const client = {
       application: new jstp.Application('jstp', {}),
+      reconnector: () => {},
     };
 
     server.once(

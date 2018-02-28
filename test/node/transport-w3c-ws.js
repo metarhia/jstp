@@ -2,9 +2,8 @@
 
 const test = require('tap');
 global.WebSocket = require('websocket').w3cwebsocket;
-const w3c = require('../../lib/ws-browser');
-
 const jstp = require('../..');
+const w3c = require('../../lib/ws-browser');
 
 const app = require('../fixtures/application');
 const application = new jstp.Application(app.name, app.interfaces);

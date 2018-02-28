@@ -31,8 +31,7 @@ test.test('must reconnect to existing session', (test) => {
       test.equal(conn.username, null, 'username must be null');
       test.assert(session instanceof jstp.Session,
         'session must be an instance of jstp.Session');
-      const client = { session };
-      jstp.net.connect(app.name, client, port, (error, conn, session) => {
+      jstp.net.reconnect(conn, port, (error, conn, session) => {
         connection = conn;
         test.assertNot(error,
           'must successfully reconnect to existing session');
@@ -64,11 +63,10 @@ test.test('must not resend messages received by other side', (test) => {
       test.equal(conn.username, null, 'username must be null');
       test.assert(session instanceof jstp.Session,
         'session must be an instance of jstp.Session');
-      const client = { session };
       conn.callMethod('calculator', 'doNothing', [], (error) => {
         test.assertNot(error, 'call must not return an error');
       });
-      jstp.net.connect(app.name, client, port, (error, conn, session) => {
+      jstp.net.reconnect(conn, port, (error, conn, session) => {
         connection = conn;
         test.assertNot(error,
           'must successfully reconnect to existing session');

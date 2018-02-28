@@ -33,6 +33,7 @@ test.afterEach((done) => {
 test.test('must perform an anonymous handshake manually', (test) => {
   const client = {
     application: new jstp.Application('jstp', {}),
+    reconnector: () => {},
   };
   const port = server.address().port;
   const socket = net.connect(port);
@@ -67,6 +68,7 @@ test.test('must perform an anonymous handshake', (test) => {
 test.test('must perform a handshake with credentials', (test) => {
   const client = {
     connectPolicy: new jstp.SimpleConnectPolicy(app.login, app.password),
+    reconnector: () => {},
   };
   const port = server.address().port;
   jstp.net.connect(app.name, client, port, (error, conn, session) => {
@@ -85,6 +87,7 @@ test.test('must perform a handshake with credentials', (test) => {
 test.test('must not perform a handshake with invalid credentials', (test) => {
   const client = {
     connectPolicy: new jstp.SimpleConnectPolicy(app.login, '__incorrect__'),
+    reconnector: () => {},
   };
   const port = server.address().port;
   jstp.net.connect(app.name, client, port, (error) => {
@@ -97,7 +100,8 @@ test.test('must not perform a handshake with invalid credentials', (test) => {
 
 test.test('must handle nonexistent application error', (test) => {
   const port = server.address().port;
-  jstp.net.connect('__nonexistentApp__', null, port, (error) => {
+  const client = { reconnector: () => {} };
+  jstp.net.connect('__nonexistentApp__', client, port, (error) => {
     test.assert(error, 'handshake must return an error');
     test.equal(error.code, jstp.ERR_APP_NOT_FOUND,
       'error code must be ERR_APP_NOT_FOUND');
@@ -125,7 +129,9 @@ test.test('must not accept handshakes on a client', (test) => {
   // `connection` is being used in an implicit way
   // `connection._processHandshakeRequest` is being tested
   // eslint-disable-next-line no-unused-vars
-  const connection = new jstp.Connection(transport, null, {});
+  const connection = new jstp.Connection(transport, null, {
+    reconnector: () => {},
+  });
   transport.emitMessage(handshake);
 });
 

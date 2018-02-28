@@ -19,7 +19,8 @@ test.afterEach((done) => {
 test.test('must call connect callback once on successful connect', (test) => {
   test.plan(1);
   const port = server.address().port;
-  jstp.net.connect(app.name, null, port, (error, connection) => {
+  const client = { reconnector: () => {} };
+  jstp.net.connect(app.name, client, port, (error, connection) => {
     test.assertNot(error, 'must not return error');
     connection.getTransport().destroy();
     connection.on('error', () => {

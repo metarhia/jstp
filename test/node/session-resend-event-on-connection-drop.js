@@ -21,7 +21,10 @@ const ifaces = {
 };
 
 const application = new jstp.Application('testApp', ifaces);
-const serverConfig = { applications: [application] };
+const serverConfig = {
+  applications: [application],
+  clientExpirationTime: 1000,
+};
 const server = jstp.net.createServer(serverConfig);
 
 client.on('message', ([message, ...args]) => {
@@ -59,7 +62,9 @@ function session(serializedSession) {
         break;
     }
   });
-  client.send(['reconnect', server.address().port, serializedSession]);
+  setTimeout(() => {
+    client.send(['reconnect', server.address().port, serializedSession]);
+  }, 2000);
 }
 
 function handleEvent(ifaceName, eventName) {
