@@ -21,9 +21,6 @@ compile_commands.json
 build/
 dist/
 
-# Built docs
-_book/
-
 # Python bytecode
 *.pyc
 
