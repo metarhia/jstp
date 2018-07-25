@@ -22,9 +22,36 @@ doc/
 # Examples
 examples/
 
-# Tests
+# Tests and benchmarks
 test/
+benchmark/
 
 # Test coverage data
 coverage/
 .nyc_output/
+
+# CI configuration files
+.appveyor.yml
+.travis.yml
+
+# Development configs and tools
+tools/
+.editorconfig
+
+# Linter configuration files
+.eslintignore
+.eslintrc
+.remarkrc
+
+# Git related files
+.gitattributes
+.mailmap
+
+# Development related docs
+AUTHORS
+CHANGELOG.md
+CODE_OF_CONDUCT.md
+
+# Browser build configs
+.babelrc
+webpack.config.js
