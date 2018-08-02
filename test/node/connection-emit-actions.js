@@ -2,6 +2,7 @@
 
 const test = require('tap');
 const net = require('net');
+const EventEmitter = require('events');
 
 const jstp = require('../..');
 
@@ -17,13 +18,15 @@ const serverConfig = {
 };
 
 let server;
+let logger;
 let connection;
 
 test.beforeEach((done) => {
   server = jstp.net.createServer(serverConfig);
   server.listen(0, () => {
     const port = server.address().port;
-    jstp.net.connect(app.name, null, port, 'localhost', (error, conn) => {
+    logger = new EventEmitter();
+    jstp.net.connect(app.name, { logger }, port, 'localhost', (error, conn) => {
       test.assertNot(error, 'must connect to server and perform handshake');
       connection = conn;
       done();
@@ -87,9 +90,11 @@ test.test('must emit server and client events login authentication strategy',
   (test) => {
     test.plan(7);
 
+    const logger = new EventEmitter();
     const client = {
       application: new jstp.Application('jstp', {}),
       reconnector: () => {},
+      logger,
     };
 
     server.once(
@@ -112,7 +117,7 @@ test.test('must emit server and client events login authentication strategy',
       const transport = new jstp.net.Transport(socket);
       const connection = new jstp.Connection(transport, null, client);
 
-      connection.on('handshake', (error, ok) => {
+      logger.on('handshake', (error, ok) => {
         test.assertNot(error, 'handshake must not return an error');
         test.assert(ok, 'handshake must return ok');
       });
@@ -145,7 +150,7 @@ test.test('must emit event on call without arguments and with a return value',
       }
     );
 
-    connection.on('callback', (error, ok) => {
+    logger.on('callback', (error, ok) => {
       test.assertNot(error, 'callMethod must not return an error');
       test.strictSame(ok, [42], 'ok contents must match');
     });
@@ -189,14 +194,14 @@ test.test('must emit messages in development mode', (test) => {
     test.strictSame(message, clientOutgoingMessage,
       'server incoming message must match the one sent from client');
   });
-  connection.on('outgoingMessage', (message) => {
+  logger.on('outgoingMessage', (message) => {
     if (message.ping || message.pong) {
       return;
     }
     test.strictSame(message, clientOutgoingMessage,
       'client outgoing message must match');
   });
-  connection.on('incomingMessage', (message) => {
+  logger.on('incomingMessage', (message) => {
     if (message.ping || message.pong) {
       return;
     }
@@ -223,7 +228,7 @@ test.test('must emit heartbeat messages in development mode', (test) => {
       received.serverPong = true;
     }
   });
-  connection.on('incomingMessage', (message) => {
+  logger.on('incomingMessage', (message) => {
     if (message.ping !== undefined) {
       received.clientPing = true;
     } else if (message.pong !== undefined) {
