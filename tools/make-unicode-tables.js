@@ -12,11 +12,11 @@ const UCD_LINK = 'http://www.unicode.org/Public/' + UNICODE_VERSION +
   '/ucd/DerivedCoreProperties.txt';
 const fullTablesFilename = 'unicode_tables.h';
 const rangeTablesFilename = 'unicode_range_tables.h';
-const getHeaderGuard = filename =>
-  `SRC_${filename.replace(/\W/g, '_').toUpperCase()}_`;
+const getHeaderGuard =
+  filename => `SRC_${filename.replace(/\W/g, '_').toUpperCase()}_`;
 const getOutputPath = filename => path.join(__dirname, '../src', filename);
 
-const getFileHeader = filename =>
+const getFileHeader = filename => (
   `// Copyright (c) 2017 JSTP project authors. Use of this source code is
 // governed by the MIT license that can be found in the LICENSE file.
 //
@@ -67,7 +67,7 @@ const getFileHeader = filename =>
 #ifndef ${getHeaderGuard(filename)}
 #define ${getHeaderGuard(filename)}
 
-`;
+`);
 
 const rangeTablesHeader = `#include <cstddef>
 #include <cstdint>

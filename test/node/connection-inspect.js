@@ -26,8 +26,10 @@ test.afterEach((done) => {
 
 test.test('must process inspect messages', (test) => {
   const expectedInterfaces = Object.keys(app.interfaces);
-  const expectedTests = expectedInterfaces.reduce((tests, iface) =>
-    tests + Object.keys(app.interfaces[iface]).length + 1, 1);
+  const expectedTests = expectedInterfaces.reduce(
+    (tests, iface) => tests + Object.keys(app.interfaces[iface]).length + 1,
+    1
+  );
 
   test.plan(expectedTests);
   const port = server.address().port;
@@ -38,8 +40,10 @@ test.test('must process inspect messages', (test) => {
     expectedInterfaces.forEach((iface) => {
       connection.inspectInterface(iface, (error, methods) => {
         test.assertNot(error, `must inspect ${iface}`);
-        Object.keys(app.interfaces[iface]).forEach(method =>
-          test.assert(method in methods, `api.${iface} must include ${method}`)
+        Object.keys(app.interfaces[iface]).forEach(
+          method => test.assert(
+            method in methods, `api.${iface} must include ${method}`
+          )
         );
       });
     });
@@ -57,9 +61,10 @@ test.test('must generate remote api after inspect', (test) => {
 
       expectedInterfaces.forEach((iface) => {
         test.assert(iface in api, `api must include '${iface}'`);
-        Object.keys(app.interfaces[iface]).forEach(method =>
-          test.assert(method in api[iface],
-            `api.${iface} must include ${method}`)
+        Object.keys(app.interfaces[iface]).forEach(
+          method => test.assert(
+            method in api[iface], `api.${iface} must include ${method}`
+          )
         );
       });
       test.end();
