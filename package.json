@@ -25,14 +25,15 @@
     "jstp-cli": "./bin/cli.js"
   },
   "browser": {
-    "./lib/record-serialization.js": "./lib/record-serialization-fallback.js",
+    "./jstp.js": "./dist/jstp.umd.js",
     "./lib/server.js": false,
     "./lib/net.js": false,
     "./lib/tls.js": false,
     "./lib/socket.js": false,
     "./lib/wss.js": false,
     "./lib/ws.js": "./lib/ws-browser.js",
-    "./lib/simple-auth-policy.js": false
+    "./lib/simple-auth-policy.js": false,
+    "./lib/simple-session-storage-provider.js": false
   },
   "dependencies": {
     "semver": "^5.5.0",
@@ -41,8 +42,8 @@
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
-    "babel-loader": "^7.1.4",
-    "babel-polyfill": "^6.26.0",
+    "babel-loader": "^7.1.5",
+    "babel-plugin-transform-builtin-extend": "^1.1.2",
     "babel-preset-env": "^1.7.0",
     "eslint": "^5.2.0",
     "eslint-config-metarhia": "^3.0.0",
@@ -51,7 +52,8 @@
     "remark-preset-lint-metarhia": "^1.0.2",
     "remark-validate-links": "^7.0.0",
     "tap": "^11.1.5",
-    "webpack": "^3.12.0",
+    "webpack": "^4.16.4",
+    "webpack-command": "^0.4.1",
     "yargs": "^10.1.2"
   },
   "scripts": {
@@ -65,7 +67,7 @@
     "build": "npm run build-node && npm run build-browser",
     "build-node": "node tools/build-native",
     "rebuild-node": "node tools/build-native --rebuild",
-    "build-browser": "webpack --progress --colors",
+    "build-browser": "webpack --progress",
     "prepublish": "npm run build-browser",
     "pretest": "npm run build-node"
   },

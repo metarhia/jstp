@@ -52,11 +52,9 @@ JSTP works in Node.js and web browsers:
 $ npm install --save metarhia-jstp
 ```
 
-Or, alternatively, there are
-[jstp.min.js](https://metarhia.github.io/jstp/dist/jstp.min.js) and
-[jstp.min.js.map](https://metarhia.github.io/jstp/dist/jstp.min.js.map)
-available for those browser-based applications that aren't built using a module
-bundler like [webpack](https://webpack.js.org/).
+Or, alternatively, there is
+[jstp.umd.js](https://unpkg.com/metarhia-jstp@latest/dist/jstp.umd.js)
+UMD bundle.
 
 We also have official client-side implementations for
 [Swift](https://github.com/metarhia/jstp-swift) and
