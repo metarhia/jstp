@@ -63,25 +63,28 @@ process.argv.forEach(arg => {
   }
 });
 
-getCommandOutput('git cherry ' + branch).then(cherryOut => {
-  const hashes = cherryOut
-    .split('\n')
-    .filter(line => line !== '' && line.startsWith('+'))
-    .map(line => line.slice(2))
-    .filter(hash => {
-      for (const excludedHash of excludeCommits) {
-        if (hash.startsWith(excludedHash)) {
-          return false;
+getCommandOutput('git cherry ' + branch)
+  .then(cherryOut => {
+    const hashes = cherryOut
+      .split('\n')
+      .filter(line => line !== '' && line.startsWith('+'))
+      .map(line => line.slice(2))
+      .filter(hash => {
+        for (const excludedHash of excludeCommits) {
+          if (hash.startsWith(excludedHash)) {
+            return false;
+          }
         }
-      }
-      return true;
-    });
-  return Promise.all(hashes.map(getMetadata));
-}).then(processCommits).catch(error => {
-  const message = error.stack || error.toString();
-  console.error(message);
-  process.exit(1);
-});
+        return true;
+      });
+    return Promise.all(hashes.map(getMetadata));
+  })
+  .then(processCommits)
+  .catch(error => {
+    const message = error.stack || error.toString();
+    console.error(message);
+    process.exit(1);
+  });
 
 function getMetadata(commitHash) {
   const command = 'git log --format="%aN%n%B" -n 1 ' + commitHash;
@@ -111,10 +114,12 @@ function parsePrUrl(prUrl) {
   if (!prUrl) return null;
   const regex = /^https:\/\/github.com\/([\w-]+)\/([\w-]+)\/pull\/(\d+)\/?$/;
   const match = prUrl.match(regex);
-  return match && {
-    repo: match[1] + '/' + match[2],
-    id: match[3],
-  };
+  return (
+    match && {
+      repo: match[1] + '/' + match[2],
+      id: match[3],
+    }
+  );
 }
 
 function getSemverTag(repo, id) {
@@ -132,47 +137,52 @@ function getSemverTag(repo, id) {
 }
 
 function httpsGetJson(options) {
-  options = Object.assign({
-    headers: { 'User-Agent': 'metarhia-jstp-release-tool' },
-  }, options);
+  options = Object.assign(
+    {
+      headers: { 'User-Agent': 'metarhia-jstp-release-tool' },
+    },
+    options
+  );
   if (token) {
     options.headers['Authorization'] = `token ${token}`;
   }
 
   return new Promise((resolve, reject) => {
-    https.get(options, res => {
-      getStreamData(res, (err, json) => {
-        if (err) {
-          reject(err);
-          return;
-        }
+    https
+      .get(options, res => {
+        getStreamData(res, (err, json) => {
+          if (err) {
+            reject(err);
+            return;
+          }
 
-        if (res.statusCode !== 200) {
-          const url = `https://${options.host}${options.path}`;
-          const message = `Request to ${url} failed with status code ` +
-                          res.statusCode;
-          reject(new Error(`${message}\n${json}`));
-          return;
-        }
+          if (res.statusCode !== 200) {
+            const url = `https://${options.host}${options.path}`;
+            const message =
+              `Request to ${url} failed with status code ` + res.statusCode;
+            reject(new Error(`${message}\n${json}`));
+            return;
+          }
 
-        const contentType = res.headers['content-type'];
-        if (!contentType.startsWith('application/json')) {
-          const error = new Error(`Invalid Content-Type: ${contentType}`);
-          res.resume();
-          reject(error);
-          return;
-        }
+          const contentType = res.headers['content-type'];
+          if (!contentType.startsWith('application/json')) {
+            const error = new Error(`Invalid Content-Type: ${contentType}`);
+            res.resume();
+            reject(error);
+            return;
+          }
 
-        let object = null;
-        try {
-          object = JSON.parse(json);
-        } catch (err) {
-          reject(err);
-          return;
-        }
-        resolve(object);
-      });
-    }).on('error', error => reject(error));
+          let object = null;
+          try {
+            object = JSON.parse(json);
+          } catch (err) {
+            reject(err);
+            return;
+          }
+          resolve(object);
+        });
+      })
+      .on('error', error => reject(error));
   });
 }
 
@@ -212,9 +222,9 @@ function processCommits(commits) {
 
     const url = `https://github.com/${commit.repo}/pull/${commit.pr}`;
     const pr = `[#${commit.pr}](${url})`;
-    changelog += ` * ${message}\n   *(${commit.author})*\n   ${pr}\n`;
+    changelog += `- ${message}\n  _(${commit.author})_\n  ${pr}\n`;
     if (commit.semver !== 'patch') {
-      changelog += `   **\\[semver-${commit.semver}\\]**\n`;
+      changelog += `  **\\[semver-${commit.semver}\\]**\n`;
     }
   }
 

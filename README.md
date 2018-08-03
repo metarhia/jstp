@@ -83,8 +83,8 @@ const app = new jstp.Application('testApp', {
   someService: {
     sayHi(connection, name, callback) {
       callback(null, `Hi, ${name}!`);
-    }
-  }
+    },
+  },
 });
 
 // Let's create a TCP server for this app. Other available transports are
@@ -114,7 +114,12 @@ const jstp = require('@metarhia/jstp');
 // net.connect (host and port) and last argument is a callback
 // to be called on successful connection or error.
 jstp.net.connectAndInspect(
-  'testApp', null, ['someService'], 3000, 'localhost', handleConnect
+  'testApp',
+  null,
+  ['someService'],
+  3000,
+  'localhost',
+  handleConnect
 );
 
 function handleConnect(error, connection, app) {
@@ -142,13 +147,13 @@ function handleConnect(error, connection, app) {
 Kudos to [@tshemsedinov](https://github.com/tshemsedinov) for the initial idea
 and proof-of-concept implementation. Current project team is:
 
-* [@aqrln](https://github.com/aqrln) &mdash;
+- [@aqrln](https://github.com/aqrln) &mdash;
   **Alexey Orlenko** &lt;eaglexrlnk@gmail.com&gt;
-* [@belochub](https://github.com/belochub) &mdash;
+- [@belochub](https://github.com/belochub) &mdash;
   **Mykola Bilochub** &lt;nbelochub@gmail.com&gt;
-* [@lundibundi](https://github.com/lundibundi) &mdash;
+- [@lundibundi](https://github.com/lundibundi) &mdash;
   **Denys Otrishko** &lt;shishugi@gmail.com&gt;
-* [@nechaido](https://github.com/nechaido) &mdash;
+- [@nechaido](https://github.com/nechaido) &mdash;
   **Dmytro Nechai** &lt;nechaido@gmail.com&gt;
-* [@tshemsedinov](https://github.com/tshemsedinov) &mdash;
+- [@tshemsedinov](https://github.com/tshemsedinov) &mdash;
   **Timur Shemsedinov** &lt;timur.shemsedinov@gmail.com&gt;

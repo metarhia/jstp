@@ -15,9 +15,10 @@ testCases.forEach(testCase => {
     expextedJstpArray.push(testCase.expectedMessage);
   }
 
-  test(`Must properly construct jstp array from error with ${testCase.name}`,
-    test => {
-      test.strictSame(jstpArray, expextedJstpArray);
-      test.end();
-    });
+  test(`Must properly construct jstp array from error with ${
+    testCase.name
+  }`, test => {
+    test.strictSame(jstpArray, expextedJstpArray);
+    test.end();
+  });
 });

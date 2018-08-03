@@ -31,18 +31,26 @@ test.afterEach(done => {
   done();
 });
 
-
 test.test('TCP connection must connect to server', test => {
-  jstp.net.connect(app.name, null, port, (error, conn) => {
-    connection = conn;
-    test.assertNot(error, 'connect must not return an error');
-    test.end();
-  });
+  jstp.net.connect(
+    app.name,
+    null,
+    port,
+    (error, conn) => {
+      connection = conn;
+      test.assertNot(error, 'connect must not return an error');
+      test.end();
+    }
+  );
 });
 
 test.test('TCP connection must connect and inspect', test => {
   jstp.net.connectAndInspect(
-    app.name, null, interfaces, port, (error, conn, api) => {
+    app.name,
+    null,
+    interfaces,
+    port,
+    (error, conn, api) => {
       connection = conn;
       test.assertNot(error, 'connectAndInspect must not return an error');
 
@@ -50,7 +58,8 @@ test.test('TCP connection must connect and inspect', test => {
         test.assert(iface in api, `api must include '${iface}'`);
         Object.keys(app.interfaces[iface]).forEach(method => {
           test.assert(
-            method in api[iface], `api.${iface} must include ${method}`
+            method in api[iface],
+            `api.${iface} must include ${method}`
           );
         });
       });
@@ -66,9 +75,14 @@ test.test('TCP connection must throw an error on invalid address', test => {
     port,
   };
 
-  jstp.net.connect(app.name, null, invalidAddress, error => {
-    test.assert(error, 'connect must return an error');
-    test.equals(error.code, 'ENOTFOUND', 'error must be ENOTFOUND');
-    test.end();
-  });
+  jstp.net.connect(
+    app.name,
+    null,
+    invalidAddress,
+    error => {
+      test.assert(error, 'connect must return an error');
+      test.equals(error.code, 'ENOTFOUND', 'error must be ENOTFOUND');
+      test.end();
+    }
+  );
 });

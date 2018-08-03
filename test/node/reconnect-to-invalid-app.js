@@ -20,8 +20,7 @@ const reconnector = (connection, reconnectFn) => {
     reconnectFn(error => {
       if (error) {
         const newBackoff = backoff * 2;
-        backoff = newBackoff < MAX_BACKOFF_TIME ?
-          newBackoff : MAX_BACKOFF_TIME;
+        backoff = newBackoff < MAX_BACKOFF_TIME ? newBackoff : MAX_BACKOFF_TIME;
         return;
       }
       backoff = DEFAULT_BACKOFF_TIME;
@@ -33,10 +32,15 @@ test.test('reconnection to non-existent app must not throw', test => {
   const server = jstp.net.createServer(serverConfig);
   server.listen(0, () => {
     const port = server.address().port;
-    jstp.net.connect(INVALID_APP_NAME, { reconnector }, port, 'localhost',
+    jstp.net.connect(
+      INVALID_APP_NAME,
+      { reconnector },
+      port,
+      'localhost',
       (error, conn) => {
         test.assert(
-          error, 'connection to non-existent app must return an error'
+          error,
+          'connection to non-existent app must return an error'
         );
         setTimeout(() => {
           conn.close();

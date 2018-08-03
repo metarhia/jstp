@@ -24,6 +24,6 @@ times.
 
 When the package reaches 1.0.0, the protocol version will be unconditionally
 bumped to 1.0.0 too, regardless of whether `metarhia-jstp@1.0.0` brings any
-changes to the protocol.  We will then take this as a starting point and the
+changes to the protocol. We will then take this as a starting point and the
 protocol specification will be versioned with semver independently from the
 package.

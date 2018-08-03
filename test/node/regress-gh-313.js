@@ -10,7 +10,9 @@ const server = jstp.net.createServer({ applications: [app] });
 
 server.listen(() => {
   jstp.net.connect(
-    'app', null, server.address().port,
+    'app',
+    null,
+    server.address().port,
     (err, connection) => {
       test.assertNot(err, 'must connect successfully');
 

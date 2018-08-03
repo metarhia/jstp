@@ -26,8 +26,12 @@ test('must forward a single event under a new name', test => {
   const sourceEventEmitter = new events.EventEmitter();
   const targetEventEmitter = new events.EventEmitter();
 
-  common.forwardEvent(sourceEventEmitter, targetEventEmitter,
-    'testEvent', 'renamedEvent');
+  common.forwardEvent(
+    sourceEventEmitter,
+    targetEventEmitter,
+    'testEvent',
+    'renamedEvent'
+  );
 
   targetEventEmitter.on('renamedEvent', () => {
     test.pass('event handler must be called');

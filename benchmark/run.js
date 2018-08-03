@@ -7,17 +7,14 @@ const statistics = require('./statistics');
 
 const yargsParser = require('yargs-parser');
 
-const args = yargsParser(
-  process.argv.slice(2),
-  {
-    alias: {
-      workers: ['W'],
-      connections: ['C'],
-      requests: ['R'],
-      size: ['S'],
-    },
-  }
-);
+const args = yargsParser(process.argv.slice(2), {
+  alias: {
+    workers: ['W'],
+    connections: ['C'],
+    requests: ['R'],
+    size: ['S'],
+  },
+});
 
 const {
   workers: workersAmount,
@@ -107,7 +104,7 @@ function outputResults(benchTimeHR) {
   const stdev = Math.sqrt(sum / workersAmount);
 
   const benchTime = benchTimeHR[0] * 1e9 + benchTimeHR[1];
-  const erps = count * 1e9 / benchTime;
+  const erps = (count * 1e9) / benchTime;
 
   server.send(['stop']);
   console.log(`
@@ -123,7 +120,8 @@ function terminate() {
   console.warn(
     '\nBenchmark is being terminated due to an error or signal termination\n'
   );
-  workers.filter((_, index) => !workersExited[index])
+  workers
+    .filter((_, index) => !workersExited[index])
     .forEach(worker => {
       worker.kill('SIGKILL');
     });

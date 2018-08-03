@@ -42,17 +42,9 @@ const args = yargs
   })
   .demandOption(['workers'])
   .help()
-  .alias('help', 'h')
-  .argv;
+  .alias('help', 'h').argv;
 
-const {
-  address,
-  size,
-  connection,
-  interval,
-  report,
-  workers,
-} = args;
+const { address, size, connection, interval, report, workers } = args;
 
 for (let i = 0; i < workers; i++) {
   cp.fork(

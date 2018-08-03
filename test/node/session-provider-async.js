@@ -46,7 +46,9 @@ const reconnect = (connection, port) => {
     test.error(error, 'must not encounter error on reconnection');
     connection.callMethod('iface', 'second', [], (error, token) => {
       test.error(error, 'call to iface.second must not return an error');
-      test.equal(token, TOKEN,
+      test.equal(
+        token,
+        TOKEN,
         'second method must return the same token passed to first method'
       );
       connection.close();
@@ -60,16 +62,21 @@ const reconnect = (connection, port) => {
 
 server.listen(0, () => {
   const port = server.address().port;
-  jstp.net.connect(APP_NAME, client, port, (error, connection) => {
-    test.error(error, 'handshake must not return an error');
-    connection.callMethod('iface', 'first', [TOKEN], error => {
-      test.error(error, 'call to iface.first must not return an error');
-      connection.close();
-      connection.once('close', () => {
-        setTimeout(() => {
-          reconnect(connection, port);
-        }, TIMEOUT * 10);
+  jstp.net.connect(
+    APP_NAME,
+    client,
+    port,
+    (error, connection) => {
+      test.error(error, 'handshake must not return an error');
+      connection.callMethod('iface', 'first', [TOKEN], error => {
+        test.error(error, 'call to iface.first must not return an error');
+        connection.close();
+        connection.once('close', () => {
+          setTimeout(() => {
+            reconnect(connection, port);
+          }, TIMEOUT * 10);
+        });
       });
-    });
-  });
+    }
+  );
 });

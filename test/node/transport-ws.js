@@ -54,8 +54,10 @@ test.test('WebSocket connection must connect and inspect', test => {
       interfaces.forEach(iface => {
         test.assert(iface in api, `api must include '${iface}'`);
         Object.keys(app.interfaces[iface]).forEach(method => {
-          test.assert(method in api[iface],
-            `api.${iface} must include ${method}`);
+          test.assert(
+            method in api[iface],
+            `api.${iface} must include ${method}`
+          );
         });
       });
 
@@ -67,7 +69,14 @@ test.test('WebSocket connection must connect and inspect', test => {
 test.test('WebSocket connection must connect and inspect', test => {
   test.plan(1);
 
-  test.throws(() => jstp.ws.connect(
-    app.name, null, null, '__illegal__url__'
-  ), 'connect must throw an error');
+  test.throws(
+    () =>
+      jstp.ws.connect(
+        app.name,
+        null,
+        null,
+        '__illegal__url__'
+      ),
+    'connect must throw an error'
+  );
 });

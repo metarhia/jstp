@@ -30,27 +30,20 @@ const args = yargs
     alias: 'k',
     type: 'string',
     describe: 'Path to file that contains SSL certificate key',
-    coerce:
-      arg => (arg ? fs.readFileSync(path.resolve(__dirname, arg)) : undefined),
+    coerce: arg =>
+      arg ? fs.readFileSync(path.resolve(__dirname, arg)) : undefined,
   })
   .option('cert', {
     alias: 'c',
     type: 'string',
     describe: 'Path to file that contains SSL certificate',
-    coerce:
-      arg => (arg ? fs.readFileSync(path.resolve(__dirname, arg)) : undefined),
+    coerce: arg =>
+      arg ? fs.readFileSync(path.resolve(__dirname, arg)) : undefined,
   })
   .help()
-  .alias('help', 'h')
-  .argv;
+  .alias('help', 'h').argv;
 
-const {
-  address,
-  master,
-  report: reportInterval,
-  key,
-  cert,
-} = args;
+const { address, master, report: reportInterval, key, cert } = args;
 
 const [masterAddressError, parsedMasterAddress] = parseAddress(master);
 if (masterAddressError) {
@@ -100,7 +93,11 @@ server.listen(listenAddress, () => {
   console.log(`Server listening on ${address}`);
 
   jstp[masterTransport].connectAndInspect(
-    'master', null, ['master'], ...masterAddress, (error, connection, api) => {
+    'master',
+    null,
+    ['master'],
+    ...masterAddress,
+    (error, connection, api) => {
       if (error) {
         console.error(error);
         server.close();

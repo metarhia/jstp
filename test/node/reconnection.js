@@ -31,11 +31,17 @@ test.beforeEach(done => {
   server = jstp.net.createServer(serverConfig);
   server.listen(0, () => {
     const port = server.address().port;
-    jstp.net.connect(APP_NAME, null, port, 'localhost', (error, conn) => {
-      test.assertNot(error, 'must connect to server and perform handshake');
-      connection = conn;
-      done();
-    });
+    jstp.net.connect(
+      APP_NAME,
+      null,
+      port,
+      'localhost',
+      (error, conn) => {
+        test.assertNot(error, 'must connect to server and perform handshake');
+        connection = conn;
+        done();
+      }
+    );
   });
 });
 
@@ -59,7 +65,9 @@ test.test('must reconnect to the same session', test => {
     setTimeout(() => {
       connection.callMethod('iface', 'second', [], (error, token) => {
         test.assertNot(error, 'callMethod must not return an error');
-        test.equal(token, TOKEN,
+        test.equal(
+          token,
+          TOKEN,
           'second method must return the same token passed to first method'
         );
         test.end();

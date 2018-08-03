@@ -17,7 +17,9 @@ tap.plan(2);
 
 server.listen(() => {
   jstp.net.connect(
-    'app', null, server.address().port,
+    'app',
+    null,
+    server.address().port,
     (error, connection) => {
       tap.assertNot(error, 'client must connect successfully');
 

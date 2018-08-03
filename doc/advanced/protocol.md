@@ -5,15 +5,15 @@
 JSTP is a data transfer protocol that uses JavaScript objects syntax as the
 encoding format and supports metadata. The protocol has 8 types of packets:
 
-* `call` — remote API call;
-* `callback` — remote API response;
-* `event` — event with attached data;
-* `state` — data synchronization;
-* `stream` — data streaming;
-* `handshake` — protocol handshake;
-* `health` — system data about resource state and usage;
-* `inspect` — API introspection request;
-* this list is a subject to change.
+- `call` — remote API call;
+- `callback` — remote API response;
+- `event` — event with attached data;
+- `state` — data synchronization;
+- `stream` — data streaming;
+- `handshake` — protocol handshake;
+- `health` — system data about resource state and usage;
+- `inspect` — API introspection request;
+- this list is a subject to change.
 
 ```javascript
 // Packet ID 17, remote call, interface auth, method newAccount
@@ -28,12 +28,12 @@ encoding format and supports metadata. The protocol has 8 types of packets:
 
 Packet structure:
 
-* a packet is an object with several keys;
+- a packet is an object with several keys;
 
-* the first one is a header, the name of this key is the packet type,
+- the first one is a header, the name of this key is the packet type,
   its elements are:
 
-  * `[0]` — unique number that identifies the packet inside the connection;
+  - `[0]` — unique number that identifies the packet inside the connection;
     packet with ID `0` is sent by a client (the side that initiated the
     connection) and the client increments it by `1` with each request;
     a server has a separate counter that is being decremented by `1` with
@@ -41,25 +41,25 @@ Packet structure:
     request (like `call` or `inspect`), another one responds with a
     `callback` packet with the same ID.
 
-  * `[1]` — resource identifier:
+  - `[1]` — resource identifier:
 
-    * in `call`, `event` and `inspect` — name of an interface;
-    * in `state` — identifier of the mutating object;
+    - in `call`, `event` and `inspect` — name of an interface;
+    - in `state` — identifier of the mutating object;
 
-* the second key is identifier:
+- the second key is identifier:
 
-  * in `call` — method name;
+  - in `call` — method name;
 
-  * in `callback` - response status (`ok` or `error`);
+  - in `callback` - response status (`ok` or `error`);
 
-  * in `event` — event name;
+  - in `event` — event name;
 
-  * in `state` — method identifier (`inc`, `dec`, `delete`, `let`, `push`,
+  - in `state` — method identifier (`inc`, `dec`, `delete`, `let`, `push`,
     `pop`, `shift`, `unshift`);
 
-  * in `inspect` — no value;
+  - in `inspect` — no value;
 
-  * in `stream` — no value.
+  - in `stream` — no value.
 
 ## Remote Call Packet `call`
 
@@ -134,9 +134,9 @@ an array with error code and optional error message.
 The action field of handshake requests specifies the authentication strategy.
 There are two supported strategies now:
 
-* `login` — authentication with login and password. The payload is an array of
+- `login` — authentication with login and password. The payload is an array of
   two elements: username and password, both represented as strings.
-* `anonymous` — anonymous session request. The payload is ignored (e.g., `true`
+- `anonymous` — anonymous session request. The payload is ignored (e.g., `true`
   or an empty array may be used). For anonymous handshakes the action field can
   be omitted completely, `anonymous` is implied by default.
 

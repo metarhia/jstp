@@ -7,9 +7,10 @@ const childProcess = require('child_process');
 
 const jobs = `-j${process.env.JOBS || os.cpus().length}`;
 
-const tests = childProcess.spawn(
-  'tap', [jobs, 'test/node/*.js'], { shell: true, stdio: 'inherit' }
-);
+const tests = childProcess.spawn('tap', [jobs, 'test/node/*.js'], {
+  shell: true,
+  stdio: 'inherit',
+});
 
 tests.on('error', error => {
   console.error(error.message);

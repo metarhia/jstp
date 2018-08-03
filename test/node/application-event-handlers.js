@@ -34,10 +34,15 @@ test.test('must call event handler in application on remote event', test => {
   server = jstp.net.createServer([application]);
   server.listen(0, () => {
     const port = server.address().port;
-    jstp.net.connect(app.name, null, port, (error, conn) => {
-      connection = conn;
-      test.assertNot(error, 'must connect to server and perform handshake');
-      connection.emitRemoteEvent('someService', 'name', [expectedName]);
-    });
+    jstp.net.connect(
+      app.name,
+      null,
+      port,
+      (error, conn) => {
+        connection = conn;
+        test.assertNot(error, 'must connect to server and perform handshake');
+        connection.emitRemoteEvent('someService', 'name', [expectedName]);
+      }
+    );
   });
 });

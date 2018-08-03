@@ -42,15 +42,16 @@ const combineStdev = (samples, mean, count) => {
   let sum = 0;
   for (let i = 0; i < samples.length; i++) {
     const sample = samples[i];
-    sum += sample.count * Math.pow(sample.stdev, 2) +
-           sample.count * Math.pow(sample.mean - mean, 2);
+    sum +=
+      sample.count * Math.pow(sample.stdev, 2) +
+      sample.count * Math.pow(sample.mean - mean, 2);
   }
   return Math.sqrt(sum / count);
 };
 
 const combineSamples = samples => {
   const count = combineCount(samples);
-  const mean  = combineMean(samples, count);
+  const mean = combineMean(samples, count);
   const stdev = combineStdev(samples, mean, count);
   return { count, mean, stdev };
 };

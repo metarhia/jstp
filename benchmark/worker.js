@@ -22,7 +22,11 @@ function connect(socket) {
   let connected = 0;
   const createConnection = index => {
     jstp.net.connectAndInspect(
-      'app', null, ['iface'], socket, (error, conn) => {
+      'app',
+      null,
+      ['iface'],
+      socket,
+      (error, conn) => {
         connected++;
 
         if (error) {
@@ -55,9 +59,9 @@ function start(requests) {
   const sendRequest = (connectionIndex, requestIndex) => {
     const timeOfStart = process.hrtime();
     connections[connectionIndex].remoteProxies.iface.method(argument, () => {
-
-      responseTimesHR[connectionIndex][requestIndex] =
-        process.hrtime(timeOfStart);
+      responseTimesHR[connectionIndex][requestIndex] = process.hrtime(
+        timeOfStart
+      );
 
       responses++;
       if (responses === requests * connections.length) {
@@ -84,7 +88,8 @@ function prepareResults(responseTimesHR, timeSpentHR) {
   const hrtimeToNSeconds = hrtime => hrtime[0] * 1e9 + hrtime[1];
 
   responseTimesHR = responseTimesHR.reduce(
-    (previous, current) => previous.concat(current), []
+    (previous, current) => previous.concat(current),
+    []
   );
 
   const responseTimes = responseTimesHR.map(hrtimeToNSeconds);

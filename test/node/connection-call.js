@@ -7,8 +7,10 @@ const jstp = require('../..');
 const app = require('../fixtures/application');
 
 const application = new jstp.Application(app.name, app.interfaces);
-const serverConfig =
-  { applications: [application], authPolicy: app.authCallback };
+const serverConfig = {
+  applications: [application],
+  authPolicy: app.authCallback,
+};
 
 let server;
 let connection;
@@ -17,11 +19,17 @@ test.beforeEach(done => {
   server = jstp.net.createServer(serverConfig);
   server.listen(0, () => {
     const port = server.address().port;
-    jstp.net.connect(app.name, null, port, 'localhost', (error, conn) => {
-      test.assertNot(error, 'must connect to server and perform handshake');
-      connection = conn;
-      done();
-    });
+    jstp.net.connect(
+      app.name,
+      null,
+      port,
+      'localhost',
+      (error, conn) => {
+        test.assertNot(error, 'must connect to server and perform handshake');
+        connection = conn;
+        done();
+      }
+    );
   });
 });
 
@@ -60,8 +68,10 @@ test.test('must perform call with arguments and return value', test => {
 test.test('must perform call that returns an error', test => {
   connection.callMethod('calculator', 'divide', [10, 0], error => {
     test.assert(error, 'callMethod must return an error');
-    test.equal(error.message,
-      new jstp.RemoteError(new Error(app.expectedErrorMessage)).message);
+    test.equal(
+      error.message,
+      new jstp.RemoteError(new Error(app.expectedErrorMessage)).message
+    );
     test.end();
   });
 });
@@ -73,8 +83,11 @@ test.test('must return error on call to nonexistent interface', test => {
     [],
     error => {
       test.assert(error, 'callMethod must return an error');
-      test.equal(error.code, jstp.ERR_INTERFACE_NOT_FOUND,
-        'error must be an ERR_INTERFACE_NOT_FOUND');
+      test.equal(
+        error.code,
+        jstp.ERR_INTERFACE_NOT_FOUND,
+        'error must be an ERR_INTERFACE_NOT_FOUND'
+      );
       test.end();
     }
   );
@@ -83,8 +96,11 @@ test.test('must return error on call to nonexistent interface', test => {
 test.test('must return error on call to nonexistent method', test => {
   connection.callMethod('calculator', '__nonexistent_method__', [], error => {
     test.assert(error, 'callMethod must return an error');
-    test.equal(error.code, jstp.ERR_METHOD_NOT_FOUND,
-      'error must be an ERR_METHOD_NOT_FOUND');
+    test.equal(
+      error.code,
+      jstp.ERR_METHOD_NOT_FOUND,
+      'error must be an ERR_METHOD_NOT_FOUND'
+    );
     test.end();
   });
 });

@@ -40,80 +40,118 @@ const args = ['firstArgument', 'secondArgument'];
 
 test.test('server must process an event', test => {
   const port = server.address().port;
-  jstp.net.connect(app.name, null, port, (error, conn) => {
-    connection = conn;
-    test.assertNot(error, 'must connect to server');
+  jstp.net.connect(
+    app.name,
+    null,
+    port,
+    (error, conn) => {
+      connection = conn;
+      test.assertNot(error, 'must connect to server');
 
-    server.getClientsArray()[0].on('event',
-      (interfaceName, remoteName, remoteArgs) => {
-        test.strictEqual(interfaceName, iface,
-          'event interface must match');
-        test.strictEqual(remoteName, eventName,
-          'event name must be equal to the emitted one');
-        test.strictDeepEqual(remoteArgs, args,
-          'event arguments must be equal to the passed ones');
+      server
+        .getClientsArray()[0]
+        .on('event', (interfaceName, remoteName, remoteArgs) => {
+          test.strictEqual(interfaceName, iface, 'event interface must match');
+          test.strictEqual(
+            remoteName,
+            eventName,
+            'event name must be equal to the emitted one'
+          );
+          test.strictDeepEqual(
+            remoteArgs,
+            args,
+            'event arguments must be equal to the passed ones'
+          );
 
-        test.end();
-      });
+          test.end();
+        });
 
-    connection.emitRemoteEvent(iface, eventName, args);
-  });
+      connection.emitRemoteEvent(iface, eventName, args);
+    }
+  );
 });
 
 test.test('client must process an event', test => {
   const port = server.address().port;
-  jstp.net.connect(app.name, null, port, (error, conn) => {
-    connection = conn;
-    test.assertNot(error, 'must connect to server');
-
-    connection.on('event', (interfaceName, remoteName, remoteArgs) => {
-      test.strictEqual(interfaceName, iface,
-        'event interface must match');
-      test.strictEqual(remoteName, eventName,
-        'event name must be equal to the emitted one');
-      test.strictDeepEqual(remoteArgs, args,
-        'event arguments must be equal to the passed ones');
-      test.end();
-    });
-
-    server.getClientsArray()[0].emitRemoteEvent(iface, eventName, args);
-  });
-});
-
-test.test('connection must reject events having not array as arguments',
-  test => {
-    const port = server.address().port;
-    jstp.net.connect(app.name, null, port, (error, conn) => {
+  jstp.net.connect(
+    app.name,
+    null,
+    port,
+    (error, conn) => {
       connection = conn;
       test.assertNot(error, 'must connect to server');
 
-      connection.on('messageRejected', () => {
-        test.pass('event message must be rejected');
+      connection.on('event', (interfaceName, remoteName, remoteArgs) => {
+        test.strictEqual(interfaceName, iface, 'event interface must match');
+        test.strictEqual(
+          remoteName,
+          eventName,
+          'event name must be equal to the emitted one'
+        );
+        test.strictDeepEqual(
+          remoteArgs,
+          args,
+          'event arguments must be equal to the passed ones'
+        );
         test.end();
       });
 
-      const invalidArgs = { invalid: 0 };
-      server.getClientsArray()[0].emitRemoteEvent(
-        iface, eventName, invalidArgs
-      );
-    });
-  });
+      server.getClientsArray()[0].emitRemoteEvent(iface, eventName, args);
+    }
+  );
+});
+
+test.test(
+  'connection must reject events having not array as arguments',
+  test => {
+    const port = server.address().port;
+    jstp.net.connect(
+      app.name,
+      null,
+      port,
+      (error, conn) => {
+        connection = conn;
+        test.assertNot(error, 'must connect to server');
+
+        connection.on('messageRejected', () => {
+          test.pass('event message must be rejected');
+          test.end();
+        });
+
+        const invalidArgs = { invalid: 0 };
+        server
+          .getClientsArray()[0]
+          .emitRemoteEvent(iface, eventName, invalidArgs);
+      }
+    );
+  }
+);
 
 test.test('remote proxy must emit an event', test => {
   const port = server.address().port;
-  jstp.net.connectAndInspect(app.name, null, [iface], port,
+  jstp.net.connectAndInspect(
+    app.name,
+    null,
+    [iface],
+    port,
     (error, conn, api) => {
       connection = conn;
       test.assertNot(error, 'must connect to server');
 
-      server.getClientsArray()[0].on('event',
-        (interfaceName, remoteName, remoteArgs) => {
-          test.strictEqual(interfaceName, iface,
-            'event interface must match');
-          test.strictEqual(remoteName, eventName,
-            'event name must be equal to the emitted one');
-          test.strictDeepEqual(remoteArgs, args,
-            'event arguments must be equal to the passed ones');
+      server
+        .getClientsArray()[0]
+        .on('event', (interfaceName, remoteName, remoteArgs) => {
+          test.strictEqual(interfaceName, iface, 'event interface must match');
+          test.strictEqual(
+            remoteName,
+            eventName,
+            'event name must be equal to the emitted one'
+          );
+          test.strictDeepEqual(
+            remoteArgs,
+            args,
+            'event arguments must be equal to the passed ones'
+          );
           test.end();
         });
 
@@ -124,14 +162,21 @@ test.test('remote proxy must emit an event', test => {
 
 test.test('remote proxy must process an event', test => {
   const port = server.address().port;
-  jstp.net.connectAndInspect(app.name, null, [iface], port,
+  jstp.net.connectAndInspect(
+    app.name,
+    null,
+    [iface],
+    port,
     (error, conn, api) => {
       connection = conn;
       test.assertNot(error, 'must connect to server');
 
       api.iface.on(eventName, (...eventArgs) => {
-        test.strictDeepEqual(eventArgs, args,
-          'event arguments must be equal to the passed ones');
+        test.strictDeepEqual(
+          eventArgs,
+          args,
+          'event arguments must be equal to the passed ones'
+        );
         test.end();
       });
       server.getClientsArray()[0].emitRemoteEvent(iface, eventName, args);

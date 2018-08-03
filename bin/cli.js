@@ -33,21 +33,24 @@ const args = yargs
   .option('pretty-print', {
     alias: 'p',
     type: 'string',
-    describe: 'Enable pretty-print. You can pass a string or a number' +
+    describe:
+      'Enable pretty-print. You can pass a string or a number' +
       ' to specify indentation',
   })
   .option('version', {
     type: 'boolean',
     describe: 'Print version and exit',
   })
-  .epilogue(`
+  .epilogue(
+    `
 Environment variables:
 JSTP_CLI_HISTORY       path to the persistent CLI history file
 JSTP_CLI_HISTORY_SIZE  controls how many lines of CLI history will be persisted,
                        must be a positive number
 
 @metarhia/jstp@${version} ${packagePath}
-    `)
+    `
+  )
   .strict().argv;
 
 if (args.version) {

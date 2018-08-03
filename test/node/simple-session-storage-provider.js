@@ -2,8 +2,7 @@
 
 const test = require('tap');
 
-const SimpleSessionStorageProvider =
-  require('../../lib/simple-session-storage-provider');
+const SimpleSessionStorageProvider = require('../../lib/simple-session-storage-provider');
 
 const SESSION_LIFETIME = 1000;
 const INTERVAL = 1000;
