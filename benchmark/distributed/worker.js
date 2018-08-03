@@ -38,8 +38,7 @@ const args = yargs
     default: 10000,
   })
   .help()
-  .alias('help', 'h')
-  .argv;
+  .alias('help', 'h').argv;
 
 const {
   address,
@@ -76,7 +75,11 @@ let requests = 0;
 
 const createConnection = (index, address) => {
   jstp[transport].connectAndInspect(
-    'server', null, ['server'], ...address, (error, connection) => {
+    'server',
+    null,
+    ['server'],
+    ...address,
+    (error, connection) => {
       if (error) {
         console.error(`Could not connect to server:\n${error}`);
         return;
@@ -97,8 +100,9 @@ const report = () => {
   const mean = statistics.mean(responseTimes) || 0;
   const stdev = statistics.stdev(responseTimes, mean) || 0;
   const timePassedHR = process.hrtime(reportCycleStartHR);
-  console.log(`${req} requests in ${timePassedHR[0]}s\n` +
-    `Mean response time: ${mean * 1e-6} ms, stdev: ${stdev * 1e-6} ms`
+  console.log(
+    `${req} requests in ${timePassedHR[0]}s\n` +
+      `Mean response time: ${mean * 1e-6} ms, stdev: ${stdev * 1e-6} ms`
   );
   api.master.emit('workerReport', req, mean, stdev);
   reportCycleStartHR = process.hrtime();
@@ -106,7 +110,7 @@ const report = () => {
 
 const request = () => {
   const startTimeHR = process.hrtime();
-  connections.forEach((connection) => {
+  connections.forEach(connection => {
     connection.remoteProxies['server'].method(argument, (error, data) => {
       if (error) {
         console.error(`Error during call:\n${error}`);
@@ -122,7 +126,11 @@ const request = () => {
 };
 
 jstp[transport].connectAndInspect(
-  'master', null, ['master'], ...masterAddress, (error, connection, master) => {
+  'master',
+  null,
+  ['master'],
+  ...masterAddress,
+  (error, connection, master) => {
     if (error) {
       console.error(`Couldn't connect to master:\n${error}`);
       return;
@@ -130,13 +138,13 @@ jstp[transport].connectAndInspect(
 
     api = master;
 
-    api.master.on('connect', (address) => {
+    api.master.on('connect', address => {
       for (let i = 0; i < connectionAmount; i++) {
         createConnection(i, address);
       }
     });
 
-    api.master.registerWorker((error) => {
+    api.master.registerWorker(error => {
       if (error) {
         console.error(`Couldn't register worker:\n${error}`);
         return;
@@ -153,7 +161,7 @@ process.on('SIGINT', () => {
   console.log('\nWorker is being closed');
   clearInterval(requestTimer);
   clearInterval(reportTimer);
-  connections.forEach((connection) => {
+  connections.forEach(connection => {
     connection.close();
   });
   process.exit(0);

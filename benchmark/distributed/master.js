@@ -25,26 +25,20 @@ const args = yargs
     alias: 'k',
     describe: 'Path to file that contains SSL certificate key',
     type: 'string',
-    coerce:
-      arg => (arg ? fs.readFileSync(path.resolve(__dirname, arg)) : undefined),
+    coerce: arg =>
+      arg ? fs.readFileSync(path.resolve(__dirname, arg)) : undefined,
   })
   .options('cert', {
     alias: 'c',
     describe: 'Path to file that contains SSL certificate',
     type: 'string',
-    coerce:
-      arg => (arg ? fs.readFileSync(path.resolve(__dirname, arg)) : undefined),
+    coerce: arg =>
+      arg ? fs.readFileSync(path.resolve(__dirname, arg)) : undefined,
   })
   .help()
-  .alias('help', 'h')
-  .argv;
+  .alias('help', 'h').argv;
 
-const {
-  address,
-  report: reportInterval,
-  key,
-  cert,
-} = args;
+const { address, report: reportInterval, key, cert } = args;
 
 const [error, parsed] = parseAddress(address);
 if (error) {
@@ -69,7 +63,7 @@ const application = {
     registerServer: (connection, address, callback) => {
       server = connection;
       serverAddress = address;
-      workers.forEach((worker) => {
+      workers.forEach(worker => {
         worker.emitRemoteEvent('worker', 'connect', [serverAddress]);
       });
       callback(null);
@@ -133,16 +127,13 @@ master.listen(listenAddress, () => {
     workersReportBuffer = [];
     reports.push([sample, server.connections, timeFromStartHR]);
 
-    const stat = statistics.combineSamples(
-      reports.map(element => element[0])
-    );
+    const stat = statistics.combineSamples(reports.map(element => element[0]));
 
     const logStats = (sample, timePassed) => {
       console.log(`Current stats:
-        RPS                : ${sample.count / timePassed * 1e9}
+        RPS                : ${(sample.count / timePassed) * 1e9}
         Response time mean : ${sample.mean * 1e-6} ms
-        Response time stdev: ${sample.stdev * 1e-6} ms\n`
-      );
+        Response time stdev: ${sample.stdev * 1e-6} ms\n`);
     };
 
     logStats(sample, timePassed);
@@ -160,7 +151,7 @@ master.listen(listenAddress, () => {
 
 process.on('SIGINT', () => {
   console.log('\nMaster server is being closed');
-  master.close((error) => {
+  master.close(error => {
     if (error) {
       console.log(`Error occured when closing:\n${error}`);
       if (transport === 'ipc') {

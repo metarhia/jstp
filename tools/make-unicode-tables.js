@@ -8,15 +8,17 @@ const path = require('path');
 const readline = require('readline');
 
 const UNICODE_VERSION = '10.0.0';
-const UCD_LINK = 'http://www.unicode.org/Public/' + UNICODE_VERSION +
+const UCD_LINK =
+  'http://www.unicode.org/Public/' +
+  UNICODE_VERSION +
   '/ucd/DerivedCoreProperties.txt';
 const fullTablesFilename = 'unicode_tables.h';
 const rangeTablesFilename = 'unicode_range_tables.h';
-const getHeaderGuard =
-  filename => `SRC_${filename.replace(/\W/g, '_').toUpperCase()}_`;
+const getHeaderGuard = filename =>
+  `SRC_${filename.replace(/\W/g, '_').toUpperCase()}_`;
 const getOutputPath = filename => path.join(__dirname, '../src', filename);
 
-const getFileHeader = filename => (
+const getFileHeader = filename =>
   `// Copyright (c) 2017 JSTP project authors. Use of this source code is
 // governed by the MIT license that can be found in the LICENSE file.
 //
@@ -67,7 +69,7 @@ const getFileHeader = filename => (
 #ifndef ${getHeaderGuard(filename)}
 #define ${getHeaderGuard(filename)}
 
-`);
+`;
 
 const rangeTablesHeader = `#include <cstddef>
 #include <cstdint>
@@ -85,7 +87,7 @@ typedef struct {
 const idStartCategoryName = 'ID_Start';
 const idContinueCategoryName = 'ID_Continue';
 
-const highestUnicodeValue = 0x10FFFF;
+const highestUnicodeValue = 0x10ffff;
 
 const idStartValues = new Array(highestUnicodeValue + 1);
 const idContinueValues = new Array(highestUnicodeValue + 1);
@@ -98,12 +100,12 @@ let idContinueTotalCount = 0;
 
 const lineRegex = /^([0-9A-F]{4,6})(?:\.\.([0-9A-F]{4,6}))? *; (\w+) #.*$/;
 
-http.get(UCD_LINK, (res) => {
+http.get(UCD_LINK, res => {
   const linereader = readline.createInterface({ input: res, historySize: 0 });
-  linereader.on('line', (line) => {
+  linereader.on('line', line => {
     const values = lineRegex.exec(line);
     if (values !== null) {
-      const [ , start, end, category  ] = values;
+      const [, start, end, category] = values;
       const startValue = parseInt(start, 16);
       const endValue = parseInt(end || start, 16);
       if (category === idStartCategoryName) {
@@ -141,7 +143,7 @@ function createArrayOfRanges(arrayName, array) {
     if (index !== array.length - 1) {
       if ((index + 1) % 3 === 0) {
         str += ',\n  ';
-      } else  {
+      } else {
         str += ', ';
       }
     } else {
@@ -160,23 +162,27 @@ function finish() {
   idStartValues[0x24] = 1; // '$'
   idContinueValues[0x24] = 1;
 
-  idStartValues[0x5F] = 1; // '_'
-  idContinueValues[0x5F] = 1;
+  idStartValues[0x5f] = 1; // '_'
+  idContinueValues[0x5f] = 1;
 
-  idContinueValues[0x200C] = 1; // ZWNJ
-  idContinueValues[0x200D] = 1; // ZWJ
+  idContinueValues[0x200c] = 1; // ZWNJ
+  idContinueValues[0x200d] = 1; // ZWJ
 
   let fullTablesResult = getFileHeader(fullTablesFilename);
-  let rangeTablesResult = getFileHeader(rangeTablesFilename) +
-    rangeTablesHeader;
+  let rangeTablesResult =
+    getFileHeader(rangeTablesFilename) + rangeTablesHeader;
 
   fullTablesResult += createFullTableArray('ID_START_FULL', idStartValues);
-  fullTablesResult +=
-    createFullTableArray('ID_CONTINUE_FULL', idContinueValues);
+  fullTablesResult += createFullTableArray(
+    'ID_CONTINUE_FULL',
+    idContinueValues
+  );
 
   rangeTablesResult += createArrayOfRanges('ID_START_RANGES', idStartRanges);
-  rangeTablesResult +=
-    createArrayOfRanges('ID_CONTINUE_RANGES', idContinueRanges);
+  rangeTablesResult += createArrayOfRanges(
+    'ID_CONTINUE_RANGES',
+    idContinueRanges
+  );
 
   fullTablesResult += `#endif  // ${getHeaderGuard(fullTablesFilename)}\n`;
   rangeTablesResult += `#endif  // ${getHeaderGuard(rangeTablesFilename)}\n`;

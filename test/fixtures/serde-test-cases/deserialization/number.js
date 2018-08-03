@@ -18,7 +18,7 @@ module.exports = [
   },
   {
     name: 'hexadecimal numbers in upper case',
-    value: 0xAF,
+    value: 0xaf,
     serialized: '0xAF',
   },
 ];

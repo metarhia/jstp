@@ -16,7 +16,7 @@ const client = {
   application: new jstp.Application(appName, interfaces),
 };
 
-const connect = (port) => {
+const connect = port => {
   jstp.net.connect(
     appName,
     client,
@@ -37,7 +37,7 @@ const reconnect = (port, serializedSession) => {
     appName,
     client,
     port,
-    (error) => {
+    error => {
       if (error) {
         process.send(['error', error]);
       }

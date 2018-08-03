@@ -12,7 +12,12 @@ const jstp = require('../..');
 // net.connect (host and port) and last argument is a callback
 // to be called on successful connection or error.
 jstp.net.connectAndInspect(
-  'testApp', null, ['someService'], 3000, 'localhost', handleConnect
+  'testApp',
+  null,
+  ['someService'],
+  3000,
+  'localhost',
+  handleConnect
 );
 
 function handleConnect(error, connection, app) {

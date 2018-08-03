@@ -36,7 +36,7 @@ server.listen(0, () => {
       const serverConnection = server.getClientsArray()[0];
 
       connection.close();
-      serverConnection.callMethodWithResend('iface', 'method', [], (error) => {
+      serverConnection.callMethodWithResend('iface', 'method', [], error => {
         test.assertNot(error, 'must not return an error');
         connection.close();
         server.close();
