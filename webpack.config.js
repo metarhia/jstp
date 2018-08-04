@@ -34,7 +34,6 @@ module.exports = {
   node: {
     net: false,
     tls: false,
-    // TODO: support WebCrypto API in lib/common.js and uncomment this
-    // crypto: 'empty',
+    crypto: 'empty',
   },
 };
