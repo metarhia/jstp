@@ -63,13 +63,13 @@
     "test-todo": "tap test/todo",
     "test-coverage": "nyc npm run test-node",
     "lint": "eslint . && remark .",
-    "install": "npm run rebuild-node",
-    "build": "npm run build-node && npm run build-browser",
+    "install": "npm run -s rebuild-node",
+    "build": "npm run -s build-node && npm run -s build-browser",
     "build-node": "node tools/build-native",
     "rebuild-node": "node tools/build-native --rebuild",
     "build-browser": "webpack --progress",
-    "prepublish": "npm run build-browser",
-    "pretest": "npm run build-node"
+    "prepublish": "npm run -s build-browser",
+    "pretest": "npm run -s build-node"
   },
   "engines": {
     "node": ">=6.0.0"
