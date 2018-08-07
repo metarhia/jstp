@@ -24,6 +24,10 @@ const sessionStorageProvider = {
   },
 };
 
+const application = new jstp.Application(appName, interfaces);
+const serverConfig = { applications: [application], sessionStorageProvider };
+const server = jstp.net.createServer(serverConfig);
+
 process.on('message', ([message, ...args]) => {
   switch (message) {
     case 'getSessionResponse': {
@@ -33,12 +37,11 @@ process.on('message', ([message, ...args]) => {
       }
       break;
     }
+    case 'close': {
+      server.close();
+    }
   }
 });
-
-const application = new jstp.Application(appName, interfaces);
-const serverConfig = { applications: [application], sessionStorageProvider };
-const server = jstp.net.createServer(serverConfig);
 
 server.on('connect', (connection) => {
   sessionStorageProvider.set(connection.session.id, connection.session);

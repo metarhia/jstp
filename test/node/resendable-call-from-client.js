@@ -44,6 +44,8 @@ function createServer() {
         sessionStorage.set(args[0], args[1]);
         if (initialConnection) {
           call();
+        } else {
+          close();
         }
         break;
       case 'callReceived':
@@ -67,9 +69,10 @@ function call() {
     test.assertNot(error, 'must not encounter an error');
 
     connection.close();
-    server.kill('SIGKILL');
+    close();
     test.end();
   });
+
   server.kill('SIGKILL');
   server = createServer();
 }
@@ -108,4 +111,14 @@ function reconnect(port) {
       }
     });
   });
+}
+
+let calledClose = 0;
+function close() {
+  calledClose++;
+  if (calledClose !== 2) {
+    return;
+  }
+  server.send(['close']);
+  server.disconnect();
 }

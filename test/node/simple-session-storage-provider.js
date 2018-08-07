@@ -7,7 +7,7 @@ const SimpleSessionStorageProvider =
 
 const SESSION_LIFETIME = 1000;
 const INTERVAL = 1000;
-const GUARANTEED_DELETION_TIME = INTERVAL * 2;
+const GUARANTEED_DELETION_TIME = INTERVAL * 3;
 const SESSION_ID = 'key';
 const SESSION = {};
 
