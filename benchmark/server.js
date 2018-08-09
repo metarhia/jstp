@@ -36,7 +36,7 @@ process.on('message', ([type]) => {
 
 process.on('SIGINT', terminate);
 
-server.listen(socket, (error) => {
+server.listen(socket, error => {
   if (error) {
     console.error(error);
   }

@@ -2,7 +2,7 @@
 
 const { split } = require('../../lib/cli/utils');
 
-module.exports = (address) => {
+module.exports = address => {
   const [transport, location] = split(address, '://', 1, true);
 
   if (!location) {

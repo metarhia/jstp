@@ -12,13 +12,14 @@ const EXIT_FAIL = 1;
 let action = process.argv.includes('--rebuild') ? 'rebuild' : 'build';
 const jobs = `-j${process.env.JOBS || os.cpus().length}`;
 
-fs.access('build', (error) => {
+fs.access('build', error => {
   if (error) {
     action = 'rebuild';
   }
 
-  const nodeGyp = childProcess.spawn(
-    'node-gyp', [action, jobs], { shell: true });
+  const nodeGyp = childProcess.spawn('node-gyp', [action, jobs], {
+    shell: true,
+  });
   const errorLines = [];
 
   nodeGyp.on('error', () => {
@@ -27,13 +28,13 @@ fs.access('build', (error) => {
 
   nodeGyp.stdout.pipe(process.stdout);
 
-  nodeGyp.stderr.on('data', (data) => {
+  nodeGyp.stderr.on('data', data => {
     const line = data.toString();
     console.error(line);
     errorLines.push(line);
   });
 
-  nodeGyp.on('exit', (code) => {
+  nodeGyp.on('exit', code => {
     if (errorLines.length > 0) {
       fs.writeFileSync('builderror.log', errorLines.join('\n'));
     }
@@ -47,7 +48,9 @@ function handleBuildError(code) {
   if (process.env.CI) {
     process.exit(code);
   } else {
-    console.warn('Could not build JSTP native extensions, ' +
-      'JavaScript implementation will be used instead.');
+    console.warn(
+      'Could not build JSTP native extensions, ' +
+        'JavaScript implementation will be used instead.'
+    );
   }
 }

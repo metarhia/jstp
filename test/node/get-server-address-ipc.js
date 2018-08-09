@@ -7,9 +7,10 @@ const jstp = require('../..');
 
 const app = new jstp.Application('name', {});
 
-const path = process.platform === 'win32' ?
-  '\\\\.\\pipe\\my-service' :
-  '/tmp/my-service.sock';
+const path =
+  process.platform === 'win32'
+    ? '\\\\.\\pipe\\my-service'
+    : '/tmp/my-service.sock';
 const config = { path, applications: [app] };
 
 const server = jstp.net.createServer(config);
@@ -28,11 +29,16 @@ process.on('exit', () => {
   }
 });
 
-test.assertNot(server.address(),
-  'must return null address if server is not listening');
+test.assertNot(
+  server.address(),
+  'must return null address if server is not listening'
+);
 
 server.listen(config.path, () => {
-  test.strictEqual(server.address(), config.path,
-    'must return correct path address upon listening');
+  test.strictEqual(
+    server.address(),
+    config.path,
+    'must return correct path address upon listening'
+  );
   server.close();
 });

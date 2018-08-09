@@ -40,7 +40,7 @@ const application = new jstp.Application(appName, interfaces);
 const serverConfig = { applications: [application], sessionStorageProvider };
 const server = jstp.net.createServer(serverConfig);
 
-server.on('connect', (connection) => {
+server.on('connect', connection => {
   sessionStorageProvider.set(connection.session.id, connection.session);
 });
 

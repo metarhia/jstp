@@ -17,13 +17,15 @@ tap.plan(2);
 
 server.listen(() => {
   jstp.net.connect(
-    'app', null, server.address().port,
+    'app',
+    null,
+    server.address().port,
     (error, connection) => {
       tap.assertNot(error, 'client must connect successfully');
 
       let heartbeatsCount = 0;
 
-      connection.on('incomingMessage', (message) => {
+      connection.on('incomingMessage', message => {
         if (message.ping !== undefined) {
           heartbeatsCount++;
         }

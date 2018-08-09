@@ -1,5 +1,3 @@
 'use strict';
 
-module.exports = [].concat(
-  require('./object')
-);
+module.exports = [].concat(require('./object'));

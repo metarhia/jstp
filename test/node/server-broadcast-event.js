@@ -15,7 +15,7 @@ const serverConfig = {
 let server;
 let port;
 
-test.beforeEach((done) => {
+test.beforeEach(done => {
   server = jstp.net.createServer(serverConfig);
   server.listen(0, () => {
     port = server.address().port;
@@ -23,12 +23,12 @@ test.beforeEach((done) => {
   });
 });
 
-test.afterEach((done) => {
+test.afterEach(done => {
   server.close();
   done();
 });
 
-test.test('must broadcast event to all connected clients', (test) => {
+test.test('must broadcast event to all connected clients', test => {
   const iface = 'someService';
   const eventName = 'broadcast';
   const eventArgs = ['hello'];
@@ -49,17 +49,27 @@ test.test('must broadcast event to all connected clients', (test) => {
 });
 
 function connectAndCheckEvent(test, iface, eventName, args, callback) {
-  jstp.net.connect(app.name, null, port, (error, connection) => {
-    test.assertNot(error, 'must connect to server and perform handshake');
-    connection.on('event', (interfaceName, remoteName, remoteArgs) => {
-      test.strictEqual(interfaceName, iface,
-        'event interface must match');
-      test.strictEqual(remoteName, eventName,
-        'event name must be equal to the emitted one');
-      test.strictDeepEqual(remoteArgs, args,
-        'event arguments must be equal to the passed ones');
-      connection.close();
-    });
-    callback();
-  });
+  jstp.net.connect(
+    app.name,
+    null,
+    port,
+    (error, connection) => {
+      test.assertNot(error, 'must connect to server and perform handshake');
+      connection.on('event', (interfaceName, remoteName, remoteArgs) => {
+        test.strictEqual(interfaceName, iface, 'event interface must match');
+        test.strictEqual(
+          remoteName,
+          eventName,
+          'event name must be equal to the emitted one'
+        );
+        test.strictDeepEqual(
+          remoteArgs,
+          args,
+          'event arguments must be equal to the passed ones'
+        );
+        connection.close();
+      });
+      callback();
+    }
+  );
 }

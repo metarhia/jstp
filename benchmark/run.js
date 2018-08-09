@@ -7,17 +7,14 @@ const statistics = require('./statistics');
 
 const yargsParser = require('yargs-parser');
 
-const args = yargsParser(
-  process.argv.slice(2),
-  {
-    alias: {
-      workers: ['W'],
-      connections: ['C'],
-      requests: ['R'],
-      size: ['S'],
-    },
-  }
-);
+const args = yargsParser(process.argv.slice(2), {
+  alias: {
+    workers: ['W'],
+    connections: ['C'],
+    requests: ['R'],
+    size: ['S'],
+  },
+});
 
 const {
   workers: workersAmount,
@@ -44,7 +41,7 @@ let workersFinished = 0;
 
 let benchStartedHR;
 
-server.on('exit', (exitCode) => {
+server.on('exit', exitCode => {
   serverExited = true;
   if (exitCode !== 0) {
     terminate();
@@ -59,7 +56,7 @@ server.on('message', ([type, payload]) => {
   }
   socket = payload;
 
-  const onWorkerExitFactory = index => (exitCode) => {
+  const onWorkerExitFactory = index => exitCode => {
     workersExited[index] = true;
     if (exitCode !== 0) {
       terminate();
@@ -99,13 +96,15 @@ function outputResults(benchTimeHR) {
   const count = workersAmount * connectionsPerWorker * requestsPerConnection;
   const mean = statistics.mean(results.map(result => result[0]));
 
-  const sum = results.reduce((previous, current) => (
-    previous + Math.pow(current[1], 2) + Math.pow(current[0] - mean, 2)
-  ), 0);
+  const sum = results.reduce(
+    (previous, current) =>
+      previous + Math.pow(current[1], 2) + Math.pow(current[0] - mean, 2),
+    0
+  );
   const stdev = Math.sqrt(sum / workersAmount);
 
   const benchTime = benchTimeHR[0] * 1e9 + benchTimeHR[1];
-  const erps = count * 1e9 / benchTime;
+  const erps = (count * 1e9) / benchTime;
 
   server.send(['stop']);
   console.log(`
@@ -121,10 +120,9 @@ function terminate() {
   console.warn(
     '\nBenchmark is being terminated due to an error or signal termination\n'
   );
-  workers.filter((_, index) => !workersExited[index])
-    .forEach((worker) => {
-      worker.kill('SIGKILL');
-    });
+  workers.filter((_, index) => !workersExited[index]).forEach(worker => {
+    worker.kill('SIGKILL');
+  });
 
   if (!serverExited) {
     server.kill('SIGINT');

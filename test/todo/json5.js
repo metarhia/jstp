@@ -7,10 +7,7 @@ const jstp = require('../..');
 const jsParser = require('../../lib/serde-fallback');
 
 const supportedByUs = {
-  arrays: [
-    'leading-comma-array',
-    'lone-trailing-comma-array',
-  ],
+  arrays: ['leading-comma-array', 'lone-trailing-comma-array'],
 };
 
 // Parses a JavaScript object, and if it's a sparse array,
@@ -28,16 +25,17 @@ function extendedEval(source) {
 }
 
 const testCasesPath = path.resolve(__dirname, '../fixtures/json5');
-const testCases = fs.readdirSync(testCasesPath)
+const testCases = fs
+  .readdirSync(testCasesPath)
   .map(caseName => ({
     name: caseName,
     path: path.join(testCasesPath, caseName),
   }))
   .filter(testCase => fs.statSync(testCase.path).isDirectory());
 
-testCases.forEach((testCase) => {
-  tap.test(testCase.name, (test) => {
-    fs.readdirSync(testCase.path).forEach((filename) => {
+testCases.forEach(testCase => {
+  tap.test(testCase.name, test => {
+    fs.readdirSync(testCase.path).forEach(filename => {
       const ext = path.extname(filename);
       if (!['.json', '.json5', '.js', '.txt'].includes(ext)) {
         return;
@@ -71,7 +69,7 @@ testCases.forEach((testCase) => {
       };
 
       const runTest = (parserName, parser) => {
-        test.test(`${testName} (${parserName} parser)`, (test) => {
+        test.test(`${testName} (${parserName} parser)`, test => {
           testCases[ext.slice(1)](test, parser);
           test.end();
         });

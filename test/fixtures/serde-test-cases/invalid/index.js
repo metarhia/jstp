@@ -19,11 +19,11 @@ module.exports = [
   },
   {
     name: 'illegal input #5',
-    value: '\'\\u{\'',
+    value: "'\\u{'",
   },
   {
     name: 'illegal input #6',
-    value: '\'\\u{}\'',
+    value: "'\\u{}'",
   },
   {
     name: 'old octal literals',
@@ -51,6 +51,6 @@ module.exports = [
   },
   {
     name: 'overflow in Unicode escape sequence',
-    value: '\'\\u{420420}\'',
+    value: "'\\u{420420}'",
   },
 ];

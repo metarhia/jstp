@@ -63,7 +63,7 @@ function call() {
   if (amountOfCalls !== 2) {
     return;
   }
-  connection.callMethodWithResend('iface', 'method', [], (error) => {
+  connection.callMethodWithResend('iface', 'method', [], error => {
     test.assertNot(error, 'must not encounter an error');
 
     connection.close();
@@ -83,7 +83,7 @@ function connect(port) {
       test.assertNot(error, 'must connect without errors');
 
       connection = conn;
-      connection.on('error', (error) => {
+      connection.on('error', error => {
         if (error.code !== 'ECONNRESET') {
           test.fail('must not encounter errors other than `ECONNRESET`');
         }
@@ -102,7 +102,7 @@ function reconnect(port) {
     test.assertNot(error, 'must connect without errors');
 
     connection = conn;
-    connection.on('error', (error) => {
+    connection.on('error', error => {
       if (error.code !== 'ECONNRESET') {
         test.fail('must not encounter errors other then `ECONNRESET`');
       }

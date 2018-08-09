@@ -1,9 +1,9 @@
 # Errors
 
-Many operations in JSTP may end up with an error instead of a result.  Following
+Many operations in JSTP may end up with an error instead of a result. Following
 the common Node.js convention, errors are always being passed as the first
 argument of callbacks of these operations and if the operation was successful,
-this argument will be null.  This behavior is both consistent with the core
+this argument will be null. This behavior is both consistent with the core
 Node.js API and allows the JSTP API to be wrapped into promises easily and even
 to be used with async/await, if you use these advanced features, while keeping
 compatibility with plain callback-based asynchronous code for those who prefer
@@ -11,8 +11,8 @@ performance over convenience or those who are forced to use older versions of
 Node.js.
 
 Hanshakes, RPC invocations and introspection requests are special cases of such
-operations.  If they end up with an error, this error will be sent over
-network.  As you can see in
+operations. If they end up with an error, this error will be sent over
+network. As you can see in
 [handshake](../protocol.md#handshake-packet-handshake) and
 [callback](../protocol.md#remote-call-response-packet-callback) packets
 description, such errors are serialized into arrays that contain an error code
@@ -23,11 +23,11 @@ Callbacks of the operations stated above will receive instances of `RemoteError`
 as the first argument if an error occured. However, when returning an error
 from a remote method, you can pass any of the following to a callback:
 
-* `RemoteError` instance;
-* `Error` instance;
-* numeric error code;
-* error message as a string;
-* any other object that will return an error message as a result
+- `RemoteError` instance;
+- `Error` instance;
+- numeric error code;
+- error message as a string;
+- any other object that will return an error message as a result
   of its `toString` method.
 
 If an error code is unknown (i.e., in any case except the first and third ones)
@@ -89,8 +89,8 @@ received from a remote method call over network.
 
 ### new RemoteError(code, \[message\])
 
-* code {Number} error code.
-* message {String} error message.
+- code {Number} error code.
+- message {String} error message.
 
 If `message` is not provided and `code` is one of predefined codes, default
 message is used. If `message` is not provided and `code` is unknown, error code
@@ -106,7 +106,7 @@ Error message (String).
 
 ### error.toJstpArray()
 
-* Return: {Array}
+- Return: {Array}
 
 Returns an array for JSTP packets. This array will always contain the error
 code and, if the message is not equal to code and the code is not one of
@@ -114,17 +114,17 @@ predefined error codes, the error message.
 
 ### Class Method: RemoteError.fromJstpArray(array)
 
-* `array` {Array} array from a JSTP packet.
-* Return: {[RemoteError](#class-remoteerror)}
+- `array` {Array} array from a JSTP packet.
+- Return: {[RemoteError](#class-remoteerror)}
 
 This factory method creates a `RemoteError` instance from an array found in a
 JSTP packet.
 
 ### Class Method: RemoteError.getJstpArrayFor(error)
 
-* `error` {[RemoteError](#class-remoteerror) | Error | Number | String}
+- `error` {[RemoteError](#class-remoteerror) | Error | Number | String}
   error to be converted to an array for a JSTP packet.
-* Return: {Array}
+- Return: {Array}
 
 This function returns an array suitable to be sent in a JSTP packet from a
 `RemoteError` instance, an `Error` instance, an error code or an error message.

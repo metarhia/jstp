@@ -43,7 +43,11 @@ const interfaces = {
 };
 
 const authCallback = (
-  connection, application, strategy, credentials, callback
+  connection,
+  application,
+  strategy,
+  credentials,
+  callback
 ) => {
   if (application.name !== name) {
     return callback(new jstp.RemoteError(jstp.ERR_APP_NOT_FOUND));
@@ -52,9 +56,11 @@ const authCallback = (
   let username = null;
   let success = false;
 
-  if (strategy === 'login' &&
-      credentials[0] === login &&
-      credentials[1] === password) {
+  if (
+    strategy === 'login' &&
+    credentials[0] === login &&
+    credentials[1] === password
+  ) {
     success = true;
     username = login;
   }

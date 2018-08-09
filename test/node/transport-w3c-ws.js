@@ -13,12 +13,12 @@ const interfaces = Object.keys(app.interfaces);
 let server;
 let connection;
 
-test.beforeEach((done) => {
+test.beforeEach(done => {
   server = jstp.ws.createServer([application]);
   server.listen(0, done);
 });
 
-test.afterEach((done) => {
+test.afterEach(done => {
   if (connection) {
     connection.close();
     connection = null;
@@ -27,7 +27,7 @@ test.afterEach((done) => {
   done();
 });
 
-test.test('W3C WebSocket connection must connect to server', (test) => {
+test.test('W3C WebSocket connection must connect to server', test => {
   w3c.connect(
     app.name,
     null,
@@ -40,7 +40,7 @@ test.test('W3C WebSocket connection must connect to server', (test) => {
   );
 });
 
-test.test('W3C WebSocket connection must connect and inspect', (test) => {
+test.test('W3C WebSocket connection must connect and inspect', test => {
   w3c.connectAndInspect(
     app.name,
     null,
@@ -50,11 +50,13 @@ test.test('W3C WebSocket connection must connect and inspect', (test) => {
       connection = conn;
       test.assertNot(error, 'connectAndInspect must not return an error');
 
-      interfaces.forEach((iface) => {
+      interfaces.forEach(iface => {
         test.assert(iface in api, `api must include '${iface}'`);
-        Object.keys(app.interfaces[iface]).forEach((method) => {
-          test.assert(method in api[iface],
-            `api.${iface} must include ${method}`);
+        Object.keys(app.interfaces[iface]).forEach(method => {
+          test.assert(
+            method in api[iface],
+            `api.${iface} must include ${method}`
+          );
         });
       });
 
@@ -63,11 +65,14 @@ test.test('W3C WebSocket connection must connect and inspect', (test) => {
   );
 });
 
-test.test('W3C WebSocket connection must connect and inspect', (test) => {
+test.test('W3C WebSocket connection must connect and inspect', test => {
   test.plan(1);
 
-  w3c.connect(app.name, null, '__illegal__url__',
-    (error) => {
+  w3c.connect(
+    app.name,
+    null,
+    '__illegal__url__',
+    error => {
       test.assert(error, 'connect must return an error');
     }
   );

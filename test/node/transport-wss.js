@@ -11,9 +11,11 @@ const jstp = require('../..');
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 const key = fs.readFileSync(
-  path.resolve(__dirname, '../fixtures/cert/test.key'));
+  path.resolve(__dirname, '../fixtures/cert/test.key')
+);
 const cert = fs.readFileSync(
-  path.resolve(__dirname, '../fixtures/cert/test.crt'));
+  path.resolve(__dirname, '../fixtures/cert/test.crt')
+);
 
 const app = require('../fixtures/application');
 const application = new jstp.Application(app.name, app.interfaces);
@@ -23,12 +25,12 @@ const interfaces = Object.keys(app.interfaces);
 let server;
 let connection;
 
-test.beforeEach((done) => {
+test.beforeEach(done => {
   server = jstp.wss.createServer({ applications: [application], key, cert });
   server.listen(0, done);
 });
 
-test.afterEach((done) => {
+test.afterEach(done => {
   if (connection) {
     connection.close();
     connection = null;
@@ -37,7 +39,7 @@ test.afterEach((done) => {
   done();
 });
 
-test.test('WSS connection must connect to server', (test) => {
+test.test('WSS connection must connect to server', test => {
   jstp.wss.connect(
     app.name,
     null,
@@ -51,7 +53,7 @@ test.test('WSS connection must connect to server', (test) => {
   );
 });
 
-test.test('WSS connection must connect and inspect', (test) => {
+test.test('WSS connection must connect and inspect', test => {
   jstp.wss.connectAndInspect(
     app.name,
     null,
@@ -62,11 +64,13 @@ test.test('WSS connection must connect and inspect', (test) => {
       connection = conn;
       test.assertNot(error, 'connectAndInspect must not return an error');
 
-      interfaces.forEach((iface) => {
+      interfaces.forEach(iface => {
         test.assert(iface in api, `api must include '${iface}'`);
-        Object.keys(app.interfaces[iface]).forEach((method) => {
-          test.assert(method in api[iface],
-            `api.${iface} must include ${method}`);
+        Object.keys(app.interfaces[iface]).forEach(method => {
+          test.assert(
+            method in api[iface],
+            `api.${iface} must include ${method}`
+          );
         });
       });
 
@@ -75,10 +79,17 @@ test.test('WSS connection must connect and inspect', (test) => {
   );
 });
 
-test.test('WSS connection must connect and inspect', (test) => {
+test.test('WSS connection must connect and inspect', test => {
   test.plan(1);
 
-  test.throws(() => jstp.wss.connect(
-    app.name, null, null, '__illegal__url__'
-  ), 'connect must throw an error');
+  test.throws(
+    () =>
+      jstp.wss.connect(
+        app.name,
+        null,
+        null,
+        '__illegal__url__'
+      ),
+    'connect must throw an error'
+  );
 });

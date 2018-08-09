@@ -53,7 +53,7 @@ if (!branch || !['patch', 'minor', 'major'].includes(maxLevel)) {
 
 let excludeCommits = [];
 let token = null;
-process.argv.forEach((arg) => {
+process.argv.forEach(arg => {
   if (arg.startsWith('--exclude')) {
     const commits = arg.split('=')[1];
     const commitHashes = commits.split(',');
@@ -63,29 +63,32 @@ process.argv.forEach((arg) => {
   }
 });
 
-getCommandOutput('git cherry ' + branch).then((cherryOut) => {
-  const hashes = cherryOut
-    .split('\n')
-    .filter(line => line !== '' && line.startsWith('+'))
-    .map(line => line.slice(2))
-    .filter((hash) => {
-      for (const excludedHash of excludeCommits) {
-        if (hash.startsWith(excludedHash)) {
-          return false;
+getCommandOutput('git cherry ' + branch)
+  .then(cherryOut => {
+    const hashes = cherryOut
+      .split('\n')
+      .filter(line => line !== '' && line.startsWith('+'))
+      .map(line => line.slice(2))
+      .filter(hash => {
+        for (const excludedHash of excludeCommits) {
+          if (hash.startsWith(excludedHash)) {
+            return false;
+          }
         }
-      }
-      return true;
-    });
-  return Promise.all(hashes.map(getMetadata));
-}).then(processCommits).catch((error) => {
-  const message = error.stack || error.toString();
-  console.error(message);
-  process.exit(1);
-});
+        return true;
+      });
+    return Promise.all(hashes.map(getMetadata));
+  })
+  .then(processCommits)
+  .catch(error => {
+    const message = error.stack || error.toString();
+    console.error(message);
+    process.exit(1);
+  });
 
 function getMetadata(commitHash) {
   const command = 'git log --format="%aN%n%B" -n 1 ' + commitHash;
-  return getCommandOutput(command).then((output) => {
+  return getCommandOutput(command).then(output => {
     const firstLfIndex = output.indexOf('\n');
     const secondLfIndex = output.indexOf('\n', firstLfIndex + 1);
     const author = output.slice(0, firstLfIndex);
@@ -111,16 +114,18 @@ function parsePrUrl(prUrl) {
   if (!prUrl) return null;
   const regex = /^https:\/\/github.com\/([\w-]+)\/([\w-]+)\/pull\/(\d+)\/?$/;
   const match = prUrl.match(regex);
-  return match && {
-    repo: match[1] + '/' + match[2],
-    id: match[3],
-  };
+  return (
+    match && {
+      repo: match[1] + '/' + match[2],
+      id: match[3],
+    }
+  );
 }
 
 function getSemverTag(repo, id) {
   const host = 'api.github.com';
   const path = `/repos/${repo}/issues/${id}/labels`;
-  return httpsGetJson({ host, path }).then((labels) => {
+  return httpsGetJson({ host, path }).then(labels => {
     const semverLabel = 'semver-';
     for (const label of labels) {
       if (label.name.startsWith(semverLabel)) {
@@ -132,41 +137,46 @@ function getSemverTag(repo, id) {
 }
 
 function httpsGetJson(options) {
-  options = Object.assign({
-    headers: { 'User-Agent': 'metarhia-jstp-release-tool' },
-  }, options);
+  options = Object.assign(
+    {
+      headers: { 'User-Agent': 'metarhia-jstp-release-tool' },
+    },
+    options
+  );
   if (token) {
     options.headers['Authorization'] = `token ${token}`;
   }
 
   return new Promise((resolve, reject) => {
-    https.get(options, (res) => {
-      getStreamData(res, (err, json) => {
-        if (err) return reject(err);
+    https
+      .get(options, res => {
+        getStreamData(res, (err, json) => {
+          if (err) return reject(err);
 
-        if (res.statusCode !== 200) {
-          const url = `https://${options.host}${options.path}`;
-          const message = `Request to ${url} failed with status code ` +
-                          res.statusCode;
-          return reject(`${message}\n${json}`);
-        }
+          if (res.statusCode !== 200) {
+            const url = `https://${options.host}${options.path}`;
+            const message =
+              `Request to ${url} failed with status code ` + res.statusCode;
+            return reject(`${message}\n${json}`);
+          }
 
-        const contentType = res.headers['content-type'];
-        if (!contentType.startsWith('application/json')) {
-          const error = new Error(`Invalid Content-Type: ${contentType}`);
-          res.resume();
-          return reject(error);
-        }
+          const contentType = res.headers['content-type'];
+          if (!contentType.startsWith('application/json')) {
+            const error = new Error(`Invalid Content-Type: ${contentType}`);
+            res.resume();
+            return reject(error);
+          }
 
-        let object = null;
-        try {
-          object = JSON.parse(json);
-        } catch (err) {
-          return reject(err);
-        }
-        resolve(object);
-      });
-    }).on('error', error => reject(error));
+          let object = null;
+          try {
+            object = JSON.parse(json);
+          } catch (err) {
+            return reject(err);
+          }
+          resolve(object);
+        });
+      })
+      .on('error', error => reject(error));
   });
 }
 

@@ -31,7 +31,7 @@ client.on('message', ([message, ...args]) => {
       client.kill('SIGKILL');
       server
         .getClientsArray()[0]
-        .callMethodWithResend('iface', 'method', [], (error) => {
+        .callMethodWithResend('iface', 'method', [], error => {
           test.assertNot(error, 'must not return an error');
           server.close();
           client.kill('SIGKILL');
