@@ -39,7 +39,8 @@
     "mdsf": "^1.0.1",
     "semver": "^5.5.0",
     "uuid": "^3.2.1",
-    "websocket": "^1.0.26"
+    "websocket": "^1.0.26",
+    "yargs": "^12.0.1"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
@@ -54,8 +55,7 @@
     "remark-validate-links": "^7.0.0",
     "tap": "^11.1.5",
     "webpack": "^4.16.4",
-    "webpack-command": "^0.4.1",
-    "yargs": "^10.1.2"
+    "webpack-command": "^0.4.1"
   },
   "scripts": {
     "test": "npm run lint && npm run test-node && npm run test-integration",

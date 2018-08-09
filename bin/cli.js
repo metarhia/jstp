@@ -2,11 +2,31 @@
 
 'use strict';
 
+const yargs = require('yargs');
 const readline = require('readline');
 
 const Cli = require('../lib/cli/cli');
 
 let rl = null;
+
+const args = yargs
+  .option('verbose', {
+    alias: 'v',
+    type: 'count',
+    describe: 'Verbosely print incoming and outgoing messages',
+  })
+  .option('no-reconnect', {
+    alias: 'R',
+    type: 'boolean',
+    describe: 'Disable reconnection',
+  })
+  .option('heartbeat-interval', {
+    alias: 'i',
+    requiresArg: true,
+    type: 'number',
+    describe: 'Heartbeat interval in milliseconds',
+  })
+  .strict().argv;
 
 const log = (msg) => {
   const userInput = rl.line;
@@ -21,7 +41,7 @@ const finish = () => {
   process.exit();
 };
 
-const cli = new Cli(log);
+const cli = new Cli(log, args);
 
 cli.on('exit', () => finish());
 
