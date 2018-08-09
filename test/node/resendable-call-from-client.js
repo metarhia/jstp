@@ -16,7 +16,7 @@ const client = {
   session: null,
 };
 let initialConnection = true;
-let callsRecievedByServer = 0;
+let callsReceivedByServer = 0;
 
 let server = createServer();
 
@@ -46,9 +46,9 @@ function createServer() {
           call();
         }
         break;
-      case 'callRecieved':
-        if (++callsRecievedByServer !== 1) {
-          test.fail('server must recieve only one call');
+      case 'callReceived':
+        if (++callsReceivedByServer !== 1) {
+          test.fail('server must receive only one call');
         }
         break;
     }

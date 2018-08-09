@@ -136,7 +136,7 @@ test.test('must not accept handshakes on a client', (test) => {
 });
 
 test.test(
-  'must drop connection after HANDSHAKE_TIMEOUT if no handshake recieved',
+  'must drop connection after HANDSHAKE_TIMEOUT if no handshake received',
   (test) => {
     test.plan(3);
     server.on('handshakeTimeout', () => {

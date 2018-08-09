@@ -6,7 +6,7 @@ const appName = 'application';
 const interfaces = {
   iface: {
     method: (connection, callback) => {
-      process.send(['callRecieved']);
+      process.send(['callReceived']);
       callback(null);
     },
   },

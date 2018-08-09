@@ -19,7 +19,7 @@ server.on('message', ([type, port]) => {
   test.plan(EXPECTED_ATTEMPTS_TO_RECONNECT + 1);
 
   if (type !== 'listening') {
-    test.fail('must not recieve unknown messages');
+    test.fail('must not receive unknown messages');
   }
 
   jstp.net.connect(APP_NAME, null, port, 'localhost', (error, connection) => {
