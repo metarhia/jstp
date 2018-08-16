@@ -3,6 +3,8 @@
 const test = require('tap');
 const net = require('net');
 
+const mdsf = require('mdsf');
+
 const jstp = require('../..');
 
 const app = require('../fixtures/application');
@@ -121,7 +123,7 @@ test.test('must not accept handshakes on a client', (test) => {
   };
 
   transport.on('dataSent', (data) => {
-    test.equal(data, jstp.stringify(response),
+    test.equal(data, mdsf.stringify(response),
       'client must return ERR_NOT_A_SERVER');
     test.end();
   });

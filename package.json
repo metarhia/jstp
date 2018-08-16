@@ -36,6 +36,7 @@
     "./lib/simple-session-storage-provider.js": false
   },
   "dependencies": {
+    "mdsf": "^1.0.1",
     "semver": "^5.5.0",
     "uuid": "^3.2.1",
     "websocket": "^1.0.26"
@@ -60,16 +61,10 @@
     "test": "npm run lint && npm run test-node && npm run test-integration",
     "test-node": "node tools/run-node-tests.js",
     "test-integration": "node test/integration/run.js",
-    "test-todo": "tap test/todo",
     "test-coverage": "nyc npm run test-node",
     "lint": "eslint . && remark .",
-    "install": "npm run -s rebuild-node",
-    "build": "npm run -s build-node && npm run -s build-browser",
-    "build-node": "node tools/build-native",
-    "rebuild-node": "node tools/build-native --rebuild",
     "build-browser": "webpack --progress",
-    "prepublish": "npm run -s build-browser",
-    "pretest": "npm run -s build-node"
+    "prepublish": "npm run -s build-browser"
   },
   "engines": {
     "node": ">=6.0.0"
