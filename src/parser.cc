@@ -84,9 +84,7 @@ static constexpr MaybeLocal<Value> (*kParseFunctions[])(Isolate*,
   &internal::ParseObject
 };
 
-Local<Value> Parse(Isolate* isolate, const String::Utf8Value& in) {
-  const char* str = *in;
-  const size_t length = in.length();
+Local<Value> Parse(Isolate* isolate, const char* str, size_t length) {
   const char* end = str + length;
 
   Type type;

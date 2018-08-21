@@ -16,6 +16,7 @@ using v8::Local;
 using v8::Object;
 using v8::String;
 using v8::Value;
+using v8::Uint8Array;
 
 namespace jstp {
 
@@ -28,15 +29,27 @@ void Parse(const FunctionCallbackInfo<Value>& args) {
     THROW_EXCEPTION(TypeError, "Wrong number of arguments");
     return;
   }
-  if (!args[0]->IsString() && !args[0]->IsUint8Array()) {
+
+  HandleScope scope(isolate);
+
+  Local<Value> result;
+  std::size_t length;
+
+  if (args[0]->IsString()) {
+    String::Utf8Value utf8str(args[0]);
+    length = utf8str.length();
+    result = jstp::parser::Parse(isolate, *utf8str, length);
+  } else if (args[0]->IsUint8Array()) {
+    Local<Uint8Array> buf = args[0].As<Uint8Array>();
+    length = buf->ByteLength();
+    void* data = buf->Buffer()->GetContents().Data();
+    const char* str = static_cast<const char*>(data) + buf->ByteOffset();
+    result = jstp::parser::Parse(isolate, str, length);
+  } else {
     THROW_EXCEPTION(TypeError, "Wrong argument type");
     return;
   }
 
-  HandleScope scope(isolate);
-
-  String::Utf8Value str(args[0]->ToString());
-  auto result = jstp::parser::Parse(isolate, str);
   args.GetReturnValue().Set(result);
 }
 
@@ -47,16 +60,20 @@ void ParseNetworkMessages(const FunctionCallbackInfo<Value>& args) {
     THROW_EXCEPTION(TypeError, "Wrong number of arguments");
     return;
   }
-  if (!args[0]->IsString() || !args[1]->IsArray()) {
+  if (!args[0]->IsUint8Array() || !args[1]->IsArray()) {
     THROW_EXCEPTION(TypeError, "Wrong argument type");
     return;
   }
 
   HandleScope scope(isolate);
 
-  String::Utf8Value str(args[0]->ToString());
+  Local<Uint8Array> buf = args[0].As<Uint8Array>();
+  std::size_t length = buf->ByteLength();
+  void* data = buf->Buffer()->GetContents().Data();
+  const char* str = static_cast<const char*>(data) + buf->ByteOffset();
   auto array = args[1].As<Array>();
-  auto result = jstp::message_parser::ParseNetworkMessages(isolate, str, array);
+  auto result = jstp::message_parser::ParseNetworkMessages(isolate,
+      str, length, array);
   args.GetReturnValue().Set(result);
 }
 

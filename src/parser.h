@@ -15,7 +15,8 @@ namespace parser {
 // Deserializes a UTF-8 encoded string into a JavaScript value
 // and returns a handle to it.
 v8::Local<v8::Value> Parse(v8::Isolate* isolate,
-                           const v8::String::Utf8Value& in);
+                           const char* str,
+                           std::size_t length);
 
 namespace internal {
 

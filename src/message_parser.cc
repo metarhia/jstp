@@ -15,6 +15,7 @@ using std::size_t;
 using std::strlen;
 
 using v8::Array;
+using v8::Integer;
 using v8::Isolate;
 using v8::Local;
 using v8::String;
@@ -26,46 +27,54 @@ namespace jstp {
 
 namespace message_parser {
 
-Local<String> ParseNetworkMessages(Isolate* isolate,
-                                  const String::Utf8Value& in,
-                                  Local<Array> out) {
-  const size_t total_size = in.length();
-  size_t parsed_size = 0;
-  const char* source = *in;
-  const char* curr_chunk = source;
-  int index = 0;
+Local<Integer> ParseNetworkMessages(Isolate* isolate,
+                                    const char* str,
+                                    size_t length,
+                                    Local<Array> out) {
 
-  while (parsed_size < total_size) {
-    auto chunk_size = strlen(curr_chunk);
-    parsed_size += chunk_size + 1;
+  auto context = isolate->GetCurrentContext();
+  uint32_t out_index = 0;
+  int32_t parsed_length = 0;
 
-    if (parsed_size <= total_size) {
-      size_t skipped_size = SkipToNextToken(curr_chunk,
-          curr_chunk + chunk_size);
-      size_t parsed_chunk_size;
-      auto result = ParseObject(isolate, curr_chunk + skipped_size,
-          curr_chunk + chunk_size, &parsed_chunk_size);
+  for (size_t i = 0; i < length; i++) {
+    if (str[i] == '\0') {
+      const char* current_message = str + parsed_length;
+      const char* current_message_end = str + i;
+      size_t skipped_size = SkipToNextToken(current_message,
+          current_message_end);
+      size_t parsed_message_size;
+      if (current_message[skipped_size] != '{') {
+        THROW_EXCEPTION(SyntaxError, "Invalid message type");
+        return Local<Integer>();
+      }
+      auto message_object = ParseObject(isolate,
+                                        current_message + skipped_size,
+                                        current_message_end,
+                                        &parsed_message_size);
 
-      if (result.IsEmpty()) {
-        return Local<String>();
+      if (message_object.IsEmpty()) {
+        return Local<Integer>();
       }
 
-      parsed_chunk_size += skipped_size;
-      parsed_chunk_size += SkipToNextToken(curr_chunk + parsed_chunk_size,
-          curr_chunk + chunk_size);
+      parsed_message_size += skipped_size;
+      parsed_message_size += SkipToNextToken(current_message +
+          parsed_message_size, current_message_end);
 
-      if (parsed_chunk_size != chunk_size) {
+      if (parsed_message_size != i - parsed_length) {
         THROW_EXCEPTION(SyntaxError, "Invalid format");
-        return Local<String>();
+        return Local<Integer>();
       }
 
-      out->Set(index++, result.ToLocalChecked());
-      curr_chunk += chunk_size + 1;
+      auto mb = out->Set(context, out_index++, message_object.ToLocalChecked());
+      if (!mb.FromMaybe(false)) {
+        return Local<Integer>();
+      }
+
+      parsed_length = i + 1;
     }
   }
 
-  auto rest = String::NewFromUtf8(isolate, curr_chunk);
-  return rest;
+  return Integer::New(isolate, parsed_length);
 }
 
 }  // namespace message_parser
