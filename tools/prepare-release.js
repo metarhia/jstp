@@ -53,7 +53,7 @@ if (!branch || !['patch', 'minor', 'major'].includes(maxLevel)) {
 
 let excludeCommits = [];
 let token = null;
-process.argv.forEach((arg) => {
+process.argv.forEach(arg => {
   if (arg.startsWith('--exclude')) {
     const commits = arg.split('=')[1];
     const commitHashes = commits.split(',');
@@ -63,12 +63,12 @@ process.argv.forEach((arg) => {
   }
 });
 
-getCommandOutput('git cherry ' + branch).then((cherryOut) => {
+getCommandOutput('git cherry ' + branch).then(cherryOut => {
   const hashes = cherryOut
     .split('\n')
     .filter(line => line !== '' && line.startsWith('+'))
     .map(line => line.slice(2))
-    .filter((hash) => {
+    .filter(hash => {
       for (const excludedHash of excludeCommits) {
         if (hash.startsWith(excludedHash)) {
           return false;
@@ -77,7 +77,7 @@ getCommandOutput('git cherry ' + branch).then((cherryOut) => {
       return true;
     });
   return Promise.all(hashes.map(getMetadata));
-}).then(processCommits).catch((error) => {
+}).then(processCommits).catch(error => {
   const message = error.stack || error.toString();
   console.error(message);
   process.exit(1);
@@ -85,7 +85,7 @@ getCommandOutput('git cherry ' + branch).then((cherryOut) => {
 
 function getMetadata(commitHash) {
   const command = 'git log --format="%aN%n%B" -n 1 ' + commitHash;
-  return getCommandOutput(command).then((output) => {
+  return getCommandOutput(command).then(output => {
     const firstLfIndex = output.indexOf('\n');
     const secondLfIndex = output.indexOf('\n', firstLfIndex + 1);
     const author = output.slice(0, firstLfIndex);
@@ -120,7 +120,7 @@ function parsePrUrl(prUrl) {
 function getSemverTag(repo, id) {
   const host = 'api.github.com';
   const path = `/repos/${repo}/issues/${id}/labels`;
-  return httpsGetJson({ host, path }).then((labels) => {
+  return httpsGetJson({ host, path }).then(labels => {
     const semverLabel = 'semver-';
     for (const label of labels) {
       if (label.name.startsWith(semverLabel)) {
@@ -140,7 +140,7 @@ function httpsGetJson(options) {
   }
 
   return new Promise((resolve, reject) => {
-    https.get(options, (res) => {
+    https.get(options, res => {
       getStreamData(res, (err, json) => {
         if (err) return reject(err);
 

@@ -20,7 +20,7 @@ process.on('message', ([type, ...payload]) => {
 
 function connect(socket) {
   let connected = 0;
-  const createConnection = (index) => {
+  const createConnection = index => {
     jstp.net.connectAndInspect(
       'app', null, ['iface'], socket, (error, conn) => {
         connected++;

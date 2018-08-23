@@ -28,7 +28,7 @@ const appV2 = new jstp.Application(app.name, interfacesV2, {}, '2.0.0');
 let server;
 let connection;
 
-test.afterEach((done) => {
+test.afterEach(done => {
   if (connection) {
     connection.close();
     connection.once('close', () => {
@@ -43,19 +43,19 @@ test.afterEach((done) => {
   }
 });
 
-test.test('must allow to specify version in application name', (test) => {
+test.test('must allow to specify version in application name', test => {
   const appV1 = new jstp.Application('app@1.0.0', interfacesV1);
   test.strictSame(appV1.version, '1.0.0');
   test.end();
 });
 
-test.test('must set version to (1.0.0) if none was provided', (test) => {
+test.test('must set version to (1.0.0) if none was provided', test => {
   const app = new jstp.Application('app', interfacesV1);
   test.strictSame(app.version, '1.0.0');
   test.end();
 });
 
-test.test('must call latest version if no version specified', (test) => {
+test.test('must call latest version if no version specified', test => {
   const serverConfig = {
     applications: [appV1, appV2], authPolicy: app.authCallback,
   };
@@ -75,7 +75,7 @@ test.test('must call latest version if no version specified', (test) => {
   });
 });
 
-test.test('must call specific version when specified (v1)', (test) => {
+test.test('must call specific version when specified (v1)', test => {
   const serverConfig = {
     applications: [appV1, appV2], authPolicy: app.authCallback,
   };
@@ -95,7 +95,7 @@ test.test('must call specific version when specified (v1)', (test) => {
   });
 });
 
-test.test('must call specific version when specified (v2)', (test) => {
+test.test('must call specific version when specified (v2)', test => {
   const serverConfig = {
     applications: [appV1, appV2], authPolicy: app.authCallback,
   };
@@ -115,7 +115,7 @@ test.test('must call specific version when specified (v2)', (test) => {
   });
 });
 
-test.test('must handle version ranges (^1.0.0)', (test) => {
+test.test('must handle version ranges (^1.0.0)', test => {
   const serverConfig = {
     applications: [appV1, appV2], authPolicy: app.authCallback,
   };
@@ -136,7 +136,7 @@ test.test('must handle version ranges (^1.0.0)', (test) => {
   });
 });
 
-test.test('must handle version ranges (>1.0.0)', (test) => {
+test.test('must handle version ranges (>1.0.0)', test => {
   const serverConfig = {
     applications: [appV1, appV2], authPolicy: app.authCallback,
   };
@@ -157,7 +157,7 @@ test.test('must handle version ranges (>1.0.0)', (test) => {
   });
 });
 
-test.test('must return an error on connect to nonexistent version', (test) => {
+test.test('must return an error on connect to nonexistent version', test => {
   const serverConfig =
     { applications: [appV1, appV2], authPolicy: app.authCallback };
   server = jstp.net.createServer(serverConfig);
@@ -174,7 +174,7 @@ test.test('must return an error on connect to nonexistent version', (test) => {
   });
 });
 
-test.test('must return an error on connect to invalid version', (test) => {
+test.test('must return an error on connect to invalid version', test => {
   const serverConfig =
     { applications: [appV1, appV2], authPolicy: app.authCallback };
   server = jstp.net.createServer(serverConfig);
@@ -191,7 +191,7 @@ test.test('must return an error on connect to invalid version', (test) => {
 });
 
 test.test('must throw an error on invalid version in application name',
-  (test) => {
+  test => {
     test.throws(() => {
       new jstp.Application('app@__invalid__', interfacesV1);
     }, TypeError, 'Invalid semver version');
@@ -200,7 +200,7 @@ test.test('must throw an error on invalid version in application name',
 );
 
 test.test('must throw an error on invalid version in application parameter',
-  (test) => {
+  test => {
     test.throws(() => {
       new jstp.Application('app', interfacesV1, {}, '__invalid__');
     }, TypeError, 'Invalid semver version');
@@ -208,7 +208,7 @@ test.test('must throw an error on invalid version in application parameter',
   }
 );
 
-test.test('must not allow the same app with duplicate versions', (test) => {
+test.test('must not allow the same app with duplicate versions', test => {
   const serverConfig = {
     applications: [appV1, appV1], authPolicy: app.authCallback,
   };

@@ -39,9 +39,9 @@ function createServer(callback) {
     port = server.address().port;
     callback();
   });
-  server.once('connect', (connection) => {
+  server.once('connect', connection => {
     process.nextTick(() => {
-      connection.callMethodWithResend('iface', 'method', [], (error) => {
+      connection.callMethodWithResend('iface', 'method', [], error => {
         test.error(error, 'callMethodWithResend must not encounter an error');
         test.pass('callback must be called');
         server.close();

@@ -13,7 +13,7 @@ let server;
 let connection;
 let port;
 
-test.afterEach((done) => {
+test.afterEach(done => {
   if (connection) {
     connection.close();
     connection = null;
@@ -22,7 +22,7 @@ test.afterEach((done) => {
   done();
 });
 
-test.test('must reconnect to existing session', (test) => {
+test.test('must reconnect to existing session', test => {
   server = jstp.net.createServer(serverConfig);
   server.listen(0, () => {
     port = server.address().port;
@@ -42,7 +42,7 @@ test.test('must reconnect to existing session', (test) => {
   });
 });
 
-test.test('must not resend messages received by other side', (test) => {
+test.test('must not resend messages received by other side', test => {
   test.plan(7);
   server = jstp.net.createServer({
     applications: [
@@ -63,7 +63,7 @@ test.test('must not resend messages received by other side', (test) => {
       test.equal(conn.username, null, 'username must be null');
       test.assert(session instanceof jstp.Session,
         'session must be an instance of jstp.Session');
-      conn.callMethod('calculator', 'doNothing', [], (error) => {
+      conn.callMethod('calculator', 'doNothing', [], error => {
         test.assertNot(error, 'call must not return an error');
         jstp.net.reconnect(conn, port, (error, conn, session) => {
           connection = conn;

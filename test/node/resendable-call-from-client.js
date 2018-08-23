@@ -61,7 +61,7 @@ function reconnect() {
   connection.close();
   connection.once('close', () => {
     server.close();
-    createServer((port) => {
+    createServer(port => {
       jstp.net.reconnect(connection, port, (error, conn) => {
         test.error(error, 'must reconnect without errors');
         connection = conn;
@@ -72,11 +72,11 @@ function reconnect() {
 
 test.plan(6);
 
-createServer((port) => {
+createServer(port => {
   connect(
     port,
     () => {
-      connection.callMethodWithResend('iface', 'method', [], (error) => {
+      connection.callMethodWithResend('iface', 'method', [], error => {
         test.error(error, 'callMethodWithResend must not encounter an error');
         test.pass('callback must be called');
         connection.close();

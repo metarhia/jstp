@@ -18,12 +18,12 @@ const Transport = require('../mock/transport');
 let server;
 let connection;
 
-test.beforeEach((done) => {
+test.beforeEach(done => {
   server = jstp.net.createServer(serverConfig);
   server.listen(0, () => done());
 });
 
-test.afterEach((done) => {
+test.afterEach(done => {
   if (connection) {
     connection.close();
     connection = null;
@@ -32,7 +32,7 @@ test.afterEach((done) => {
   done();
 });
 
-test.test('must perform an anonymous handshake manually', (test) => {
+test.test('must perform an anonymous handshake manually', test => {
   const client = {
     application: new jstp.Application('jstp', {}),
     reconnector: () => {},
@@ -54,7 +54,7 @@ test.test('must perform an anonymous handshake manually', (test) => {
   });
 });
 
-test.test('must perform an anonymous handshake', (test) => {
+test.test('must perform an anonymous handshake', test => {
   const port = server.address().port;
   jstp.net.connect(app.name, null, port, (error, conn, session) => {
     connection = conn;
@@ -67,7 +67,7 @@ test.test('must perform an anonymous handshake', (test) => {
 });
 
 
-test.test('must perform a handshake with credentials', (test) => {
+test.test('must perform a handshake with credentials', test => {
   const client = {
     connectPolicy: new jstp.SimpleConnectPolicy(app.login, app.password),
     reconnector: () => {},
@@ -86,13 +86,13 @@ test.test('must perform a handshake with credentials', (test) => {
   });
 });
 
-test.test('must not perform a handshake with invalid credentials', (test) => {
+test.test('must not perform a handshake with invalid credentials', test => {
   const client = {
     connectPolicy: new jstp.SimpleConnectPolicy(app.login, '__incorrect__'),
     reconnector: () => {},
   };
   const port = server.address().port;
-  jstp.net.connect(app.name, client, port, (error) => {
+  jstp.net.connect(app.name, client, port, error => {
     test.assert(error, 'handshake must return an error');
     test.equal(error.code, jstp.ERR_AUTH_FAILED,
       'error code must be ERR_AUTH_FAILED');
@@ -100,10 +100,10 @@ test.test('must not perform a handshake with invalid credentials', (test) => {
   });
 });
 
-test.test('must handle nonexistent application error', (test) => {
+test.test('must handle nonexistent application error', test => {
   const port = server.address().port;
   const client = { reconnector: () => {} };
-  jstp.net.connect('__nonexistentApp__', client, port, (error) => {
+  jstp.net.connect('__nonexistentApp__', client, port, error => {
     test.assert(error, 'handshake must return an error');
     test.equal(error.code, jstp.ERR_APP_NOT_FOUND,
       'error code must be ERR_APP_NOT_FOUND');
@@ -111,7 +111,7 @@ test.test('must handle nonexistent application error', (test) => {
   });
 });
 
-test.test('must not accept handshakes on a client', (test) => {
+test.test('must not accept handshakes on a client', test => {
   const transport = new Transport();
 
   const handshake = {
@@ -122,7 +122,7 @@ test.test('must not accept handshakes on a client', (test) => {
     error: [jstp.ERR_NOT_A_SERVER],
   };
 
-  transport.on('dataSent', (data) => {
+  transport.on('dataSent', data => {
     test.equal(data, mdsf.stringify(response),
       'client must return ERR_NOT_A_SERVER');
     test.end();
@@ -139,14 +139,14 @@ test.test('must not accept handshakes on a client', (test) => {
 
 test.test(
   'must drop connection after HANDSHAKE_TIMEOUT if no handshake received',
-  (test) => {
+  test => {
     test.plan(3);
     server.on('handshakeTimeout', () => {
       test.pass('handshake timeout must occur');
     });
 
     const port = server.address().port;
-    const connection = net.connect(port, (error) => {
+    const connection = net.connect(port, error => {
       test.assertNot(error, 'must connect to server');
     });
     connection.on('close', () => {

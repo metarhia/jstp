@@ -27,7 +27,7 @@ const serverConfig = { applications: [application] };
 let server;
 let connection;
 
-test.beforeEach((done) => {
+test.beforeEach(done => {
   server = jstp.net.createServer(serverConfig);
   server.listen(0, () => {
     const port = server.address().port;
@@ -39,7 +39,7 @@ test.beforeEach((done) => {
   });
 });
 
-test.afterEach((done) => {
+test.afterEach(done => {
   if (connection) {
     connection.close();
     connection = null;
@@ -48,8 +48,8 @@ test.afterEach((done) => {
   done();
 });
 
-test.test('must reconnect to the same session', (test) => {
-  connection.callMethod('iface', 'first', [TOKEN], (error) => {
+test.test('must reconnect to the same session', test => {
+  connection.callMethod('iface', 'first', [TOKEN], error => {
     test.assertNot(error, 'callMethod must not return an error');
     connection.getTransport().destroy();
     connection.on('error', () => {

@@ -20,12 +20,12 @@ const application = new jstp.Application(app.name, app.interfaces);
 let server;
 let connection;
 
-test.beforeEach((done) => {
+test.beforeEach(done => {
   server = jstp.net.createServer([application]);
   server.listen(0, () => done());
 });
 
-test.afterEach((done) => {
+test.afterEach(done => {
   if (connection) {
     connection.close();
     connection = null;
@@ -38,7 +38,7 @@ const iface = 'iface';
 const eventName = 'someEvent';
 const args = ['firstArgument', 'secondArgument'];
 
-test.test('server must process an event', (test) => {
+test.test('server must process an event', test => {
   const port = server.address().port;
   jstp.net.connect(app.name, null, port, (error, conn) => {
     connection = conn;
@@ -60,7 +60,7 @@ test.test('server must process an event', (test) => {
   });
 });
 
-test.test('client must process an event', (test) => {
+test.test('client must process an event', test => {
   const port = server.address().port;
   jstp.net.connect(app.name, null, port, (error, conn) => {
     connection = conn;
@@ -81,7 +81,7 @@ test.test('client must process an event', (test) => {
 });
 
 test.test('connection must reject events having not array as arguments',
-  (test) => {
+  test => {
     const port = server.address().port;
     jstp.net.connect(app.name, null, port, (error, conn) => {
       connection = conn;
@@ -99,7 +99,7 @@ test.test('connection must reject events having not array as arguments',
     });
   });
 
-test.test('remote proxy must emit an event', (test) => {
+test.test('remote proxy must emit an event', test => {
   const port = server.address().port;
   jstp.net.connectAndInspect(app.name, null, [iface], port,
     (error, conn, api) => {
@@ -122,7 +122,7 @@ test.test('remote proxy must emit an event', (test) => {
   );
 });
 
-test.test('remote proxy must process an event', (test) => {
+test.test('remote proxy must process an event', test => {
   const port = server.address().port;
   jstp.net.connectAndInspect(app.name, null, [iface], port,
     (error, conn, api) => {

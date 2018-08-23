@@ -12,12 +12,12 @@ const interfaces = Object.keys(app.interfaces);
 let server;
 let connection;
 
-test.beforeEach((done) => {
+test.beforeEach(done => {
   server = jstp.ws.createServer([application]);
   server.listen(0, done);
 });
 
-test.afterEach((done) => {
+test.afterEach(done => {
   if (connection) {
     connection.close();
     connection = null;
@@ -26,7 +26,7 @@ test.afterEach((done) => {
   done();
 });
 
-test.test('WebSocket connection must connect to server', (test) => {
+test.test('WebSocket connection must connect to server', test => {
   jstp.ws.connect(
     app.name,
     null,
@@ -40,7 +40,7 @@ test.test('WebSocket connection must connect to server', (test) => {
   );
 });
 
-test.test('WebSocket connection must connect and inspect', (test) => {
+test.test('WebSocket connection must connect and inspect', test => {
   jstp.ws.connectAndInspect(
     app.name,
     null,
@@ -51,9 +51,9 @@ test.test('WebSocket connection must connect and inspect', (test) => {
       connection = conn;
       test.assertNot(error, 'connectAndInspect must not return an error');
 
-      interfaces.forEach((iface) => {
+      interfaces.forEach(iface => {
         test.assert(iface in api, `api must include '${iface}'`);
-        Object.keys(app.interfaces[iface]).forEach((method) => {
+        Object.keys(app.interfaces[iface]).forEach(method => {
           test.assert(method in api[iface],
             `api.${iface} must include ${method}`);
         });
@@ -64,7 +64,7 @@ test.test('WebSocket connection must connect and inspect', (test) => {
   );
 });
 
-test.test('WebSocket connection must connect and inspect', (test) => {
+test.test('WebSocket connection must connect and inspect', test => {
   test.plan(1);
 
   test.throws(() => jstp.ws.connect(

@@ -34,7 +34,7 @@ server.listen(0, () => {
       test.assertNot(error, 'must connect to server');
 
       connection.close();
-      api.iface.method((error) => {
+      api.iface.method(error => {
         test.assertNot(error, 'must not return an error');
         connection.close();
         server.close();

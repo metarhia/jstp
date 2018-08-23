@@ -69,7 +69,7 @@ const application = {
     registerServer: (connection, address, callback) => {
       server = connection;
       serverAddress = address;
-      workers.forEach((worker) => {
+      workers.forEach(worker => {
         worker.emitRemoteEvent('worker', 'connect', [serverAddress]);
       });
       callback(null);
@@ -160,7 +160,7 @@ master.listen(listenAddress, () => {
 
 process.on('SIGINT', () => {
   console.log('\nMaster server is being closed');
-  master.close((error) => {
+  master.close(error => {
     if (error) {
       console.log(`Error occured when closing:\n${error}`);
       if (transport === 'ipc') {

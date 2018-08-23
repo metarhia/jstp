@@ -10,12 +10,12 @@ const application = new jstp.Application(app.name, app.interfaces);
 let server;
 let connection;
 
-test.beforeEach((done) => {
+test.beforeEach(done => {
   server = jstp.net.createServer([application]);
   server.listen(0, () => done());
 });
 
-test.afterEach((done) => {
+test.afterEach(done => {
   if (connection) {
     connection.close();
     connection = null;
@@ -24,7 +24,7 @@ test.afterEach((done) => {
   done();
 });
 
-test.test('must process inspect messages', (test) => {
+test.test('must process inspect messages', test => {
   const expectedInterfaces = Object.keys(app.interfaces);
   const expectedTests = expectedInterfaces.reduce(
     (tests, iface) => tests + Object.keys(app.interfaces[iface]).length + 1,
@@ -37,7 +37,7 @@ test.test('must process inspect messages', (test) => {
     connection = conn;
     test.assertNot(error, 'must connect to server');
 
-    expectedInterfaces.forEach((iface) => {
+    expectedInterfaces.forEach(iface => {
       connection.inspectInterface(iface, (error, methods) => {
         test.assertNot(error, `must inspect ${iface}`);
         Object.keys(app.interfaces[iface]).forEach(
@@ -50,7 +50,7 @@ test.test('must process inspect messages', (test) => {
   });
 });
 
-test.test('must generate remote api after inspect', (test) => {
+test.test('must generate remote api after inspect', test => {
   const expectedInterfaces = Object.keys(app.interfaces);
 
   const port = server.address().port;
@@ -59,7 +59,7 @@ test.test('must generate remote api after inspect', (test) => {
       connection = conn;
       test.assertNot(error, 'inspect must not return an error');
 
-      expectedInterfaces.forEach((iface) => {
+      expectedInterfaces.forEach(iface => {
         test.assert(iface in api, `api must include '${iface}'`);
         Object.keys(app.interfaces[iface]).forEach(
           method => test.assert(
@@ -72,7 +72,7 @@ test.test('must generate remote api after inspect', (test) => {
   );
 });
 
-test.test('remote proxy must call a remote method', (test) => {
+test.test('remote proxy must call a remote method', test => {
   const port = server.address().port;
   jstp.net.connectAndInspect(app.name, null, ['someService'], port,
     (error, conn, api) => {
@@ -89,7 +89,7 @@ test.test('remote proxy must call a remote method', (test) => {
   );
 });
 
-test.test('must return an error if interface does not exist', (test) => {
+test.test('must return an error if interface does not exist', test => {
   const port = server.address().port;
   jstp.net.connectAndInspect(
     app.name, null, ['__nonexistent__interface__'], port, (error, conn) => {

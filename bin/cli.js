@@ -28,7 +28,7 @@ const args = yargs
   })
   .strict().argv;
 
-const log = (msg) => {
+const log = msg => {
   const userInput = rl.line;
   if (userInput) rl.clearLine();
   rl.output.write(msg);
@@ -52,7 +52,7 @@ rl = readline.createInterface({
 });
 
 const prompt = rl.prompt.bind(rl);
-rl.on('line', (line) => {
+rl.on('line', line => {
   cli.processLine(line, prompt);
 });
 

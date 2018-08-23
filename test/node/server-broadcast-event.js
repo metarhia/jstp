@@ -15,7 +15,7 @@ const serverConfig = {
 let server;
 let port;
 
-test.beforeEach((done) => {
+test.beforeEach(done => {
   server = jstp.net.createServer(serverConfig);
   server.listen(0, () => {
     port = server.address().port;
@@ -23,12 +23,12 @@ test.beforeEach((done) => {
   });
 });
 
-test.afterEach((done) => {
+test.afterEach(done => {
   server.close();
   done();
 });
 
-test.test('must broadcast event to all connected clients', (test) => {
+test.test('must broadcast event to all connected clients', test => {
   const iface = 'someService';
   const eventName = 'broadcast';
   const eventArgs = ['hello'];

@@ -43,9 +43,9 @@ const testCases = [
   },
 ];
 
-testCases.forEach((testCase) => {
+testCases.forEach(testCase => {
   const arr = RemoteError.getJstpArrayFor(testCase.value);
-  test(`Must properly create an array from ${testCase.name}`, (test) => {
+  test(`Must properly create an array from ${testCase.name}`, test => {
     test.strictSame(arr, testCase.expected);
     test.end();
   });

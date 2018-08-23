@@ -106,7 +106,7 @@ const report = () => {
 
 const request = () => {
   const startTimeHR = process.hrtime();
-  connections.forEach((connection) => {
+  connections.forEach(connection => {
     connection.remoteProxies['server'].method(argument, (error, data) => {
       if (error) {
         console.error(`Error during call:\n${error}`);
@@ -130,13 +130,13 @@ jstp[transport].connectAndInspect(
 
     api = master;
 
-    api.master.on('connect', (address) => {
+    api.master.on('connect', address => {
       for (let i = 0; i < connectionAmount; i++) {
         createConnection(i, address);
       }
     });
 
-    api.master.registerWorker((error) => {
+    api.master.registerWorker(error => {
       if (error) {
         console.error(`Couldn't register worker:\n${error}`);
         return;
@@ -153,7 +153,7 @@ process.on('SIGINT', () => {
   console.log('\nWorker is being closed');
   clearInterval(requestTimer);
   clearInterval(reportTimer);
-  connections.forEach((connection) => {
+  connections.forEach(connection => {
     connection.close();
   });
   process.exit(0);

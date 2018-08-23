@@ -6,7 +6,7 @@ const events = require('events');
 
 const common = require('../../lib/common');
 
-test('must forward a single event', (test) => {
+test('must forward a single event', test => {
   test.plan(1);
 
   const sourceEventEmitter = new events.EventEmitter();
@@ -20,7 +20,7 @@ test('must forward a single event', (test) => {
   sourceEventEmitter.emit('testEvent');
 });
 
-test('must forward a single event under a new name', (test) => {
+test('must forward a single event under a new name', test => {
   test.plan(1);
 
   const sourceEventEmitter = new events.EventEmitter();
@@ -36,7 +36,7 @@ test('must forward a single event under a new name', (test) => {
   sourceEventEmitter.emit('testEvent');
 });
 
-test('must forward multiple events', (test) => {
+test('must forward multiple events', test => {
   test.plan(2);
 
   const sourceEventEmitter = new events.EventEmitter();

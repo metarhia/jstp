@@ -21,7 +21,7 @@ let server;
 let logger;
 let connection;
 
-test.beforeEach((done) => {
+test.beforeEach(done => {
   server = jstp.net.createServer(serverConfig);
   server.listen(0, () => {
     const port = server.address().port;
@@ -34,7 +34,7 @@ test.beforeEach((done) => {
   });
 });
 
-test.afterEach((done) => {
+test.afterEach(done => {
   if (connection) {
     connection.close();
     connection = null;
@@ -44,7 +44,7 @@ test.afterEach((done) => {
 });
 
 test.test('must emit server and client events upon anonymous handshake',
-  (test) => {
+  test => {
     test.plan(7);
 
     const client = {
@@ -77,7 +77,7 @@ test.test('must emit server and client events upon anonymous handshake',
         test.assert(ok, 'handshake must return ok');
       });
 
-      connection.handshake(app.name, null, null, (error) => {
+      connection.handshake(app.name, null, null, error => {
         test.assertNot(error, 'handshake must not return an error');
         test.equal(connection.username, null, 'username must be null');
         connection.close();
@@ -87,7 +87,7 @@ test.test('must emit server and client events upon anonymous handshake',
 );
 
 test.test('must emit server and client events login authentication strategy',
-  (test) => {
+  test => {
     test.plan(7);
 
     const logger = new EventEmitter();
@@ -122,7 +122,7 @@ test.test('must emit server and client events login authentication strategy',
         test.assert(ok, 'handshake must return ok');
       });
 
-      connection.handshake(app.name, app.login, app.password, (error) => {
+      connection.handshake(app.name, app.login, app.password, error => {
         test.assertNot(error, 'handshake must not return an error');
         test.equal(connection.username, app.login, 'username must match');
         connection.close();
@@ -132,7 +132,7 @@ test.test('must emit server and client events login authentication strategy',
 );
 
 test.test('must emit event on call without arguments and with a return value',
-  (test) => {
+  test => {
     test.plan(5);
 
     const iface = 'calculator';
@@ -159,49 +159,49 @@ test.test('must emit event on call without arguments and with a return value',
   }
 );
 
-test.test('must emit event upon inspect message', (test) => {
+test.test('must emit event upon inspect message', test => {
   const expectedInterfaces = Object.keys(app.interfaces);
   const expectedTests = expectedInterfaces.length;
 
   test.plan(expectedTests);
-  server.getClientsArray()[0].on('inspect', (interfaceName) => {
+  server.getClientsArray()[0].on('inspect', interfaceName => {
     test.assert(expectedInterfaces.includes(interfaceName),
       'inspect event interface must be one of expected');
   });
 
-  expectedInterfaces.forEach((iface) => {
+  expectedInterfaces.forEach(iface => {
     connection.inspectInterface(iface);
   });
 });
 
-test.test('must emit messages in development mode', (test) => {
+test.test('must emit messages in development mode', test => {
   test.plan(4);
 
   const clientOutgoingMessage = { call: [1, 'calculator'], answer: [] };
   const serverOutgoingMessage = { callback: [1], ok: [42] };
 
-  server.getClientsArray()[0].on('outgoingMessage', (message) => {
+  server.getClientsArray()[0].on('outgoingMessage', message => {
     if (message.ping || message.pong) {
       return;
     }
     test.strictSame(message, serverOutgoingMessage,
       'server outgoing message must match');
   });
-  server.getClientsArray()[0].on('incomingMessage', (message) => {
+  server.getClientsArray()[0].on('incomingMessage', message => {
     if (message.ping || message.pong) {
       return;
     }
     test.strictSame(message, clientOutgoingMessage,
       'server incoming message must match the one sent from client');
   });
-  logger.on('outgoingMessage', (message) => {
+  logger.on('outgoingMessage', message => {
     if (message.ping || message.pong) {
       return;
     }
     test.strictSame(message, clientOutgoingMessage,
       'client outgoing message must match');
   });
-  logger.on('incomingMessage', (message) => {
+  logger.on('incomingMessage', message => {
     if (message.ping || message.pong) {
       return;
     }
@@ -212,7 +212,7 @@ test.test('must emit messages in development mode', (test) => {
   connection.callMethod('calculator', 'answer', []);
 });
 
-test.test('must emit heartbeat messages in development mode', (test) => {
+test.test('must emit heartbeat messages in development mode', test => {
   test.plan(4);
   const received = {
     serverPing: false,
@@ -221,14 +221,14 @@ test.test('must emit heartbeat messages in development mode', (test) => {
     clientPong: false,
   };
 
-  server.getClientsArray()[0].on('incomingMessage', (message) => {
+  server.getClientsArray()[0].on('incomingMessage', message => {
     if (message.ping !== undefined) {
       received.serverPing = true;
     } else if (message.pong !== undefined) {
       received.serverPong = true;
     }
   });
-  logger.on('incomingMessage', (message) => {
+  logger.on('incomingMessage', message => {
     if (message.ping !== undefined) {
       received.clientPing = true;
     } else if (message.pong !== undefined) {

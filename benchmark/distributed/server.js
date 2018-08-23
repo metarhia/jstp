@@ -107,7 +107,7 @@ server.listen(listenAddress, () => {
         return;
       }
 
-      api.master.registerServer(connectAddress, (error) => {
+      api.master.registerServer(connectAddress, error => {
         if (error) {
           console.error(error);
           connection.close();
@@ -133,7 +133,7 @@ server.listen(listenAddress, () => {
 process.on('SIGINT', () => {
   console.log('\nServer is being closed');
   clearInterval(timer);
-  server.close((error) => {
+  server.close(error => {
     if (error) {
       console.log(`Error occured when closing:\n${error}`);
       if (transport === 'ipc') {

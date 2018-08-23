@@ -7,16 +7,16 @@ const app = new jstp.Application('app', {});
 
 let server;
 
-test.beforeEach((done) => {
+test.beforeEach(done => {
   server = jstp.net.createServer({ applications: [app] });
   server.listen(0, done);
 });
 
-test.afterEach((done) => {
+test.afterEach(done => {
   server.close(done);
 });
 
-test.test('must call connect callback once on successful connect', (test) => {
+test.test('must call connect callback once on successful connect', test => {
   test.plan(1);
   const port = server.address().port;
   const client = { reconnector: () => {} };
@@ -34,9 +34,9 @@ const invalidAddress = {
   host: '__invalid_host__',
 };
 
-test.test('must call connect callback once on error on connect', (test) => {
+test.test('must call connect callback once on error on connect', test => {
   test.plan(1);
-  jstp.net.connect(app.name, null, invalidAddress, (error) => {
+  jstp.net.connect(app.name, null, invalidAddress, error => {
     test.assert(error, 'must return error');
   });
 });

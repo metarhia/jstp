@@ -7,7 +7,7 @@ const fs = require('fs');
 const common = {};
 module.exports = common;
 
-common.getCommandOutput = (cmd) => {
+common.getCommandOutput = cmd => {
   const exec = common.promisify(childProcess.exec);
   return exec(cmd).then((stdout, stderr) => {
     if (stderr) console.error(stderr);

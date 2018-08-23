@@ -1,6 +1,6 @@
 'use strict';
 
-const mean = (sample) => {
+const mean = sample => {
   const len = sample.length;
   if (len === 0)
     return;
@@ -25,7 +25,7 @@ const stdev = (sample, meanValue) => {
   return Math.sqrt(variance);
 };
 
-const combineCount = (samples) => {
+const combineCount = samples => {
   let sum = 0;
   for (let i = 0; i < samples.length; i++) {
     sum += samples[i].count;
@@ -52,7 +52,7 @@ const combineStdev = (samples, mean, count) => {
   return Math.sqrt(sum / count);
 };
 
-const combineSamples = (samples) => {
+const combineSamples = samples => {
   const len = samples.length;
   if (len === 0)
     return;

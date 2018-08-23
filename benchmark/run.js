@@ -44,7 +44,7 @@ let workersFinished = 0;
 
 let benchStartedHR;
 
-server.on('exit', (exitCode) => {
+server.on('exit', exitCode => {
   serverExited = true;
   if (exitCode !== 0) {
     terminate();
@@ -59,7 +59,7 @@ server.on('message', ([type, payload]) => {
   }
   socket = payload;
 
-  const onWorkerExitFactory = index => (exitCode) => {
+  const onWorkerExitFactory = index => exitCode => {
     workersExited[index] = true;
     if (exitCode !== 0) {
       terminate();
@@ -122,7 +122,7 @@ function terminate() {
     '\nBenchmark is being terminated due to an error or signal termination\n'
   );
   workers.filter((_, index) => !workersExited[index])
-    .forEach((worker) => {
+    .forEach(worker => {
       worker.kill('SIGKILL');
     });
 

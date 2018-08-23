@@ -23,7 +23,7 @@ server.listen(() => {
 
       let heartbeatsCount = 0;
 
-      connection.on('incomingMessage', (message) => {
+      connection.on('incomingMessage', message => {
         if (message.ping !== undefined) {
           heartbeatsCount++;
         }

@@ -11,7 +11,7 @@ const GUARANTEED_DELETION_TIME = INTERVAL * 3;
 const SESSION_ID = 'key';
 const SESSION = {};
 
-test.test('must set and get session', (test) => {
+test.test('must set and get session', test => {
   const storageProvider = new SimpleSessionStorageProvider(
     SESSION_LIFETIME,
     INTERVAL
@@ -22,7 +22,7 @@ test.test('must set and get session', (test) => {
   test.end();
 });
 
-test.test('must delete session after expiration', (test) => {
+test.test('must delete session after expiration', test => {
   const storageProvider = new SimpleSessionStorageProvider(
     SESSION_LIFETIME,
     INTERVAL
@@ -36,7 +36,7 @@ test.test('must delete session after expiration', (test) => {
   }, GUARANTEED_DELETION_TIME);
 });
 
-test.test('must not delete active session', (test) => {
+test.test('must not delete active session', test => {
   const storageProvider = new SimpleSessionStorageProvider(
     SESSION_LIFETIME,
     INTERVAL
@@ -49,7 +49,7 @@ test.test('must not delete active session', (test) => {
   }, GUARANTEED_DELETION_TIME);
 });
 
-test.test('get must mark session as active', (test) => {
+test.test('get must mark session as active', test => {
   const storageProvider = new SimpleSessionStorageProvider(
     SESSION_LIFETIME,
     INTERVAL
@@ -65,7 +65,7 @@ test.test('get must mark session as active', (test) => {
   }, GUARANTEED_DELETION_TIME);
 });
 
-test.test('must not get session if none is set', (test) => {
+test.test('must not get session if none is set', test => {
   const storageProvider = new SimpleSessionStorageProvider(
     SESSION_LIFETIME,
     INTERVAL

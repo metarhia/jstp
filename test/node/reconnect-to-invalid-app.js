@@ -17,7 +17,7 @@ let backoff = DEFAULT_BACKOFF_TIME;
 const reconnector = (connection, reconnectFn) => {
   if (connection.closedIntentionally) return;
   setTimeout(() => {
-    reconnectFn((error) => {
+    reconnectFn(error => {
       if (error) {
         const newBackoff = backoff * 2;
         backoff = (newBackoff < MAX_BACKOFF_TIME) ?
@@ -29,7 +29,7 @@ const reconnector = (connection, reconnectFn) => {
   }, backoff);
 };
 
-test.test('reconnection to non-existent app must not throw', (test) => {
+test.test('reconnection to non-existent app must not throw', test => {
   const server = jstp.net.createServer(serverConfig);
   server.listen(0, () => {
     const port = server.address().port;

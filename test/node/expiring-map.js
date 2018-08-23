@@ -11,7 +11,7 @@ const VALUE = 'value';
 
 test.test(
   'must delete entry on next interval iteration',
-  (test) => {
+  test => {
     const map = new ExpiringMap(INTERVAL);
     map.set(KEY, VALUE);
     map.delete(KEY);
@@ -24,7 +24,7 @@ test.test(
 
 test.test(
   'must not delete entry if it was requested before interval iteration',
-  (test) => {
+  test => {
     const map = new ExpiringMap(INTERVAL);
     map.set(KEY, VALUE);
     map.delete(KEY);
