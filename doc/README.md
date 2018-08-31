@@ -18,11 +18,11 @@ and remote procedures.
 JSTP works in Node.js and web browsers:
 
 ```sh
-$ npm install --save metarhia-jstp
+$ npm install --save @metarhia/jstp
 ```
 
 Or, alternatively, there is
-[jstp.umd.js](https://unpkg.com/metarhia-jstp@latest/dist/jstp.umd.js)
+[jstp.umd.js](https://unpkg.com/@metarhia/jstp@latest/dist/jstp.umd.js)
 UMD bundle.
 
 We also have official client-side implementations for

@@ -19,16 +19,16 @@
     src="https://coveralls.io/repos/github/metarhia/jstp/badge.svg?branch=master"
     alt="Coverage Status"
   /></a>
-  <a href="https://badge.fury.io/js/metarhia-jstp"><img
-    src="https://badge.fury.io/js/metarhia-jstp.svg"
+  <a href="https://badge.fury.io/js/%40metarhia%2Fjstp"><img
+    src="https://badge.fury.io/js/%40metarhia%2Fjstp.svg"
     alt="NPM Version"
   /></a>
-  <a href="https://www.npmjs.com/package/metarhia-jstp"><img
-    src="https://img.shields.io/npm/dm/metarhia-jstp.svg"
+  <a href="https://www.npmjs.com/package/@metarhia/jstp"><img
+    src="https://img.shields.io/npm/dm/@metarhia/jstp.svg"
     alt="NPM Downloads/Month"
   /></a>
-  <a href="https://www.npmjs.com/package/metarhia-jstp"><img
-    src="https://img.shields.io/npm/dt/metarhia-jstp.svg"
+  <a href="https://www.npmjs.com/package/@metarhia/jstp"><img
+    src="https://img.shields.io/npm/dt/@metarhia/jstp.svg"
     alt="NPM Downloads"
   /></a>
   <h1>JSTP / JavaScript Transfer Protocol</h1>
@@ -49,11 +49,11 @@ implementation bundled in!
 JSTP works in Node.js and web browsers:
 
 ```sh
-$ npm install --save metarhia-jstp
+$ npm install --save @metarhia/jstp
 ```
 
 Or, alternatively, there is
-[jstp.umd.js](https://unpkg.com/metarhia-jstp@latest/dist/jstp.umd.js)
+[jstp.umd.js](https://unpkg.com/@metarhia/jstp@latest/dist/jstp.umd.js)
 UMD bundle.
 
 We also have official client-side implementations for
@@ -68,7 +68,7 @@ Server:
 ```js
 'use strict';
 
-const jstp = require('metarhia-jstp');
+const jstp = require('@metarhia/jstp');
 
 // Application is the core high-level abstraction of the framework. An app
 // consists of a number of interfaces, and each interface has its methods.
@@ -95,7 +95,7 @@ Client:
 ```js
 'use strict';
 
-const jstp = require('metarhia-jstp');
+const jstp = require('@metarhia/jstp');
 
 // Create a TCP connection to server and connect to the `testApp` application.
 // Clients can have applications too for full-duplex RPC,
