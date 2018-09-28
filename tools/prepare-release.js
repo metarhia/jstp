@@ -142,27 +142,33 @@ function httpsGetJson(options) {
   return new Promise((resolve, reject) => {
     https.get(options, res => {
       getStreamData(res, (err, json) => {
-        if (err) return reject(err);
+        if (err) {
+          reject(err);
+          return;
+        }
 
         if (res.statusCode !== 200) {
           const url = `https://${options.host}${options.path}`;
           const message = `Request to ${url} failed with status code ` +
                           res.statusCode;
-          return reject(`${message}\n${json}`);
+          reject(new Error(`${message}\n${json}`));
+          return;
         }
 
         const contentType = res.headers['content-type'];
         if (!contentType.startsWith('application/json')) {
           const error = new Error(`Invalid Content-Type: ${contentType}`);
           res.resume();
-          return reject(error);
+          reject(error);
+          return;
         }
 
         let object = null;
         try {
           object = JSON.parse(json);
         } catch (err) {
-          return reject(err);
+          reject(err);
+          return;
         }
         resolve(object);
       });

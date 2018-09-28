@@ -2,8 +2,7 @@
 
 const mean = sample => {
   const len = sample.length;
-  if (len === 0)
-    return;
+  if (len === 0) return 0;
   let sum = 0;
   for (let i = 0; i < len; i++) {
     sum += sample[i];
@@ -13,10 +12,7 @@ const mean = sample => {
 
 const stdev = (sample, meanValue) => {
   const len = sample.length;
-  if (len === 0)
-    return;
-  if (len === 1)
-    return 0;
+  if (len === 0 || len === 1) return 0;
   let sum = 0;
   for (let i = 0; i < len; i++) {
     sum += Math.pow(sample[i] - meanValue, 2);
@@ -53,12 +49,6 @@ const combineStdev = (samples, mean, count) => {
 };
 
 const combineSamples = samples => {
-  const len = samples.length;
-  if (len === 0)
-    return;
-  if (len === 1) {
-    return samples[0];
-  }
   const count = combineCount(samples);
   const mean  = combineMean(samples, count);
   const stdev = combineStdev(samples, mean, count);

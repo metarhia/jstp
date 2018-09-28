@@ -46,7 +46,8 @@ const authCallback = (
   connection, application, strategy, credentials, callback
 ) => {
   if (application.name !== name) {
-    return callback(new jstp.RemoteError(jstp.ERR_APP_NOT_FOUND));
+    callback(new jstp.RemoteError(jstp.ERR_APP_NOT_FOUND));
+    return;
   }
 
   let username = null;
