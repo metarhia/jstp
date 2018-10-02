@@ -1,5 +1,25 @@
 # `@metarhia/jstp` changelog
 
+## Version 2.1.0 (2018-10-02, @belochub)
+
+This release fixes and improves WebSocket transport.
+
+All changes:
+
+ * **ws,server:** fix server crash
+   *(Mykola Bilochub)*
+   [#380](https://github.com/metarhia/jstp/pull/380)
+ * **test:** add regression test for GH-380
+   *(Alexey Orlenko)*
+   [#380](https://github.com/metarhia/jstp/pull/380)
+ * **deps,lint:** update eslint-config-metarhia
+   *(Mykola Bilochub)*
+   [#382](https://github.com/metarhia/jstp/pull/382)
+ * **ws,server:** change max frame and message size
+   *(Mykola Bilochub)*
+   [#383](https://github.com/metarhia/jstp/pull/383)
+   **\[semver-minor\]**
+
 ## Version 2.0.1 (2018-09-05, @belochub)
 
 This release fixes UMD browser build and updates links in README.
