@@ -73,12 +73,12 @@ test.test('TLS connection must connect and inspect', test => {
   );
 });
 
-const invalidAddress = {
-  host: '__invalid_host__',
-  port,
-};
-
 test.test('TLS connection must throw an error on invalid address', test => {
+  const invalidAddress = {
+    host: '__invalid_host__',
+    port,
+  };
+
   jstp.tls.connect(app.name, null, invalidAddress, error => {
     test.assert(error, 'connect must return an error');
     test.equals(error.code, 'ENOTFOUND', 'error must be ENOTFOUND');

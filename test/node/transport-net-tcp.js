@@ -60,12 +60,12 @@ test.test('TCP connection must connect and inspect', test => {
   );
 });
 
-const invalidAddress = {
-  host: '__invalid_host__',
-  port,
-};
-
 test.test('TCP connection must throw an error on invalid address', test => {
+  const invalidAddress = {
+    host: '__invalid_host__',
+    port,
+  };
+
   jstp.net.connect(app.name, null, invalidAddress, error => {
     test.assert(error, 'connect must return an error');
     test.equals(error.code, 'ENOTFOUND', 'error must be ENOTFOUND');
