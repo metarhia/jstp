@@ -6,6 +6,7 @@ const yargs = require('yargs');
 const readline = require('readline');
 
 const Cli = require('../lib/cli/cli');
+const { setupHistory, getHistorySize } = require('../lib/cli/history');
 
 let rl = null;
 
@@ -26,13 +27,18 @@ const args = yargs
     type: 'number',
     describe: 'Heartbeat interval in milliseconds',
   })
+  .epilogue(`
+Environment variables:
+JSTP_CLI_HISTORY       path to the persistent CLI history file
+JSTP_CLI_HISTORY_SIZE  controls how many lines of CLI history will be persisted,
+                       must be a positive number
+    `)
   .strict().argv;
 
 const log = msg => {
   const userInput = rl.line;
   if (userInput) rl.clearLine();
-  rl.output.write(msg);
-  rl.write('\n');
+  rl.output.write(msg + '\n' + rl._prompt);
   if (userInput) rl.write(userInput);
 };
 
@@ -43,12 +49,19 @@ const finish = () => {
 
 const cli = new Cli(log, args);
 
-cli.on('exit', () => finish());
+cli.on('exit', () => {
+  if (rl._flushingHistory) {
+    rl.once('flushHistory', finish);
+  } else {
+    finish();
+  }
+});
 
 rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
   completer: cli.completer.bind(cli),
+  historySize: getHistorySize(),
 });
 
 const prompt = rl.prompt.bind(rl);
@@ -60,4 +73,10 @@ rl.on('close', () => finish());
 
 rl.on('SIGINT', () => finish());
 
-rl.prompt(true);
+setupHistory(rl, (err, message) => {
+  if (err) {
+    if (message) log(message);
+    if (args.verbose !== 0) log(err.stack);
+  }
+  rl.prompt(true);
+});
