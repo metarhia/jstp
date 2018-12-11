@@ -16,7 +16,7 @@ const server =
   cp.fork(path.join(__dirname, '../utils/reconnector/server-for-backoff.js'));
 
 server.on('message', ([type, port]) => {
-  test.plan(EXPECTED_ATTEMPTS_TO_RECONNECT + 1);
+  test.plan(EXPECTED_ATTEMPTS_TO_RECONNECT);
 
   if (type !== 'listening') {
     test.fail('must not receive unknown messages');
