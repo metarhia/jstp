@@ -99,9 +99,11 @@ function outputResults(benchTimeHR) {
   const count = workersAmount * connectionsPerWorker * requestsPerConnection;
   const mean = statistics.mean(results.map(result => result[0]));
 
-  const sum = results.reduce((previous, current) => (
-    previous + Math.pow(current[1], 2) + Math.pow(current[0] - mean, 2)
-  ), 0);
+  const sum = results.reduce(
+    (previous, current) =>
+      previous + Math.pow(current[1], 2) + Math.pow(current[0] - mean, 2),
+    0
+  );
   const stdev = Math.sqrt(sum / workersAmount);
 
   const benchTime = benchTimeHR[0] * 1e9 + benchTimeHR[1];

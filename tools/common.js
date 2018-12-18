@@ -15,13 +15,12 @@ common.getCommandOutput = cmd => {
   });
 };
 
-common.promisify = fn => (...args) => (
+common.promisify = fn => (...args) =>
   new Promise((resolve, reject) => {
     fn(...args, (error, ...result) => {
       if (error) reject(error);
       else resolve(...result);
     });
-  })
-);
+  });
 
 common.writeFile = common.promisify(fs.writeFile);

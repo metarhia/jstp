@@ -36,27 +36,27 @@
     "./lib/simple-session-storage-provider.js": false
   },
   "dependencies": {
-    "mdsf": "^1.0.1",
-    "semver": "^5.5.0",
+    "mdsf": "^1.1.0",
+    "semver": "^5.6.0",
     "uuid": "^3.2.1",
-    "websocket": "^1.0.26",
-    "yargs": "^12.0.1"
+    "websocket": "^1.0.28",
+    "yargs": "^12.0.5"
   },
   "devDependencies": {
-    "@babel/core": "^7.0.0",
-    "@babel/plugin-transform-runtime": "^7.0.0",
-    "@babel/preset-env": "^7.0.0",
-    "@babel/runtime": "^7.0.0",
-    "babel-loader": "^8.0.0",
-    "eslint": "^5.2.0",
-    "eslint-config-metarhia": "^5.0.0",
+    "@babel/core": "^7.2.2",
+    "@babel/plugin-transform-runtime": "^7.2.0",
+    "@babel/preset-env": "^7.2.0",
+    "@babel/runtime": "^7.2.0",
+    "babel-loader": "^8.0.4",
+    "eslint": "^5.10.0",
+    "eslint-config-metarhia": "^6.1.0",
     "eslint-plugin-import": "^2.11.0",
-    "remark-cli": "^5.0.0",
+    "remark-cli": "^6.0.1",
     "remark-preset-lint-metarhia": "^1.0.2",
-    "remark-validate-links": "^7.0.0",
-    "tap": "^12.0.1",
-    "webpack": "^4.17.1",
-    "webpack-command": "^0.4.1"
+    "remark-validate-links": "^7.1.2",
+    "tap": "^12.1.1",
+    "webpack": "^4.27.1",
+    "webpack-command": "^0.4.2"
   },
   "scripts": {
     "test": "npm run lint && npm run test-node && npm run test-integration",

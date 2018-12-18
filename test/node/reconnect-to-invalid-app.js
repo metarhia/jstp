@@ -20,7 +20,7 @@ const reconnector = (connection, reconnectFn) => {
     reconnectFn(error => {
       if (error) {
         const newBackoff = backoff * 2;
-        backoff = (newBackoff < MAX_BACKOFF_TIME) ?
+        backoff = newBackoff < MAX_BACKOFF_TIME ?
           newBackoff : MAX_BACKOFF_TIME;
         return;
       }
