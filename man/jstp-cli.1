@@ -1,0 +1,64 @@
+.TH JSTP\-CLI 1 2018-12-22 Metarhia
+.SH NAME
+jstp\-cli \- JavaScript Transfer Protocol command line interface
+.SH SYNOPSIS
+.B jstp\-cli
+.RI [ options ]
+.SH DESCRIPTION
+.B jstp\-cli
+is a client for interacting with the JSTP server through the CLI.
+.SH OPTIONS
+.TP
+.BR \-v ", " \-\-verbose
+Enable verbose reporting of errors and incoming and outgoing JSTP messages.
+Specifying this option more than once will also enable printing of ping and
+pong messages that are used mostly for heartbeat.
+.TP
+.BR \-R ", " \-\-no\-reconnect
+Disable automatic reconnection whenever connection is lost.
+
+By default, reconnection is enabled and uses a truncated binary exponential
+backoff algorithm.
+.TP
+.BR \-i ", " \-\-heartbeat\-interval =\fImilliseconds
+Enable sending of the heartbeat messages from the client with the specified
+interval.
+.TP
+.BR \-p "[=\fIindentation\fP], " \-\-pretty\-print [=\fIindentation\fP]
+Enable pretty\-printing of the arrays and objects.
+.RI "The " indentation
+may be a number or a string, and it works in the same way as when passed as the
+third argument to ECMAScript's
+.IR JSON.stringify() .
+When the
+.I indentation
+is omitted, the default value of 2 spaces is used.
+.TP
+.B \-\-version
+Print package version and exit.
+.SH ENVIRONMENT
+.TP
+.BI JSTP_CLI_HISTORY " file"
+Path to the
+.I file
+used to store persistent CLI history.
+The default path is
+.IR $HOME/.jstp_cli_history ,
+which is overridden by this variable.
+Setting the value to an empty string
+("" or " ") will disable persistent CLI history.
+.TP
+.BI JSTP_CLI_HISTORY_SIZE " number"
+Controls how many lines of the CLI history will be persisted.
+.I number
+must have a positive value.
+.SH BUGS
+Bugs are tracked in GitHub Issues: https://github.com/metarhia/jstp/issues
+.SH COPYRIGHT
+.B jstp\-cli
+is available under the MIT license.
+See https://github.com/metarhia/jstp/blob/master/LICENSE for the full license
+text.
+.SH AUTHORS
+Full contributors list is available at
+https://github.com/metarhia/jstp/blob/master/AUTHORS

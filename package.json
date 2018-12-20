@@ -16,6 +16,9 @@
     "type": "git",
     "url": "https://github.com/metarhia/jstp"
   },
+  "directories": {
+    "man": "./man"
+  },
   "bugs": {
     "url": "https://github.com/metarhia/jstp/issues",
     "email": "timur.shemsedinov@gmail.com"
