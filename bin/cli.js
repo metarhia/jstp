@@ -27,6 +27,12 @@ const args = yargs
     type: 'number',
     describe: 'Heartbeat interval in milliseconds',
   })
+  .option('pretty-print', {
+    alias: 'p',
+    type: 'string',
+    describe: 'Enable pretty-print. You can pass a string or a number' +
+      ' to specify indentation',
+  })
   .epilogue(`
 Environment variables:
 JSTP_CLI_HISTORY       path to the persistent CLI history file
