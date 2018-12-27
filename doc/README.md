@@ -29,3 +29,10 @@ We also have official client-side implementations for
 [Swift](https://github.com/metarhia/jstp-swift) and
 [Java](https://github.com/metarhia/jstp-java)
 that work effortlessly on iOS and Android 🎉
+
+There is also an interactive CLI provided by this package:
+
+```sh
+$ npm install -g @metarhia/jstp
+$ jstp-cli
+```
