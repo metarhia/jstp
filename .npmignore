@@ -55,3 +55,7 @@ CODE_OF_CONDUCT.md
 # Browser build configs
 .babelrc
 webpack.config.js
+
+# Prettier configs
+.prettierrc
+.prettierignore
