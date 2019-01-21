@@ -13,16 +13,10 @@ test.test('transport.connect must return connection error', test => {
   const server = jstp.net.createServer(serverConfig);
   server.listen(0, () => {
     const port = server.address().port;
-    jstp.tls.connect(
-      APP_NAME,
-      null,
-      port,
-      'localhost',
-      error => {
-        test.assert(error, 'connect must fail');
-        server.close();
-        test.end();
-      }
-    );
+    jstp.tls.connect(APP_NAME, null, port, 'localhost', error => {
+      test.assert(error, 'connect must fail');
+      server.close();
+      test.end();
+    });
   });
 });

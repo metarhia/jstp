@@ -16,30 +16,25 @@ const server = jstp.net.createServer({
 tap.plan(2);
 
 server.listen(() => {
-  jstp.net.connect(
-    'app',
-    null,
-    server.address().port,
-    (error, connection) => {
-      tap.assertNot(error, 'client must connect successfully');
+  jstp.net.connect('app', null, server.address().port, (error, connection) => {
+    tap.assertNot(error, 'client must connect successfully');
 
-      let heartbeatsCount = 0;
+    let heartbeatsCount = 0;
 
-      connection.on('incomingMessage', message => {
-        if (message.ping !== undefined) {
-          heartbeatsCount++;
-        }
-      });
+    connection.on('incomingMessage', message => {
+      if (message.ping !== undefined) {
+        heartbeatsCount++;
+      }
+    });
 
-      setTimeout(() => {
-        tap.assert(
-          heartbeatsCount > 0,
-          'client must have received some heartbeat messages'
-        );
+    setTimeout(() => {
+      tap.assert(
+        heartbeatsCount > 0,
+        'client must have received some heartbeat messages'
+      );
 
-        connection.close();
-        server.close();
-      }, HANDSHAKE_TIMEOUT - 100);
-    }
-  );
+      connection.close();
+      server.close();
+    }, HANDSHAKE_TIMEOUT - 100);
+  });
 });

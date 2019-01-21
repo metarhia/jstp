@@ -30,10 +30,7 @@ const makeTest = protocols => test => {
       test.end();
     });
 
-    client.connect(
-      url,
-      protocols
-    );
+    client.connect(url, protocols);
   });
 };
 

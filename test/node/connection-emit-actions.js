@@ -26,17 +26,11 @@ test.beforeEach(done => {
   server.listen(0, () => {
     const port = server.address().port;
     logger = new EventEmitter();
-    jstp.net.connect(
-      app.name,
-      { logger },
-      port,
-      'localhost',
-      (error, conn) => {
-        test.assertNot(error, 'must connect to server and perform handshake');
-        connection = conn;
-        done();
-      }
-    );
+    jstp.net.connect(app.name, { logger }, port, 'localhost', (error, conn) => {
+      test.assertNot(error, 'must connect to server and perform handshake');
+      connection = conn;
+      done();
+    });
   });
 });
 

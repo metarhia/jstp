@@ -23,18 +23,13 @@ const server = jstp.net.createServer({
 tap.plan(1);
 
 server.listen(() => {
-  jstp.net.connect(
-    'app',
-    null,
-    server.address().port,
-    (error, connection) => {
-      tap.assertNot(error, 'client must connect successfully');
+  jstp.net.connect('app', null, server.address().port, (error, connection) => {
+    tap.assertNot(error, 'client must connect successfully');
 
-      connection.close();
+    connection.close();
 
-      setTimeout(() => {
-        server.close();
-      }, HANDSHAKE_TIMEOUT + 100);
-    }
-  );
+    setTimeout(() => {
+      server.close();
+    }, HANDSHAKE_TIMEOUT + 100);
+  });
 });

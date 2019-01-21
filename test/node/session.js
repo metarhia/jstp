@@ -26,28 +26,23 @@ test.test('must reconnect to existing session', test => {
   server = jstp.net.createServer(serverConfig);
   server.listen(0, () => {
     port = server.address().port;
-    jstp.net.connect(
-      app.name,
-      null,
-      port,
-      (error, conn, session) => {
-        test.assertNot(error, 'handshake must not return an error');
-        test.equal(conn.username, null, 'username must be null');
-        test.assert(
-          session instanceof jstp.Session,
-          'session must be an instance of jstp.Session'
+    jstp.net.connect(app.name, null, port, (error, conn, session) => {
+      test.assertNot(error, 'handshake must not return an error');
+      test.equal(conn.username, null, 'username must be null');
+      test.assert(
+        session instanceof jstp.Session,
+        'session must be an instance of jstp.Session'
+      );
+      jstp.net.reconnect(conn, port, (error, conn, session) => {
+        connection = conn;
+        test.assertNot(
+          error,
+          'must successfully reconnect to existing session'
         );
-        jstp.net.reconnect(conn, port, (error, conn, session) => {
-          connection = conn;
-          test.assertNot(
-            error,
-            'must successfully reconnect to existing session'
-          );
-          test.assertNot(session, 'must not return Session object');
-          test.end();
-        });
-      }
-    );
+        test.assertNot(session, 'must not return Session object');
+        test.end();
+      });
+    });
   });
 });
 
@@ -67,29 +62,24 @@ test.test('must not resend messages received by other side', test => {
   });
   server.listen(0, () => {
     port = server.address().port;
-    jstp.net.connect(
-      app.name,
-      null,
-      port,
-      (error, conn, session) => {
-        test.assertNot(error, 'handshake must not return an error');
-        test.equal(conn.username, null, 'username must be null');
-        test.assert(
-          session instanceof jstp.Session,
-          'session must be an instance of jstp.Session'
-        );
-        conn.callMethod('calculator', 'doNothing', [], error => {
-          test.assertNot(error, 'call must not return an error');
-          jstp.net.reconnect(conn, port, (error, conn, session) => {
-            connection = conn;
-            test.assertNot(
-              error,
-              'must successfully reconnect to existing session'
-            );
-            test.assertNot(session, 'must not return Session object');
-          });
+    jstp.net.connect(app.name, null, port, (error, conn, session) => {
+      test.assertNot(error, 'handshake must not return an error');
+      test.equal(conn.username, null, 'username must be null');
+      test.assert(
+        session instanceof jstp.Session,
+        'session must be an instance of jstp.Session'
+      );
+      conn.callMethod('calculator', 'doNothing', [], error => {
+        test.assertNot(error, 'call must not return an error');
+        jstp.net.reconnect(conn, port, (error, conn, session) => {
+          connection = conn;
+          test.assertNot(
+            error,
+            'must successfully reconnect to existing session'
+          );
+          test.assertNot(session, 'must not return Session object');
         });
-      }
-    );
+      });
+    });
   });
 });
