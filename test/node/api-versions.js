@@ -64,20 +64,15 @@ test.test('must call latest version if no version specified', test => {
   server.listen(0, () => {
     const port = server.address().port;
     const appLatest = { name: app.name };
-    jstp.net.connect(
-      appLatest,
-      null,
-      port,
-      (error, conn) => {
-        connection = conn;
-        test.assertNot(error, 'connect must not return an error');
-        connection.callMethod('calculator', 'answer', [], (error, result) => {
-          test.assertNot(error, 'callMethod must not return an error');
-          test.strictSame(result, 24);
-          test.end();
-        });
-      }
-    );
+    jstp.net.connect(appLatest, null, port, (error, conn) => {
+      connection = conn;
+      test.assertNot(error, 'connect must not return an error');
+      connection.callMethod('calculator', 'answer', [], (error, result) => {
+        test.assertNot(error, 'callMethod must not return an error');
+        test.strictSame(result, 24);
+        test.end();
+      });
+    });
   });
 });
 
@@ -90,20 +85,15 @@ test.test('must call specific version when specified (v1)', test => {
   server.listen(0, () => {
     const port = server.address().port;
     const appV1 = { name: app.name, version: '1' };
-    jstp.net.connect(
-      appV1,
-      null,
-      port,
-      (error, conn) => {
-        connection = conn;
-        test.assertNot(error, 'connect must not return an error');
-        connection.callMethod('calculator', 'answer', [], (error, result) => {
-          test.assertNot(error, 'callMethod must not return an error');
-          test.strictSame(result, 42);
-          test.end();
-        });
-      }
-    );
+    jstp.net.connect(appV1, null, port, (error, conn) => {
+      connection = conn;
+      test.assertNot(error, 'connect must not return an error');
+      connection.callMethod('calculator', 'answer', [], (error, result) => {
+        test.assertNot(error, 'callMethod must not return an error');
+        test.strictSame(result, 42);
+        test.end();
+      });
+    });
   });
 });
 
@@ -116,20 +106,15 @@ test.test('must call specific version when specified (v2)', test => {
   server.listen(0, () => {
     const port = server.address().port;
     const appV2 = { name: app.name, version: '2' };
-    jstp.net.connect(
-      appV2,
-      null,
-      port,
-      (error, conn) => {
-        connection = conn;
-        test.assertNot(error, 'connect must not return an error');
-        connection.callMethod('calculator', 'answer', [], (error, result) => {
-          test.assertNot(error, 'callMethod must not return an error');
-          test.strictSame(result, 24);
-          test.end();
-        });
-      }
-    );
+    jstp.net.connect(appV2, null, port, (error, conn) => {
+      connection = conn;
+      test.assertNot(error, 'connect must not return an error');
+      connection.callMethod('calculator', 'answer', [], (error, result) => {
+        test.assertNot(error, 'callMethod must not return an error');
+        test.strictSame(result, 24);
+        test.end();
+      });
+    });
   });
 });
 
@@ -143,20 +128,15 @@ test.test('must handle version ranges (^1.0.0)', test => {
     const port = server.address().port;
     const appV1Compatible = { name: app.name, version: '^1.0.0' };
     // must connect to appV1
-    jstp.net.connect(
-      appV1Compatible,
-      null,
-      port,
-      (error, conn) => {
-        connection = conn;
-        test.assertNot(error, 'connect must not return an error');
-        connection.callMethod('calculator', 'answer', [], (error, result) => {
-          test.assertNot(error, 'callMethod must not return an error');
-          test.strictSame(result, 42);
-          test.end();
-        });
-      }
-    );
+    jstp.net.connect(appV1Compatible, null, port, (error, conn) => {
+      connection = conn;
+      test.assertNot(error, 'connect must not return an error');
+      connection.callMethod('calculator', 'answer', [], (error, result) => {
+        test.assertNot(error, 'callMethod must not return an error');
+        test.strictSame(result, 42);
+        test.end();
+      });
+    });
   });
 });
 
@@ -170,20 +150,15 @@ test.test('must handle version ranges (>1.0.0)', test => {
     const port = server.address().port;
     const appV1Higher = { name: app.name, version: '>1.0.0' };
     // must connect to appV2
-    jstp.net.connect(
-      appV1Higher,
-      null,
-      port,
-      (error, conn) => {
-        connection = conn;
-        test.assertNot(error, 'connect must not return an error');
-        connection.callMethod('calculator', 'answer', [], (error, result) => {
-          test.assertNot(error, 'callMethod must not return an error');
-          test.strictSame(result, 24);
-          test.end();
-        });
-      }
-    );
+    jstp.net.connect(appV1Higher, null, port, (error, conn) => {
+      connection = conn;
+      test.assertNot(error, 'connect must not return an error');
+      connection.callMethod('calculator', 'answer', [], (error, result) => {
+        test.assertNot(error, 'callMethod must not return an error');
+        test.strictSame(result, 24);
+        test.end();
+      });
+    });
   });
 });
 
@@ -196,21 +171,16 @@ test.test('must return an error on connect to nonexistent version', test => {
   server.listen(0, () => {
     const port = server.address().port;
     const nonexistentApp = { name: app.name, version: '9999' };
-    jstp.net.connect(
-      nonexistentApp,
-      null,
-      port,
-      (error, conn) => {
-        connection = conn;
-        test.assert(error, 'connect must return an error');
-        test.equal(
-          error.code,
-          jstp.ERR_APP_NOT_FOUND,
-          'error must be an ERR_APP_NOT_FOUND'
-        );
-        test.end();
-      }
-    );
+    jstp.net.connect(nonexistentApp, null, port, (error, conn) => {
+      connection = conn;
+      test.assert(error, 'connect must return an error');
+      test.equal(
+        error.code,
+        jstp.ERR_APP_NOT_FOUND,
+        'error must be an ERR_APP_NOT_FOUND'
+      );
+      test.end();
+    });
   });
 });
 
@@ -223,17 +193,12 @@ test.test('must return an error on connect to invalid version', test => {
   server.listen(0, () => {
     const port = server.address().port;
     const application = { name: app.name, version: '__invalid_version__' };
-    jstp.net.connect(
-      application,
-      null,
-      port,
-      (error, conn) => {
-        connection = conn;
-        test.assert(error, 'connect must return an error');
-        test.equal(error.message, 'Invalid semver version range');
-        test.end();
-      }
-    );
+    jstp.net.connect(application, null, port, (error, conn) => {
+      connection = conn;
+      test.assert(error, 'connect must return an error');
+      test.equal(error.message, 'Invalid semver version range');
+      test.end();
+    });
   });
 });
 

@@ -11,15 +11,10 @@ server.listen(() => {
     test.pass('log event must be emmited');
   });
 
-  jstp.net.connect(
-    'app',
-    null,
-    server.address().port,
-    (err, connection) => {
-      test.assertNot(err, 'must connect successfully');
+  jstp.net.connect('app', null, server.address().port, (err, connection) => {
+    test.assertNot(err, 'must connect successfully');
 
-      connection.close();
-      server.close();
-    }
-  );
+    connection.close();
+    server.close();
+  });
 });

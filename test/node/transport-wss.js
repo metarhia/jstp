@@ -83,13 +83,7 @@ test.test('WSS connection must connect and inspect', test => {
   test.plan(1);
 
   test.throws(
-    () =>
-      jstp.wss.connect(
-        app.name,
-        null,
-        null,
-        '__illegal__url__'
-      ),
+    () => jstp.wss.connect(app.name, null, null, '__illegal__url__'),
     'connect must throw an error'
   );
 });

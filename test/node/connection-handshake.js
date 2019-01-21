@@ -61,21 +61,16 @@ test.test('must perform an anonymous handshake manually', test => {
 
 test.test('must perform an anonymous handshake', test => {
   const port = server.address().port;
-  jstp.net.connect(
-    app.name,
-    null,
-    port,
-    (error, conn, session) => {
-      connection = conn;
-      test.assertNot(error, 'handshake must not return an error');
-      test.equal(connection.username, null, 'username must be null');
-      test.assert(
-        session instanceof jstp.Session,
-        'session must be an instance of jstp.Session'
-      );
-      test.end();
-    }
-  );
+  jstp.net.connect(app.name, null, port, (error, conn, session) => {
+    connection = conn;
+    test.assertNot(error, 'handshake must not return an error');
+    test.equal(connection.username, null, 'username must be null');
+    test.assert(
+      session instanceof jstp.Session,
+      'session must be an instance of jstp.Session'
+    );
+    test.end();
+  });
 });
 
 test.test('must perform a handshake with credentials', test => {
@@ -84,30 +79,25 @@ test.test('must perform a handshake with credentials', test => {
     reconnector: () => {},
   };
   const port = server.address().port;
-  jstp.net.connect(
-    app.name,
-    client,
-    port,
-    (error, conn, session) => {
-      connection = conn;
-      test.assertNot(error, 'handshake must not return an error');
-      test.equal(
-        connection.username,
-        app.login,
-        'username must be same as the one passed with handshake'
-      );
-      test.assert(
-        session instanceof jstp.Session,
-        'session must be an instance of jstp.Session'
-      );
-      test.equal(
-        session.username,
-        app.login,
-        'session username must be same as the one passed with handshake'
-      );
-      test.end();
-    }
-  );
+  jstp.net.connect(app.name, client, port, (error, conn, session) => {
+    connection = conn;
+    test.assertNot(error, 'handshake must not return an error');
+    test.equal(
+      connection.username,
+      app.login,
+      'username must be same as the one passed with handshake'
+    );
+    test.assert(
+      session instanceof jstp.Session,
+      'session must be an instance of jstp.Session'
+    );
+    test.equal(
+      session.username,
+      app.login,
+      'session username must be same as the one passed with handshake'
+    );
+    test.end();
+  });
 });
 
 test.test('must not perform a handshake with invalid credentials', test => {
@@ -116,39 +106,29 @@ test.test('must not perform a handshake with invalid credentials', test => {
     reconnector: () => {},
   };
   const port = server.address().port;
-  jstp.net.connect(
-    app.name,
-    client,
-    port,
-    error => {
-      test.assert(error, 'handshake must return an error');
-      test.equal(
-        error.code,
-        jstp.ERR_AUTH_FAILED,
-        'error code must be ERR_AUTH_FAILED'
-      );
-      test.end();
-    }
-  );
+  jstp.net.connect(app.name, client, port, error => {
+    test.assert(error, 'handshake must return an error');
+    test.equal(
+      error.code,
+      jstp.ERR_AUTH_FAILED,
+      'error code must be ERR_AUTH_FAILED'
+    );
+    test.end();
+  });
 });
 
 test.test('must handle nonexistent application error', test => {
   const port = server.address().port;
   const client = { reconnector: () => {} };
-  jstp.net.connect(
-    '__nonexistentApp__',
-    client,
-    port,
-    error => {
-      test.assert(error, 'handshake must return an error');
-      test.equal(
-        error.code,
-        jstp.ERR_APP_NOT_FOUND,
-        'error code must be ERR_APP_NOT_FOUND'
-      );
-      test.end();
-    }
-  );
+  jstp.net.connect('__nonexistentApp__', client, port, error => {
+    test.assert(error, 'handshake must return an error');
+    test.equal(
+      error.code,
+      jstp.ERR_APP_NOT_FOUND,
+      'error code must be ERR_APP_NOT_FOUND'
+    );
+    test.end();
+  });
 });
 
 test.test('must not accept handshakes on a client', test => {
@@ -189,12 +169,9 @@ test.test(
     });
 
     const port = server.address().port;
-    const connection = net.connect(
-      port,
-      error => {
-        test.assertNot(error, 'must connect to server');
-      }
-    );
+    const connection = net.connect(port, error => {
+      test.assertNot(error, 'must connect to server');
+    });
     connection.on('close', () => {
       test.pass('connection must be closed');
     });

@@ -34,16 +34,11 @@ test.afterEach(done => {
 });
 
 test.test('IPC connection must connect to server', test => {
-  jstp.net.connect(
-    app.name,
-    null,
-    socket,
-    (error, conn) => {
-      connection = conn;
-      test.assertNot(error, 'connect must not return an error');
-      test.end();
-    }
-  );
+  jstp.net.connect(app.name, null, socket, (error, conn) => {
+    connection = conn;
+    test.assertNot(error, 'connect must not return an error');
+    test.end();
+  });
 });
 
 test.test('IPC connection must connect and inspect', test => {
@@ -72,14 +67,9 @@ test.test('IPC connection must connect and inspect', test => {
 });
 
 test.test('IPC connection must throw an error on illegal address', test => {
-  jstp.net.connect(
-    app.name,
-    null,
-    '__invalid_address__',
-    error => {
-      test.assert(error, 'connect must return an error');
-      test.equals(error.code, 'ENOENT', 'error must be ENOENT');
-      test.end();
-    }
-  );
+  jstp.net.connect(app.name, null, '__invalid_address__', error => {
+    test.assert(error, 'connect must return an error');
+    test.equals(error.code, 'ENOENT', 'error must be ENOENT');
+    test.end();
+  });
 });

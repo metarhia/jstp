@@ -49,27 +49,22 @@ test.test('must broadcast event to all connected clients', test => {
 });
 
 function connectAndCheckEvent(test, iface, eventName, args, callback) {
-  jstp.net.connect(
-    app.name,
-    null,
-    port,
-    (error, connection) => {
-      test.assertNot(error, 'must connect to server and perform handshake');
-      connection.on('event', (interfaceName, remoteName, remoteArgs) => {
-        test.strictEqual(interfaceName, iface, 'event interface must match');
-        test.strictEqual(
-          remoteName,
-          eventName,
-          'event name must be equal to the emitted one'
-        );
-        test.strictDeepEqual(
-          remoteArgs,
-          args,
-          'event arguments must be equal to the passed ones'
-        );
-        connection.close();
-      });
-      callback();
-    }
-  );
+  jstp.net.connect(app.name, null, port, (error, connection) => {
+    test.assertNot(error, 'must connect to server and perform handshake');
+    connection.on('event', (interfaceName, remoteName, remoteArgs) => {
+      test.strictEqual(interfaceName, iface, 'event interface must match');
+      test.strictEqual(
+        remoteName,
+        eventName,
+        'event name must be equal to the emitted one'
+      );
+      test.strictDeepEqual(
+        remoteArgs,
+        args,
+        'event arguments must be equal to the passed ones'
+      );
+      connection.close();
+    });
+    callback();
+  });
 }

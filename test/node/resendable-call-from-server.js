@@ -52,16 +52,11 @@ function createServer(callback) {
 }
 
 function connect() {
-  jstp.net.connect(
-    appName,
-    client,
-    port,
-    (error, conn, session) => {
-      test.error(error, 'must connect without errors');
-      connection = conn;
-      client.session = session;
-    }
-  );
+  jstp.net.connect(appName, client, port, (error, conn, session) => {
+    test.error(error, 'must connect without errors');
+    connection = conn;
+    client.session = session;
+  });
 }
 
 function reconnect() {

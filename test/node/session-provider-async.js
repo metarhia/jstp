@@ -62,21 +62,16 @@ const reconnect = (connection, port) => {
 
 server.listen(0, () => {
   const port = server.address().port;
-  jstp.net.connect(
-    APP_NAME,
-    client,
-    port,
-    (error, connection) => {
-      test.error(error, 'handshake must not return an error');
-      connection.callMethod('iface', 'first', [TOKEN], error => {
-        test.error(error, 'call to iface.first must not return an error');
-        connection.close();
-        connection.once('close', () => {
-          setTimeout(() => {
-            reconnect(connection, port);
-          }, TIMEOUT * 10);
-        });
+  jstp.net.connect(APP_NAME, client, port, (error, connection) => {
+    test.error(error, 'handshake must not return an error');
+    connection.callMethod('iface', 'first', [TOKEN], error => {
+      test.error(error, 'call to iface.first must not return an error');
+      connection.close();
+      connection.once('close', () => {
+        setTimeout(() => {
+          reconnect(connection, port);
+        }, TIMEOUT * 10);
       });
-    }
-  );
+    });
+  });
 });

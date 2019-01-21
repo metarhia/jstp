@@ -68,12 +68,7 @@ test.test('W3C WebSocket connection must connect and inspect', test => {
 test.test('W3C WebSocket connection must connect and inspect', test => {
   test.plan(1);
 
-  w3c.connect(
-    app.name,
-    null,
-    '__illegal__url__',
-    error => {
-      test.assert(error, 'connect must return an error');
-    }
-  );
+  w3c.connect(app.name, null, '__illegal__url__', error => {
+    test.assert(error, 'connect must return an error');
+  });
 });

@@ -33,27 +33,19 @@ test.test('must process inspect messages', test => {
 
   test.plan(expectedTests);
   const port = server.address().port;
-  jstp.net.connect(
-    app.name,
-    null,
-    port,
-    (error, conn) => {
-      connection = conn;
-      test.assertNot(error, 'must connect to server');
+  jstp.net.connect(app.name, null, port, (error, conn) => {
+    connection = conn;
+    test.assertNot(error, 'must connect to server');
 
-      expectedInterfaces.forEach(iface => {
-        connection.inspectInterface(iface, (error, methods) => {
-          test.assertNot(error, `must inspect ${iface}`);
-          Object.keys(app.interfaces[iface]).forEach(method =>
-            test.assert(
-              method in methods,
-              `api.${iface} must include ${method}`
-            )
-          );
-        });
+    expectedInterfaces.forEach(iface => {
+      connection.inspectInterface(iface, (error, methods) => {
+        test.assertNot(error, `must inspect ${iface}`);
+        Object.keys(app.interfaces[iface]).forEach(method =>
+          test.assert(method in methods, `api.${iface} must include ${method}`)
+        );
       });
-    }
-  );
+    });
+  });
 });
 
 test.test('must generate remote api after inspect', test => {

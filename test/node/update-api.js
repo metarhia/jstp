@@ -63,64 +63,46 @@ test.afterEach(done => {
 
 test.test('must update API', test => {
   server.updateApplications([newApplication]);
-  jstp.net.connect(
-    appName,
-    null,
-    port,
-    'localhost',
-    (error, connection) => {
-      test.assertNot(error, 'must connect to a new application');
-      connection.callMethod('iface', 'method', [], (error, result) => {
-        test.assertNot(error, 'must call a new method');
-        test.equal(result, 420);
-        connection.close();
-        test.end();
-      });
-    }
-  );
+  jstp.net.connect(appName, null, port, 'localhost', (error, connection) => {
+    test.assertNot(error, 'must connect to a new application');
+    connection.callMethod('iface', 'method', [], (error, result) => {
+      test.assertNot(error, 'must call a new method');
+      test.equal(result, 420);
+      connection.close();
+      test.end();
+    });
+  });
 });
 
 test.test('must update API on existing connection', test => {
-  jstp.net.connect(
-    appName,
-    null,
-    port,
-    'localhost',
-    (error, connection) => {
-      test.assertNot(error, 'must connect to an application');
-      server.updateApplications([newApplication]);
-      server.updateConnectionsApi();
-      connection.callMethod('iface', 'method', [], (error, result) => {
-        test.assertNot(error, 'must call a new method');
-        test.equal(result, 420);
-        connection.close();
-        test.end();
-      });
-    }
-  );
+  jstp.net.connect(appName, null, port, 'localhost', (error, connection) => {
+    test.assertNot(error, 'must connect to an application');
+    server.updateApplications([newApplication]);
+    server.updateConnectionsApi();
+    connection.callMethod('iface', 'method', [], (error, result) => {
+      test.assertNot(error, 'must call a new method');
+      test.equal(result, 420);
+      connection.close();
+      test.end();
+    });
+  });
 });
 
 test.test(
   'must not update API on existing connection if no supported version is ' +
     'found (connection to a latest app)',
   test => {
-    jstp.net.connect(
-      appName,
-      null,
-      port,
-      'localhost',
-      (error, connection) => {
-        test.assertNot(error, 'must connect to an application');
-        server.updateApplications([breakingApp]);
-        server.updateConnectionsApi();
-        connection.callMethod('iface', 'method', [], (error, result) => {
-          test.assertNot(error, 'must call an old method');
-          test.equal(result, 42);
-          connection.close();
-          test.end();
-        });
-      }
-    );
+    jstp.net.connect(appName, null, port, 'localhost', (error, connection) => {
+      test.assertNot(error, 'must connect to an application');
+      server.updateApplications([breakingApp]);
+      server.updateConnectionsApi();
+      connection.callMethod('iface', 'method', [], (error, result) => {
+        test.assertNot(error, 'must call an old method');
+        test.equal(result, 42);
+        connection.close();
+        test.end();
+      });
+    });
   }
 );
 

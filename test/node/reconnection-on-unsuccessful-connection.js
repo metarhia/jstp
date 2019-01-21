@@ -17,15 +17,9 @@ test.test('must not reconnect after failed connection', test => {
   const reconnector = () => {
     reconnectionAttempts++;
   };
-  jstp.net.connect(
-    APP_NAME,
-    { reconnector },
-    0,
-    '__invalid_host__',
-    error => {
-      test.assert(error, 'must fail handshake');
-    }
-  );
+  jstp.net.connect(APP_NAME, { reconnector }, 0, '__invalid_host__', error => {
+    test.assert(error, 'must fail handshake');
+  });
   setTimeout(() => {
     test.strictSame(reconnectionAttempts, 0);
     test.end();
@@ -40,19 +34,13 @@ test.test('must not reconnect after failed handshake', test => {
   });
   server.listen(0, () => {
     const port = server.address().port;
-    jstp.net.connect(
-      INVALID_APP_NAME,
-      null,
-      port,
-      'localhost',
-      error => {
-        test.strictSame(
-          error.code,
-          jstp.ERR_APP_NOT_FOUND,
-          'must fail handshake'
-        );
-      }
-    );
+    jstp.net.connect(INVALID_APP_NAME, null, port, 'localhost', error => {
+      test.strictSame(
+        error.code,
+        jstp.ERR_APP_NOT_FOUND,
+        'must fail handshake'
+      );
+    });
   });
   setTimeout(() => {
     test.strictSame(connectionAttempts, 1);

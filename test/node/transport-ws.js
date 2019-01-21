@@ -70,13 +70,7 @@ test.test('WebSocket connection must connect and inspect', test => {
   test.plan(1);
 
   test.throws(
-    () =>
-      jstp.ws.connect(
-        app.name,
-        null,
-        null,
-        '__illegal__url__'
-      ),
+    () => jstp.ws.connect(app.name, null, null, '__illegal__url__'),
     'connect must throw an error'
   );
 });

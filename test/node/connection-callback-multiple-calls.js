@@ -20,19 +20,14 @@ test.test('must call connect callback once on successful connect', test => {
   test.plan(1);
   const port = server.address().port;
   const client = { reconnector: () => {} };
-  jstp.net.connect(
-    app.name,
-    client,
-    port,
-    (error, connection) => {
-      test.assertNot(error, 'must not return error');
-      connection.getTransport().destroy();
-      connection.on('error', () => {
-        // dismiss
-      });
-      connection.emitRemoteEvent('someService', 'someEvent', []);
-    }
-  );
+  jstp.net.connect(app.name, client, port, (error, connection) => {
+    test.assertNot(error, 'must not return error');
+    connection.getTransport().destroy();
+    connection.on('error', () => {
+      // dismiss
+    });
+    connection.emitRemoteEvent('someService', 'someEvent', []);
+  });
 });
 
 const invalidAddress = {
@@ -41,12 +36,7 @@ const invalidAddress = {
 
 test.test('must call connect callback once on error on connect', test => {
   test.plan(1);
-  jstp.net.connect(
-    app.name,
-    null,
-    invalidAddress,
-    error => {
-      test.assert(error, 'must return error');
-    }
-  );
+  jstp.net.connect(app.name, null, invalidAddress, error => {
+    test.assert(error, 'must return error');
+  });
 });

@@ -44,17 +44,12 @@ function createServer(callback) {
 }
 
 function connect(port, callback) {
-  jstp.net.connect(
-    appName,
-    client,
-    port,
-    (error, conn, session) => {
-      test.error(error, 'must connect without errors');
-      connection = conn;
-      client.session = session;
-      callback();
-    }
-  );
+  jstp.net.connect(appName, client, port, (error, conn, session) => {
+    test.error(error, 'must connect without errors');
+    connection = conn;
+    client.session = session;
+    callback();
+  });
 }
 
 function reconnect() {
