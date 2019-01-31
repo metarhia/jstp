@@ -1,0 +1,49 @@
+site_name: 'JSTP Documentation'
+repo_name: 'metarhia/jstp'
+repo_url: 'https://github.com/metarhia/jstp'
+
+docs_dir: 'doc'
+
+nav:
+  - 'README.md'
+  - 'Tutorial': 'tutorial/README.md'
+  - 'API Documentation':
+      - 'Application': 'api/application.md'
+      - 'Connection': 'api/connection.md'
+      - 'Session': 'api/session.md'
+      - 'RemoteProxy': 'api/remote-proxy.md'
+      - 'Errors': 'api/errors.md'
+      - 'Transport': 'api/transport.md'
+      - 'Available transports':
+          - 'net': 'api/net.md'
+          - 'tls': 'api/tls.md'
+          - 'ws': 'api/ws.md'
+          - 'ws-browser': 'api/ws-browser.md'
+          - 'wss': 'api/wss.md'
+      - 'SimpleConnectPolicy': 'api/simple-connect-policy.md'
+      - 'SessionStorageProvider': 'api/session-storage-provider.md'
+      - 'SimpleSessionStorageProvider': 'api/simple-session-storage-provider.md'
+      - 'AuthPolicy': 'api/auth-policy.md'
+      - 'Client': 'api/client.md'
+      - 'Server': 'api/server.md'
+  - 'JSTP CLI': 'cli/README.md'
+
+theme:
+  name: 'material'
+  favicon: 'favicon.png'
+  palette:
+    primary: 'teal'
+    accent: 'blue'
+  logo: 'https://cdn.rawgit.com/metarhia/Metarhia/master/Logos/metarhia-logo.svg'
+
+extra:
+  social:
+    - type: 'github'
+      link: 'https://github.com/metarhia'
+
+markdown_extensions:
+  - mdx_truly_sane_lists
+  - codehilite:
+      guess_lang: false
+  - toc:
+      permalink: true
