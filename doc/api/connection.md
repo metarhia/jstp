@@ -1,160 +1,279 @@
 # Connection
 
-- [Class: Connection](#class-connection)
-  - [new Connection(transport, server, client)](#new-connectiontransport-server-client)
-  - [Methods](#methods)
-    - [handshake(app, \[login\], \[password\], callback)](#handshakeapp-login-password-callback)
-    - [inspectInterface(interfaceName, callback)](#inspectinterfaceinterfacename-callback)
-    - [callMethod(interfaceName, methodName, args, callback)](#callmethodinterfacename-methodname-args-callback)
-    - [emitRemoteEvent(interfaceName, eventName, args)](#emitremoteeventinterfacename-eventname-args)
-    - [ping(callback)](#pingcallback)
-    - [pong()](#pong)
-    - [startHeartbeat(interval)](#startheartbeatinterval)
-    - [stopHeartbeat()](#stopheartbeat)
-    - [close()](#close)
-    - [getTransport()](#gettransport)
-  - [Properties](#properties)
-    - [server](#server)
-    - [client](#client)
-    - [id](#id)
-    - [remoteAddress](#remoteaddress)
-    - [handshakeDone](#handshakedone)
-    - [username](#username)
-    - [sessionId](#sessionid)
-    - [application](#application)
-    - [remoteProxies](#remoteproxies)
+## Class: jstp.Connection
 
-## Class: Connection
+### Constructor: new Connection(transport, server, client)
 
-### new Connection(transport, server, client)
+- `transport` [`<Transport>`][transport]
+- `server` [`<Server>`][server]
+- `client` [`<Client>`][client]
 
-- transport: `Transport`.
-- server: `Server` — JSTP server instance, used only for server-side parts
-  of connections (optional, but either server or client is required).
-- client: [`Client`](./client.md#object-client) — JSTP client instance,
-  used only for client-side parts of connections (optional,
-  but either server or client is required).
+Either `server` or `client` must be provided, but not both.
+`server` is required for server side connection, whereas `client` is required
+for client side connection.
 
-Don't call this constructor manually unless you use custom tranport.
-Recommended approach is to call `connect()` function provided by these modules:
+You **should not** call this constructor manually,
+unless you implement a custom JSTP transport.
 
-- [net](./net.md#connectapp-client-options-callback)
-- [tls](./tls.md#connectapp-client-options-callback)
-- [ws](./ws.md#connectapp-client-options-callback)
-- [ws-browser](./ws-browser.md#connectapp-client-options-callback)
-- [wss](./wss.md#connectapp-client-options-callback)
+Recommended approach is to call `connect()` or `connectAndInspect()` functions
+provided by these modules:
 
-### Methods
+- [net](./net.md)
+- [tls](./tls.md)
+- [ws](./ws.md)
+- [ws-browser](./ws-browser.md)
+- [wss](./wss.md)
 
-#### handshake(app, \[login\], \[password\], callback)
+### Event: 'reconnectAttempt'
 
-- app: `String || Object` — application to connect to as `'name'` or
-  `'name@version'` or `{ name, version }`, where version must be
-  a valid semver range.
-- login: `String` — user name.
-- password: `String` — user password.
-- callback(error, sessionId) — callback function to invoke after the handshake
-  is completed.
-  - error: `Error`.
-  - sessionId: `string`.
+- `transport` [`<string>`][string] Transport name.
+- `...options` `<any>` Options passed to `transport.connect()`.
+
+Client-side only event emitted before attempting the reconnection.
+
+### Event: 'reconnect'
+
+- `error` [`<Error>`][error] | [`<null>`][null] The error that occurred during
+  reconnection if any.
+
+Client-side only event emitted after the reconnection attempt.
+
+### Event: 'client'
+
+- `session` [`<Session>`][session]
+- `connection` [`<Connection>`][connection]
+
+Server-side only event emitted on successful session creation or restoration.
+
+### Event: 'call'
+
+- `interfaceName` [`<string>`][string]
+- `methodName` [`<string>`][string]
+- `args` [`<Array>`][array]
+
+Logging event emitted when a 'call' message is received.
+
+Logging events are not emitted when there is a dedicated logger specified in
+the client object.
+
+### Event: 'callback'
+
+- `error` [`<Array>`][array]
+- `ok` [`<Array>`][array]
+
+Logging event emitted when a 'callback' message is received.
+
+### Event: 'event'
+
+- `interfaceName` [`<string>`][string]
+- `eventName` [`<string>`][string]
+- `args` [`<Array>`][array]
+
+Logging event emitted when an 'event' message is received.
+
+### Event: 'handshake'
+
+- `error` [`<Array>`][array]
+- `ok` [`<string>`][string] | [`<number>`][number] Session ID if the session
+  was created or count of the messages received by the other side if the
+  session is restored.
+
+Logging event emitted when a 'handshake' message response is received.
+
+### Event: 'heartbeat'
+
+- `message` [`<Object>`][object] Empty object.
+
+Logging event emitted when an old style (`'{}\0'`) heartbeat message is
+received.
+
+Emitted only when `process.env.NODE_ENV !== 'production'`.
+
+### Event: 'incomingMessage'
+
+- `message` [`<Object>`][object] Message object.
+
+Logging event emitted when a message is received.
+
+Emitted only when `process.env.NODE_ENV !== 'production'`.
+
+### Event: 'outgoingMessage'
+
+- `message` [`<Object>`][object] Message object.
+
+Logging event emitted when a message is sent.
+
+Emitted only when `process.env.NODE_ENV !== 'production'`.
+
+### Event: 'inspect'
+
+- `intefaceName` [`<string>`][string]
+
+Logging event emitted when an 'inspect' message is received.
+
+### Event: 'messageRejected'
+
+- `message` [`<Object>`][object] Message object.
+
+Logging event emitted when a message is rejected.
+
+### connection.handshake(app\[, session\], callback)
+
+- `app` [`<string>`][string] | [`<Object>`][object]
+  - `name` [`<string>`][string]
+  - `version` [`<string>`][string]
+- `session` [`<Session>`][session]
+- `callback` [`<Function>`][function]
+  - `error` [`<RemoteError>`][remoteerror]
+  - `sessionId` [`<string>`][string]
+
+`app` may be `'name'`, `'name@version'` or `{ name, version }`,
+where version must be a valid semver range.
 
 Send a handshake message over the connection.
 
-#### inspectInterface(interfaceName, callback)
+When `session` is provided, uses `'session'` authentication strategy,
+`'anonymous'` authentication strategy is used otherwise.
 
-- interfaceName: `String` — name of an interface to inspect.
-- callback(error, proxy) — callback function to invoke after another side
-  responds to an interface introspection.
-  - error: `Error`.
-  - proxy: `RemoteProxy` — remote proxy for the interface.
+### connection.handshake(app, login, password, callback)
+
+- `app` [`<string>`][string] | [`<Object>`][object]
+  - `name` [`<string>`][string]
+  - `version` [`<string>`][string]
+- `login` [`<string>`][string]
+- `password` [`<string>`][string]
+- `callback` [`<Function>`][function]
+  - `error` [`<RemoteError>`][remoteerror]
+  - `sessionId` [`<string>`][string]
+
+`app` may be `'name'`, `'name@version'` or `{ name, version }`,
+where version must be a valid semver range.
+
+Send a handshake message over the connection using `'login'` authentication
+strategy.
+
+### connection.inspectInterface(interfaceName, callback)
+
+- `interfaceName` [`<string>`][string]
+- `callback` [`<Function>`][function]
+  - `error` [`<RemoteError>`][remoteerror]
+  - `proxy` [`<RemoteProxy>`][remoteproxy]
 
 Send an inspect message over the connection.
 
-#### callMethod(interfaceName, methodName, args, callback)
+### connection.callMethod(interfaceName, methodName, args, callback)
 
-- interfaceName: `String` — name of an interface.
-- methodName: `String` — name of a method.
-- args: `Array` — method arguments.
-- callback(error, ...args) — callback function that is invoked after a callback
-  message has been received.
-  - error: `Error`.
+- `interfaceName` [`<string>`][string]
+- `methodName` [`<string>`][string]
+- `args` [`<Array>`][array]
+- `callback` [`<Function>`][function]
+  - `error` [`<RemoteError>`][remoteerror]
+  - `...args` [`<Array>`][array]
 
 Send a call message over the connection.
 
-#### emitRemoteEvent(interfaceName, eventName, args)
+### connection.callMethodWithResend(interfaceName, methodName, args, callback)
 
-- interfaceName: `String` — name of an interface.
-- eventName: `String` — name of an event.
-- args: `Array` — event arguments.
+- `interfaceName` [`<string>`][string]
+- `methodName` [`<string>`][string]
+- `args` [`<Array>`][array]
+- `callback` [`<Function>`][function]
+  - `error` [`<RemoteError>`][remoteerror]
+  - `...args` [`<Array>`][array]
+
+Send a call message over the connection resending if not possible to get a
+callback.
+
+### connection.emitRemoteEvent(interfaceName, eventName, args)
+
+- `interfaceName` [`<string>`][string]
+- `eventName` [`<string>`][string]
+- `args` [`<Array>`][array]
 
 Send an event message over the connection.
 
-#### ping(callback)
+### connection.ping(callback)
 
-- callback(error, ...args) — callback function to invoke after another side
-  responds with a pong message.
-  - error: `Error`.
+- `callback` [`<Function>`][function]
 
 Send a ping message.
 
-#### pong()
+### connection.startHeartbeat(interval)
 
-Send a pong message.
+- `interval` [`<number>`][number]
 
-#### startHeartbeat(interval)
+Start periodically sending ping messages every `interval` milliseconds.
 
-- interval: `number` — heartbeat interval in milliseconds.
+### connection.stopHeartbeat()
 
-Start sending heartbeat messages.
+Stop periodically sending ping messages.
 
-#### stopHeartbeat()
-
-Stop sending heartbeat messages.
-
-#### close()
+### connection.close()
 
 Close the connection.
 
-#### getTransport()
+### connection.getTransport()
 
-- Returns: `Transport`.
+- Returns: [`<Transport>`][transport]
 
 Returns underlying transport.
 
-### Properties
+### connection.server
 
-#### server
+- [`<Server>`][server]
 
-- Type: `Server`.
+### connection.client
 
-#### client
+- [`<Client>`][client]
 
-- Type: [`Client`](./client.md#object-client).
+### connection.id
 
-#### id
+- [`<number>`][number]
 
-- Type: `number`.
+Unique for this process connection identifier.
 
-#### remoteAddress
+### connection.remoteAddress
 
-- Type: `Object`.
+- `<any>`
 
-#### handshakeDone
+Value obtained from `connection.getTransport().remoteAddress`.
 
-- Type: `boolean`.
+### connection.handshakeDone
 
-#### username
+- [`<boolean>`][boolean]
 
-- Type: `string`.
+### connection.username
 
-#### sessionId
+- [`<string>`][string]
 
-- Type: `number`.
+May be [`null`][null] if connection was established without logging in.
 
-#### application
+### connection.session
 
-- Type: `Application`.
+- [`<Session>`][session]
 
-#### remoteProxies
+### connection.application
 
-- Type: `Map of RemoteProxy`.
+- [`<Application>`][application]
+
+### connection.remoteProxies
+
+- [`<Object>`][object]
+  - `[interfaceName]` [`<RemoteProxy>`][remoteproxy]
+
+[application]: ./application.md#class-jstpapplication
+[transport]: ./transport.md
+[server]: ./server.md
+[client]: ./client.md#interface-jstpclient
+[session]: ./session.md
+[remoteerror]: ./errors.md#class-jstpremoteerror
+[remoteproxy]: ./remote-proxy.md
+[connection]: #class-jstpconnection
+[string]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type
+[number]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type
+[boolean]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Boolean_type
+[object]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object
+[function]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function
+[array]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array
+[error]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error
+[null]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Null_type
