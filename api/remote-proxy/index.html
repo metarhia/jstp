@@ -668,6 +668,7 @@
 <p>Remote API proxy object class that extends <a href="http://nodejs.org/dist/latest/docs/api/events.html#events_class_eventemitter"><code>EventEmitter</code></a>. It
 wraps remote methods so that they look like regular local methods and acts like
 a remote event emitter.</p>
+<p>Using <code>proxy.on()</code> you can subscribe to both local and remote events.</p>
 <h3 id="constructor-new-remoteproxyconnection-interfacename91-methods93">Constructor: new RemoteProxy(connection, interfaceName[, methods])<a class="headerlink" href="#constructor-new-remoteproxyconnection-interfacename91-methods93" title="Permanent link">&para;</a></h3>
 <ul>
 <li><code>connection</code> <a href="../connection/#class-jstpconnection"><code>&lt;Connection&gt;</code></a></li>
@@ -680,9 +681,7 @@ a remote event emitter.</p>
 <li><code>...eventArgs</code> <code>&lt;any&gt;</code></li>
 </ul>
 <p>Emits event over the connection.</p>
-<p>It also emits the event on the proxy instance for some reason.</p>
-<!-- TODO(belochub) find out the reasoning behind this -->
-
+<p>It also emits the event on the proxy instance.</p>
 <h3 id="proxy91methodname93args-callback91-resend93">proxy[methodName](...args, callback[, resend])<a class="headerlink" href="#proxy91methodname93args-callback91-resend93" title="Permanent link">&para;</a></h3>
 <ul>
 <li><code>methodName</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type"><code>&lt;string&gt;</code></a></li>
