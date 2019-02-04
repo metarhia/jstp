@@ -1,0 +1,1378 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      
+      
+      
+      
+        <meta name="lang:clipboard.copy" content="Copy to clipboard">
+      
+        <meta name="lang:clipboard.copied" content="Copied to clipboard">
+      
+        <meta name="lang:search.language" content="en">
+      
+        <meta name="lang:search.pipeline.stopwords" content="True">
+      
+        <meta name="lang:search.pipeline.trimmer" content="True">
+      
+        <meta name="lang:search.result.none" content="No matching documents">
+      
+        <meta name="lang:search.result.one" content="1 matching document">
+      
+        <meta name="lang:search.result.other" content="# matching documents">
+      
+        <meta name="lang:search.tokenizer" content="[\s\-]+">
+      
+      <link rel="shortcut icon" href="../../favicon.png">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-3.0.6">
+    
+    
+      
+        <title>Connection - JSTP Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/application.451f80e5.css">
+      
+        <link rel="stylesheet" href="../../assets/stylesheets/application-palette.22915126.css">
+      
+      
+        
+        
+        <meta name="theme-color" content="#009688">
+      
+    
+    
+      <script src="../../assets/javascripts/modernizr.1aa3b519.js"></script>
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono">
+        <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+      
+    
+    <link rel="stylesheet" href="../../assets/fonts/material-icons.css">
+    
+    
+  </head>
+  
+    
+    
+    <body dir="ltr" data-md-color-primary="teal" data-md-color-accent="blue">
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448"
+    viewBox="0 0 416 448" id="__github">
+  <path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19-18.125
+        8.5-18.125-8.5-10.75-19-3.125-20.5 3.125-20.5 10.75-19 18.125-8.5
+        18.125 8.5 10.75 19 3.125 20.5zM320 304q0 10-3.125 20.5t-10.75
+        19-18.125 8.5-18.125-8.5-10.75-19-3.125-20.5 3.125-20.5 10.75-19
+        18.125-8.5 18.125 8.5 10.75 19 3.125 20.5zM360
+        304q0-30-17.25-51t-46.75-21q-10.25 0-48.75 5.25-17.75 2.75-39.25
+        2.75t-39.25-2.75q-38-5.25-48.75-5.25-29.5 0-46.75 21t-17.25 51q0 22 8
+        38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0
+        37.25-1.75t35-7.375 30.5-15 20.25-25.75 8-38.375zM416 260q0 51.75-15.25
+        82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5-41.75
+        1.125q-19.5 0-35.5-0.75t-36.875-3.125-38.125-7.5-34.25-12.875-30.25-20.25-21.5-28.75q-15.5-30.75-15.5-82.75
+        0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25
+        30.875q36.75-8.75 77.25-8.75 37 0 70 8 26.25-20.5
+        46.75-30.25t47.25-9.75q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34
+        99.5z" />
+</svg>
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+    
+      <a href="#connection" tabindex="1" class="md-skip">
+        Skip to content
+      </a>
+    
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="../.." title="JSTP Documentation" class="md-header-nav__button md-logo">
+          
+            <img src="https://cdn.rawgit.com/metarhia/Metarhia/master/Logos/metarhia-logo.svg" width="24" height="24">
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          
+            
+              <span class="md-header-nav__topic">
+                JSTP Documentation
+              </span>
+              <span class="md-header-nav__topic">
+                Connection
+              </span>
+            
+          
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          
+            <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+            
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+          
+        
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            
+
+
+  
+
+
+  <a href="https://github.com/metarhia/jstp/" title="Go to repository" class="md-source" data-md-source="github">
+    
+      <div class="md-source__icon">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <use xlink:href="#__github" width="24" height="24"></use>
+        </svg>
+      </div>
+    
+    <div class="md-source__repository">
+      metarhia/jstp
+    </div>
+  </a>
+
+          </div>
+        </div>
+      
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+        
+      
+      
+      <main class="md-main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="../.." title="JSTP Documentation" class="md-nav__button md-logo">
+      
+        <img src="https://cdn.rawgit.com/metarhia/Metarhia/master/Logos/metarhia-logo.svg" width="48" height="48">
+      
+    </a>
+    JSTP Documentation
+  </label>
+  
+    <div class="md-nav__source">
+      
+
+
+  
+
+
+  <a href="https://github.com/metarhia/jstp/" title="Go to repository" class="md-source" data-md-source="github">
+    
+      <div class="md-source__icon">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <use xlink:href="#__github" width="24" height="24"></use>
+        </svg>
+      </div>
+    
+    <div class="md-source__repository">
+      metarhia/jstp
+    </div>
+  </a>
+
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../.." title="Home" class="md-nav__link">
+      Home
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../tutorial/" title="Tutorial" class="md-nav__link">
+      Tutorial
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3" checked>
+    
+    <label class="md-nav__link" for="nav-3">
+      API Documentation
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-3">
+        API Documentation
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../application/" title="Application" class="md-nav__link">
+      Application
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Connection
+      </label>
+    
+    <a href="./" title="Connection" class="md-nav__link md-nav__link--active">
+      Connection
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#class-jstpconnection" title="Class: jstp.Connection" class="md-nav__link">
+    Class: jstp.Connection
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#constructor-new-connectiontransport-server-client" title="Constructor: new Connection(transport, server, client)" class="md-nav__link">
+    Constructor: new Connection(transport, server, client)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#event-reconnectattempt" title="Event: 'reconnectAttempt'" class="md-nav__link">
+    Event: 'reconnectAttempt'
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#event-reconnect" title="Event: 'reconnect'" class="md-nav__link">
+    Event: 'reconnect'
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#event-client" title="Event: 'client'" class="md-nav__link">
+    Event: 'client'
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#event-call" title="Event: 'call'" class="md-nav__link">
+    Event: 'call'
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#event-callback" title="Event: 'callback'" class="md-nav__link">
+    Event: 'callback'
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#event-event" title="Event: 'event'" class="md-nav__link">
+    Event: 'event'
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#event-handshake" title="Event: 'handshake'" class="md-nav__link">
+    Event: 'handshake'
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#event-heartbeat" title="Event: 'heartbeat'" class="md-nav__link">
+    Event: 'heartbeat'
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#event-incomingmessage" title="Event: 'incomingMessage'" class="md-nav__link">
+    Event: 'incomingMessage'
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#event-outgoingmessage" title="Event: 'outgoingMessage'" class="md-nav__link">
+    Event: 'outgoingMessage'
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#event-inspect" title="Event: 'inspect'" class="md-nav__link">
+    Event: 'inspect'
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#event-messagerejected" title="Event: 'messageRejected'" class="md-nav__link">
+    Event: 'messageRejected'
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connectionhandshakeapp91-login91-password9393-callback" title="connection.handshake(app[, login[, password]], callback)" class="md-nav__link">
+    connection.handshake(app[, login[, password]], callback)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connectioninspectinterfaceinterfacename-callback" title="connection.inspectInterface(interfaceName, callback)" class="md-nav__link">
+    connection.inspectInterface(interfaceName, callback)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connectioncallmethodinterfacename-methodname-args-callback" title="connection.callMethod(interfaceName, methodName, args, callback)" class="md-nav__link">
+    connection.callMethod(interfaceName, methodName, args, callback)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connectioncallmethodwithresendinterfacename-methodname-args-callback" title="connection.callMethodWithResend(interfaceName, methodName, args, callback)" class="md-nav__link">
+    connection.callMethodWithResend(interfaceName, methodName, args, callback)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connectionemitremoteeventinterfacename-eventname-args" title="connection.emitRemoteEvent(interfaceName, eventName, args)" class="md-nav__link">
+    connection.emitRemoteEvent(interfaceName, eventName, args)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connectionpingcallback" title="connection.ping(callback)" class="md-nav__link">
+    connection.ping(callback)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connectionstartheartbeatinterval" title="connection.startHeartbeat(interval)" class="md-nav__link">
+    connection.startHeartbeat(interval)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connectionstopheartbeat" title="connection.stopHeartbeat()" class="md-nav__link">
+    connection.stopHeartbeat()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connectionclose" title="connection.close()" class="md-nav__link">
+    connection.close()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connectiongettransport" title="connection.getTransport()" class="md-nav__link">
+    connection.getTransport()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connectionserver" title="connection.server" class="md-nav__link">
+    connection.server
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connectionclient" title="connection.client" class="md-nav__link">
+    connection.client
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connectionid" title="connection.id" class="md-nav__link">
+    connection.id
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connectionremoteaddress" title="connection.remoteAddress" class="md-nav__link">
+    connection.remoteAddress
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connectionhandshakedone" title="connection.handshakeDone" class="md-nav__link">
+    connection.handshakeDone
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connectionusername" title="connection.username" class="md-nav__link">
+    connection.username
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connectionsession" title="connection.session" class="md-nav__link">
+    connection.session
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connectionapplication" title="connection.application" class="md-nav__link">
+    connection.application
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connectionremoteproxies" title="connection.remoteProxies" class="md-nav__link">
+    connection.remoteProxies
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../session/" title="Session" class="md-nav__link">
+      Session
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../remote-proxy/" title="RemoteProxy" class="md-nav__link">
+      RemoteProxy
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../errors/" title="Errors" class="md-nav__link">
+      Errors
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../transport/" title="Transport" class="md-nav__link">
+      Transport
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-7" type="checkbox" id="nav-3-7">
+    
+    <label class="md-nav__link" for="nav-3-7">
+      Available transports
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-3-7">
+        Available transports
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../net/" title="net" class="md-nav__link">
+      net
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../tls/" title="tls" class="md-nav__link">
+      tls
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../ws/" title="ws" class="md-nav__link">
+      ws
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../ws-browser/" title="ws-browser" class="md-nav__link">
+      ws-browser
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../wss/" title="wss" class="md-nav__link">
+      wss
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../simple-connect-policy/" title="SimpleConnectPolicy" class="md-nav__link">
+      SimpleConnectPolicy
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../session-storage-provider/" title="SessionStorageProvider" class="md-nav__link">
+      SessionStorageProvider
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../simple-session-storage-provider/" title="SimpleSessionStorageProvider" class="md-nav__link">
+      SimpleSessionStorageProvider
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../auth-policy/" title="AuthPolicy" class="md-nav__link">
+      AuthPolicy
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../client/" title="Client" class="md-nav__link">
+      Client
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../server/" title="Server" class="md-nav__link">
+      Server
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../cli/" title="JSTP CLI" class="md-nav__link">
+      JSTP CLI
+    </a>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#class-jstpconnection" title="Class: jstp.Connection" class="md-nav__link">
+    Class: jstp.Connection
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#constructor-new-connectiontransport-server-client" title="Constructor: new Connection(transport, server, client)" class="md-nav__link">
+    Constructor: new Connection(transport, server, client)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#event-reconnectattempt" title="Event: 'reconnectAttempt'" class="md-nav__link">
+    Event: 'reconnectAttempt'
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#event-reconnect" title="Event: 'reconnect'" class="md-nav__link">
+    Event: 'reconnect'
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#event-client" title="Event: 'client'" class="md-nav__link">
+    Event: 'client'
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#event-call" title="Event: 'call'" class="md-nav__link">
+    Event: 'call'
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#event-callback" title="Event: 'callback'" class="md-nav__link">
+    Event: 'callback'
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#event-event" title="Event: 'event'" class="md-nav__link">
+    Event: 'event'
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#event-handshake" title="Event: 'handshake'" class="md-nav__link">
+    Event: 'handshake'
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#event-heartbeat" title="Event: 'heartbeat'" class="md-nav__link">
+    Event: 'heartbeat'
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#event-incomingmessage" title="Event: 'incomingMessage'" class="md-nav__link">
+    Event: 'incomingMessage'
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#event-outgoingmessage" title="Event: 'outgoingMessage'" class="md-nav__link">
+    Event: 'outgoingMessage'
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#event-inspect" title="Event: 'inspect'" class="md-nav__link">
+    Event: 'inspect'
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#event-messagerejected" title="Event: 'messageRejected'" class="md-nav__link">
+    Event: 'messageRejected'
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connectionhandshakeapp91-login91-password9393-callback" title="connection.handshake(app[, login[, password]], callback)" class="md-nav__link">
+    connection.handshake(app[, login[, password]], callback)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connectioninspectinterfaceinterfacename-callback" title="connection.inspectInterface(interfaceName, callback)" class="md-nav__link">
+    connection.inspectInterface(interfaceName, callback)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connectioncallmethodinterfacename-methodname-args-callback" title="connection.callMethod(interfaceName, methodName, args, callback)" class="md-nav__link">
+    connection.callMethod(interfaceName, methodName, args, callback)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connectioncallmethodwithresendinterfacename-methodname-args-callback" title="connection.callMethodWithResend(interfaceName, methodName, args, callback)" class="md-nav__link">
+    connection.callMethodWithResend(interfaceName, methodName, args, callback)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connectionemitremoteeventinterfacename-eventname-args" title="connection.emitRemoteEvent(interfaceName, eventName, args)" class="md-nav__link">
+    connection.emitRemoteEvent(interfaceName, eventName, args)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connectionpingcallback" title="connection.ping(callback)" class="md-nav__link">
+    connection.ping(callback)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connectionstartheartbeatinterval" title="connection.startHeartbeat(interval)" class="md-nav__link">
+    connection.startHeartbeat(interval)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connectionstopheartbeat" title="connection.stopHeartbeat()" class="md-nav__link">
+    connection.stopHeartbeat()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connectionclose" title="connection.close()" class="md-nav__link">
+    connection.close()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connectiongettransport" title="connection.getTransport()" class="md-nav__link">
+    connection.getTransport()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connectionserver" title="connection.server" class="md-nav__link">
+    connection.server
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connectionclient" title="connection.client" class="md-nav__link">
+    connection.client
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connectionid" title="connection.id" class="md-nav__link">
+    connection.id
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connectionremoteaddress" title="connection.remoteAddress" class="md-nav__link">
+    connection.remoteAddress
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connectionhandshakedone" title="connection.handshakeDone" class="md-nav__link">
+    connection.handshakeDone
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connectionusername" title="connection.username" class="md-nav__link">
+    connection.username
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connectionsession" title="connection.session" class="md-nav__link">
+    connection.session
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connectionapplication" title="connection.application" class="md-nav__link">
+    connection.application
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connectionremoteproxies" title="connection.remoteProxies" class="md-nav__link">
+    connection.remoteProxies
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/metarhia/jstp/edit/master/docs/api/connection.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                
+                
+                <h1 id="connection">Connection<a class="headerlink" href="#connection" title="Permanent link">&para;</a></h1>
+<h2 id="class-jstpconnection">Class: jstp.Connection<a class="headerlink" href="#class-jstpconnection" title="Permanent link">&para;</a></h2>
+<h3 id="constructor-new-connectiontransport-server-client">Constructor: new Connection(transport, server, client)<a class="headerlink" href="#constructor-new-connectiontransport-server-client" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>transport</code> <a href="../transport/"><code>&lt;Transport&gt;</code></a></li>
+<li><code>server</code> <a href="../server/"><code>&lt;Server&gt;</code></a></li>
+<li><code>client</code> <a href="../client/#object-jstpclient"><code>&lt;Client&gt;</code></a></li>
+</ul>
+<p>Both <code>server</code> and <code>client</code> are optional but one of them is required.
+<code>server</code> is required for server side connection, whereas <code>client</code> is required
+for client side connection.</p>
+<p>You <strong>should not</strong> call this constructor manually,
+unless you implement a custom JSTP transport.</p>
+<p>Recommended approach is to call <code>connect()</code> or <code>connectAndInspect()</code> functions
+provided by these modules:</p>
+<ul>
+<li><a href="../net/">net</a></li>
+<li><a href="../tls/">tls</a></li>
+<li><a href="../ws/">ws</a></li>
+<li><a href="../ws-browser/">ws-browser</a></li>
+<li><a href="../wss/">wss</a></li>
+</ul>
+<h3 id="event-reconnectattempt">Event: 'reconnectAttempt'<a class="headerlink" href="#event-reconnectattempt" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>transport</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type"><code>&lt;string&gt;</code></a> Transport name.</li>
+<li><code>...options</code> <code>&lt;any&gt;</code> Options passed to <code>transport.connect()</code>.</li>
+</ul>
+<p>Client-side only event emitted before attempting the reconnection.</p>
+<h3 id="event-reconnect">Event: 'reconnect'<a class="headerlink" href="#event-reconnect" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>error</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error"><code>&lt;Error&gt;</code></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Null_type"><code>&lt;null&gt;</code></a> The error that occurred during
+  reconnection if any.</li>
+</ul>
+<p>Client-side only event emitted after the reconnection attempt.</p>
+<h3 id="event-client">Event: 'client'<a class="headerlink" href="#event-client" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>session</code> <a href="../session/"><code>&lt;Session&gt;</code></a></li>
+<li><code>connection</code> <a href="#class-jstpconnection"><code>&lt;Connection&gt;</code></a></li>
+</ul>
+<p>Server-side only event emitted on successful session creation or restoration.</p>
+<h3 id="event-call">Event: 'call'<a class="headerlink" href="#event-call" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>interfaceName</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type"><code>&lt;string&gt;</code></a></li>
+<li><code>methodName</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type"><code>&lt;string&gt;</code></a></li>
+<li><code>args</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array"><code>&lt;Array&gt;</code></a></li>
+</ul>
+<p>Logging event emitted when a 'call' message is received.</p>
+<p>Logging events are not emitted when there is a dedicated logger specified in
+the client object.</p>
+<h3 id="event-callback">Event: 'callback'<a class="headerlink" href="#event-callback" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>error</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array"><code>&lt;Array&gt;</code></a></li>
+<li><code>ok</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array"><code>&lt;Array&gt;</code></a></li>
+</ul>
+<p>Logging event emitted when a 'callback' message is received.</p>
+<h3 id="event-event">Event: 'event'<a class="headerlink" href="#event-event" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>interfaceName</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type"><code>&lt;string&gt;</code></a></li>
+<li><code>eventName</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type"><code>&lt;string&gt;</code></a></li>
+<li><code>args</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array"><code>&lt;Array&gt;</code></a></li>
+</ul>
+<p>Logging event emitted when an 'event' message is received.</p>
+<h3 id="event-handshake">Event: 'handshake'<a class="headerlink" href="#event-handshake" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>error</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array"><code>&lt;Array&gt;</code></a></li>
+<li><code>ok</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type"><code>&lt;string&gt;</code></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type"><code>&lt;number&gt;</code></a> Session ID if the session
+  was created or count of the messages received by the other side if the
+  session is restored.</li>
+</ul>
+<p>Logging event emitted when a 'handshake' message response is received.</p>
+<h3 id="event-heartbeat">Event: 'heartbeat'<a class="headerlink" href="#event-heartbeat" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>message</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object"><code>&lt;Object&gt;</code></a> Empty object.</li>
+</ul>
+<p>Logging event emitted when an old style (<code>'{}\0'</code>) heartbeat message is
+received.</p>
+<p>Emitted only when <code>process.env.NODE_ENV !== 'production'</code>.</p>
+<h3 id="event-incomingmessage">Event: 'incomingMessage'<a class="headerlink" href="#event-incomingmessage" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>message</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object"><code>&lt;Object&gt;</code></a> Message object.</li>
+</ul>
+<p>Logging event emitted when a message is received.</p>
+<p>Emitted only when <code>process.env.NODE_ENV !== 'production'</code>.</p>
+<h3 id="event-outgoingmessage">Event: 'outgoingMessage'<a class="headerlink" href="#event-outgoingmessage" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>message</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object"><code>&lt;Object&gt;</code></a> Message object.</li>
+</ul>
+<p>Logging event emitted when a message is sent.</p>
+<p>Emitted only when <code>process.env.NODE_ENV !== 'production'</code>.</p>
+<h3 id="event-inspect">Event: 'inspect'<a class="headerlink" href="#event-inspect" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>intefaceName</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type"><code>&lt;string&gt;</code></a></li>
+</ul>
+<p>Logging event emitted when an 'inspect' message is received.</p>
+<h3 id="event-messagerejected">Event: 'messageRejected'<a class="headerlink" href="#event-messagerejected" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>message</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object"><code>&lt;Object&gt;</code></a> Message object.</li>
+</ul>
+<p>Logging event emitted when a message is rejected.</p>
+<h3 id="connectionhandshakeapp91-login91-password9393-callback">connection.handshake(app[, login[, password]], callback)<a class="headerlink" href="#connectionhandshakeapp91-login91-password9393-callback" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>app</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type"><code>&lt;string&gt;</code></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object"><code>&lt;Object&gt;</code></a><ul>
+<li><code>name</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type"><code>&lt;string&gt;</code></a></li>
+<li><code>version</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type"><code>&lt;string&gt;</code></a></li>
+</ul>
+</li>
+<li><code>login</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type"><code>&lt;string&gt;</code></a></li>
+<li><code>password</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type"><code>&lt;string&gt;</code></a></li>
+<li><code>callback</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function"><code>&lt;Function&gt;</code></a><ul>
+<li><code>error</code> <a href="../errors/#class-jstpremoteerror"><code>&lt;RemoteError&gt;</code></a></li>
+<li><code>sessionId</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type"><code>&lt;string&gt;</code></a></li>
+</ul>
+</li>
+</ul>
+<p><code>app</code> may be <code>'name'</code>, <code>'name@version'</code> or <code>{ name, version }</code>,
+where version must be a valid semver range.</p>
+<p>Send a handshake message over the connection.</p>
+<h3 id="connectioninspectinterfaceinterfacename-callback">connection.inspectInterface(interfaceName, callback)<a class="headerlink" href="#connectioninspectinterfaceinterfacename-callback" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>interfaceName</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type"><code>&lt;string&gt;</code></a></li>
+<li><code>callback</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function"><code>&lt;Function&gt;</code></a><ul>
+<li><code>error</code> <a href="../errors/#class-jstpremoteerror"><code>&lt;RemoteError&gt;</code></a></li>
+<li><code>proxy</code> <a href="../remote-proxy/"><code>&lt;RemoteProxy&gt;</code></a></li>
+</ul>
+</li>
+</ul>
+<p>Send an inspect message over the connection.</p>
+<h3 id="connectioncallmethodinterfacename-methodname-args-callback">connection.callMethod(interfaceName, methodName, args, callback)<a class="headerlink" href="#connectioncallmethodinterfacename-methodname-args-callback" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>interfaceName</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type"><code>&lt;string&gt;</code></a></li>
+<li><code>methodName</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type"><code>&lt;string&gt;</code></a></li>
+<li><code>args</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object"><code>&lt;Object[]&gt;</code></a></li>
+<li><code>callback</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function"><code>&lt;Function&gt;</code></a><ul>
+<li><code>error</code> <a href="../errors/#class-jstpremoteerror"><code>&lt;RemoteError&gt;</code></a></li>
+<li><code>...args</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object"><code>&lt;Object[]&gt;</code></a></li>
+</ul>
+</li>
+</ul>
+<p>Send a call message over the connection.</p>
+<h3 id="connectioncallmethodwithresendinterfacename-methodname-args-callback">connection.callMethodWithResend(interfaceName, methodName, args, callback)<a class="headerlink" href="#connectioncallmethodwithresendinterfacename-methodname-args-callback" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>interfaceName</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type"><code>&lt;string&gt;</code></a></li>
+<li><code>methodName</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type"><code>&lt;string&gt;</code></a></li>
+<li><code>args</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object"><code>&lt;Object[]&gt;</code></a></li>
+<li><code>callback</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function"><code>&lt;Function&gt;</code></a><ul>
+<li><code>error</code> <a href="../errors/#class-jstpremoteerror"><code>&lt;RemoteError&gt;</code></a></li>
+<li><code>...args</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object"><code>&lt;Object[]&gt;</code></a></li>
+</ul>
+</li>
+</ul>
+<p>Send a call message over the connection resending if not possible to get a
+callback.</p>
+<h3 id="connectionemitremoteeventinterfacename-eventname-args">connection.emitRemoteEvent(interfaceName, eventName, args)<a class="headerlink" href="#connectionemitremoteeventinterfacename-eventname-args" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>interfaceName</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type"><code>&lt;string&gt;</code></a></li>
+<li><code>eventName</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type"><code>&lt;string&gt;</code></a></li>
+<li><code>args</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object"><code>&lt;Object[]&gt;</code></a></li>
+</ul>
+<p>Send an event message over the connection.</p>
+<h3 id="connectionpingcallback">connection.ping(callback)<a class="headerlink" href="#connectionpingcallback" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>callback</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function"><code>&lt;Function&gt;</code></a></li>
+</ul>
+<p>Send a ping message.</p>
+<h3 id="connectionstartheartbeatinterval">connection.startHeartbeat(interval)<a class="headerlink" href="#connectionstartheartbeatinterval" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>interval</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type"><code>&lt;number&gt;</code></a></li>
+</ul>
+<p>Start periodically sending ping messages every <code>interval</code> milliseconds.</p>
+<h3 id="connectionstopheartbeat">connection.stopHeartbeat()<a class="headerlink" href="#connectionstopheartbeat" title="Permanent link">&para;</a></h3>
+<p>Start periodically sending ping messages.</p>
+<h3 id="connectionclose">connection.close()<a class="headerlink" href="#connectionclose" title="Permanent link">&para;</a></h3>
+<p>Close the connection.</p>
+<h3 id="connectiongettransport">connection.getTransport()<a class="headerlink" href="#connectiongettransport" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Returns: <a href="../transport/"><code>&lt;Transport&gt;</code></a></li>
+</ul>
+<p>Returns underlying transport.</p>
+<h3 id="connectionserver">connection.server<a class="headerlink" href="#connectionserver" title="Permanent link">&para;</a></h3>
+<ul>
+<li><a href="../server/"><code>&lt;Server&gt;</code></a></li>
+</ul>
+<h3 id="connectionclient">connection.client<a class="headerlink" href="#connectionclient" title="Permanent link">&para;</a></h3>
+<ul>
+<li><a href="../client/#object-jstpclient"><code>&lt;Client&gt;</code></a></li>
+</ul>
+<h3 id="connectionid">connection.id<a class="headerlink" href="#connectionid" title="Permanent link">&para;</a></h3>
+<ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type"><code>&lt;number&gt;</code></a></li>
+</ul>
+<p>Unique for this process connection identifier.</p>
+<h3 id="connectionremoteaddress">connection.remoteAddress<a class="headerlink" href="#connectionremoteaddress" title="Permanent link">&para;</a></h3>
+<ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object"><code>&lt;Object&gt;</code></a></li>
+</ul>
+<h3 id="connectionhandshakedone">connection.handshakeDone<a class="headerlink" href="#connectionhandshakedone" title="Permanent link">&para;</a></h3>
+<ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Boolean_type"><code>&lt;boolean&gt;</code></a></li>
+</ul>
+<h3 id="connectionusername">connection.username<a class="headerlink" href="#connectionusername" title="Permanent link">&para;</a></h3>
+<ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type"><code>&lt;string&gt;</code></a></li>
+</ul>
+<p>May be <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Null_type"><code>null</code></a> if connection was established without logging in.</p>
+<h3 id="connectionsession">connection.session<a class="headerlink" href="#connectionsession" title="Permanent link">&para;</a></h3>
+<ul>
+<li><a href="../session/"><code>&lt;Session&gt;</code></a></li>
+</ul>
+<h3 id="connectionapplication">connection.application<a class="headerlink" href="#connectionapplication" title="Permanent link">&para;</a></h3>
+<ul>
+<li><a href="../application/#class-jstpapplication"><code>&lt;Application&gt;</code></a></li>
+</ul>
+<h3 id="connectionremoteproxies">connection.remoteProxies<a class="headerlink" href="#connectionremoteproxies" title="Permanent link">&para;</a></h3>
+<ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object"><code>&lt;Object&gt;</code></a><ul>
+<li><code>[interfaceName]</code> <a href="../remote-proxy/"><code>&lt;RemoteProxy&gt;</code></a></li>
+</ul>
+</li>
+</ul>
+                
+                  
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href="../application/" title="Application" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Application
+              </span>
+            </div>
+          </a>
+        
+        
+          <a href="../session/" title="Session" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Session
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        powered by
+        <a href="https://www.mkdocs.org">MkDocs</a>
+        and
+        <a href="https://squidfunk.github.io/mkdocs-material/">
+          Material for MkDocs</a>
+      </div>
+      
+        
+  <div class="md-footer-social">
+    <link rel="stylesheet" href="../../assets/fonts/font-awesome.css">
+    
+      <a href="https://github.com/metarhia" class="md-footer-social__link fa fa-github"></a>
+    
+  </div>
+
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../assets/javascripts/application.5e60981f.js"></script>
+      
+      <script>app.initialize({version:"1.0.4",url:{base:"../.."}})</script>
+      
+    
+    
+      
+    
+  </body>
+</html>
