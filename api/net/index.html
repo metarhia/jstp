@@ -688,7 +688,7 @@
   valid semver range.</li>
 <li><code>client</code> <a href="../client/#object-jstpclient"><code>&lt;Client&gt;</code></a></li>
 <li><code>...args</code> <code>&lt;any&gt;</code> Arguments passed directly to
-  <a href="http://nodejs.org/dist/latest/docs/api/net.html#net_net_connect"><code>net.connect()</code></a> (except for <code>connectListener</code>)</li>
+  <a href="http://nodejs.org/api/net.html#net_net_connect"><code>net.connect()</code></a> (except for <code>connectListener</code>)</li>
 <li><code>callback</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function"><code>&lt;Function&gt;</code></a><ul>
 <li><code>error</code>: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error"><code>&lt;Error&gt;</code></a></li>
 <li><code>connection</code>: <a href="../connection/#class-jstpconnection"><code>&lt;Connection&gt;</code></a></li>
@@ -703,7 +703,7 @@
 <li><code>client</code> <a href="../client/#object-jstpclient"><code>&lt;Client&gt;</code></a></li>
 <li><code>interfaces</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type"><code>&lt;string[]&gt;</code></a> Interface names to perform inspect on.</li>
 <li><code>...args</code> <code>&lt;any&gt;</code> Arguments passed directly to
-  <a href="http://nodejs.org/dist/latest/docs/api/net.html#net_net_connect"><code>net.connect()</code></a> (except for <code>connectListener</code>).</li>
+  <a href="http://nodejs.org/api/net.html#net_net_connect"><code>net.connect()</code></a> (except for <code>connectListener</code>).</li>
 <li><code>callback</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function"><code>&lt;Function&gt;</code></a><ul>
 <li><code>error</code>: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error"><code>&lt;Error&gt;</code></a></li>
 <li><code>connection</code>: <a href="../connection/#class-jstpconnection"><code>&lt;Connection&gt;</code></a></li>
@@ -726,7 +726,7 @@ object.</p>
 <ul>
 <li><code>connection</code>: <a href="../connection/#class-jstpconnection"><code>&lt;Connection&gt;</code></a></li>
 <li><code>...args</code> <code>&lt;any&gt;</code> Arguments passed directly to
-  <a href="http://nodejs.org/dist/latest/docs/api/net.html#net_net_connect"><code>net.connect()</code></a> (except for <code>connectListener</code>)</li>
+  <a href="http://nodejs.org/api/net.html#net_net_connect"><code>net.connect()</code></a> (except for <code>connectListener</code>)</li>
 <li><code>callback</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function"><code>&lt;Function&gt;</code></a><ul>
 <li><code>error</code>: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error"><code>&lt;Error&gt;</code></a></li>
 <li><code>connection</code>: <a href="../connection/#class-jstpconnection"><code>&lt;Connection&gt;</code></a></li>
@@ -763,7 +763,7 @@ dangling network connection.</p>
   <a href="../server/#event-connect"><code>'connect'</code></a> event.</li>
 </ul>
 <p>For additional options see documentation for
-<a href="http://nodejs.org/dist/latest/docs/api/net.html#net_net_createserver_options_connectionlistener"><code>net.createServer()</code></a>. However, beware, some of the options
+<a href="http://nodejs.org/api/net.html#net_net_createserver_options_connectionlistener"><code>net.createServer()</code></a>. However, beware, some of the options
 may interfere with the correct functioning of the JSTP protocol.</p>
 <p><code>authPolicy</code> is used whenever the handshake with authentication strategy other
 than <code>'anonymous'</code> or <code>'session'</code> is received. In case it is omitted from the
