@@ -649,7 +649,8 @@
   <code>AuthPolicy.authenticate()</code>.</li>
 <li><code>sessionStorageProvider</code> <a href="../session-storage-provider/#interface-jstpsessionstorageprovider"><code>&lt;SessionStorageProvider&gt;</code></a> If provided,
   this is used to store sessions for applications that do not have its own
-  storage provider.</li>
+  storage provider. Defaults to using <a href="../simple-session-storage-provider/#class-jstpsimplesessionstorageprovider"><code>SimpleSessionStorageProvider</code></a>
+  with its default settings.</li>
 <li><code>heartbeatInterval</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type"><code>&lt;number&gt;</code></a> Omitting this option disables
   heartbeat.</li>
 <li><code>clientExpirationTime</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type"><code>&lt;number&gt;</code></a> Time it takes for client's

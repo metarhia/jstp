@@ -773,9 +773,10 @@ the server.</p>
 <h3 id="serverupdateconnectionsapi">server.updateConnectionsApi()<a class="headerlink" href="#serverupdateconnectionsapi" title="Permanent link">&para;</a></h3>
 <p>This function updates application version for each connection.</p>
 <p>It will update connection's application to the newest version in the range
-requested by the client. For example, if the client requested <code>'1.1.x'</code> range,
-it will not be updated to <code>'1.2.x'</code>. If no suitable version is found, the client
-will use its previous app version.</p>
+requested by the client. For example, if the client requested <code>'1.1.x'</code> range
+and was using version '1.1.1', it will be updated to the latest SemVer
+compatible version in this range (e.g. <code>'1.1.2'</code>, but not <code>'1.2.x'</code>).
+If no suitable version is found, the client will use its previous app version.</p>
 <h3 id="serverbroadcastinterfacename-eventname-args">server.broadcast(interfaceName, eventName, ...args)<a class="headerlink" href="#serverbroadcastinterfacename-eventname-args" title="Permanent link">&para;</a></h3>
 <ul>
 <li><code>interfaceName</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type"><code>&lt;string&gt;</code></a></li>

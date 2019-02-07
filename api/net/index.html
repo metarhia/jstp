@@ -683,7 +683,7 @@
 <h2 id="object-jstpnet">Object: jstp.net<a class="headerlink" href="#object-jstpnet" title="Permanent link">&para;</a></h2>
 <h3 id="jstpnetconnectapp-client-args-callback">jstp.net.connect(app, client, ...args, callback)<a class="headerlink" href="#jstpnetconnectapp-client-args-callback" title="Permanent link">&para;</a></h3>
 <ul>
-<li><code>app</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type"><code>&lt;string&gt;</code></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object"><code>&lt;Object&gt;</code></a> application to connect to as
+<li><code>app</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type"><code>&lt;string&gt;</code></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object"><code>&lt;Object&gt;</code></a> Application to connect to as
   <code>'name'</code> or <code>'name@version'</code> or <code>{ name, version }</code>, where version must be a
   valid semver range.</li>
 <li><code>client</code> <a href="../client/#object-jstpclient"><code>&lt;Client&gt;</code></a></li>
@@ -697,7 +697,7 @@
 </ul>
 <h3 id="jstpnetconnectandinspectapp-client-interfaces-args-callback">jstp.net.connectAndInspect(app, client, interfaces, ...args, callback)<a class="headerlink" href="#jstpnetconnectandinspectapp-client-interfaces-args-callback" title="Permanent link">&para;</a></h3>
 <ul>
-<li><code>app</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type"><code>&lt;string&gt;</code></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object"><code>&lt;Object&gt;</code></a> application to connect to as
+<li><code>app</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type"><code>&lt;string&gt;</code></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object"><code>&lt;Object&gt;</code></a> Application to connect to as
   <code>'name'</code> or <code>'name@version'</code> or <code>{ name, version }</code>, where version must be a
   valid semver range.</li>
 <li><code>client</code> <a href="../client/#object-jstpclient"><code>&lt;Client&gt;</code></a></li>
@@ -751,7 +751,8 @@ dangling network connection.</p>
   <code>AuthPolicy.authenticate()</code>.</li>
 <li><code>sessionStorageProvider</code> <a href="../session-storage-provider/#interface-jstpsessionstorageprovider"><code>&lt;SessionStorageProvider&gt;</code></a> If provided,
   this is used to store sessions for applications that do not have its own
-  storage provider.</li>
+  storage provider. Defaults to using <a href="../simple-session-storage-provider/#class-jstpsimplesessionstorageprovider"><code>SimpleSessionStorageProvider</code></a>
+  with its default settings.</li>
 <li><code>heartbeatInterval</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type"><code>&lt;number&gt;</code></a> Omitting this option disables
   heartbeat.</li>
 <li><code>clientExpirationTime</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type"><code>&lt;number&gt;</code></a> Time it takes for client's

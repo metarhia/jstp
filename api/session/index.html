@@ -693,9 +693,9 @@
                 
                 <h1 id="session">Session<a class="headerlink" href="#session" title="Permanent link">&para;</a></h1>
 <h2 id="class-jstpsession">Class: jstp.Session<a class="headerlink" href="#class-jstpsession" title="Permanent link">&para;</a></h2>
-<p>JSTP session class is used to buffer and resend the messages on unexpected
-connection closes. It extends <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map"><code>Map</code></a> class and thus can be used to store
-the current session state independently of connection.</p>
+<p>JSTP session class is used to buffer and resend the messages in case of
+unexpected connection closes. It extends <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map"><code>Map</code></a> class and thus can be used
+to store the current session state independently of connection.</p>
 <h3 id="sessionid">session.id<a class="headerlink" href="#sessionid" title="Permanent link">&para;</a></h3>
 <ul>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type"><code>&lt;string&gt;</code></a></li>
@@ -710,7 +710,8 @@ the current session state independently of connection.</p>
 <ul>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type"><code>&lt;string&gt;</code></a></li>
 </ul>
-<p>May be <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Null_type"><code>null</code></a> if connection was established without logging in.</p>
+<p>The username that was used to log in for the first time in the session or
+<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Null_type"><code>null</code></a> if <code>'anonymous'</code> authentication strategy was used.</p>
 <h3 id="sessiontostring">session.toString()<a class="headerlink" href="#sessiontostring" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Returns: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type"><code>&lt;string&gt;</code></a></li>

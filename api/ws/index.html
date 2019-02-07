@@ -683,7 +683,7 @@
 <h2 id="object-jstpws">Object: jstp.ws<a class="headerlink" href="#object-jstpws" title="Permanent link">&para;</a></h2>
 <h3 id="jstpwsconnectapp-client-websocketconfig-requesturl-callback">jstp.ws.connect(app, client, webSocketConfig, requestUrl, callback)<a class="headerlink" href="#jstpwsconnectapp-client-websocketconfig-requesturl-callback" title="Permanent link">&para;</a></h3>
 <ul>
-<li><code>app</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type"><code>&lt;string&gt;</code></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object"><code>&lt;Object&gt;</code></a> application to connect to as
+<li><code>app</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type"><code>&lt;string&gt;</code></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object"><code>&lt;Object&gt;</code></a> Application to connect to as
   <code>'name'</code> or <code>'name@version'</code> or <code>{ name, version }</code>, where version must be a
   valid semver range.</li>
 <li><code>client</code> <a href="../client/#object-jstpclient"><code>&lt;Client&gt;</code></a></li>
@@ -697,7 +697,7 @@
 </ul>
 <h3 id="jstpwsconnectandinspectapp-client-interfaces-websocketconfig-requesturl-callback">jstp.ws.connectAndInspect(app, client, interfaces, webSocketConfig, requestUrl, callback)<a class="headerlink" href="#jstpwsconnectandinspectapp-client-interfaces-websocketconfig-requesturl-callback" title="Permanent link">&para;</a></h3>
 <ul>
-<li><code>app</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type"><code>&lt;string&gt;</code></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object"><code>&lt;Object&gt;</code></a> application to connect to as
+<li><code>app</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type"><code>&lt;string&gt;</code></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object"><code>&lt;Object&gt;</code></a> Application to connect to as
   <code>'name'</code> or <code>'name@version'</code> or <code>{ name, version }</code>, where version must be a
   valid semver range.</li>
 <li><code>client</code> <a href="../client/#object-jstpclient"><code>&lt;Client&gt;</code></a></li>
@@ -714,7 +714,7 @@
 </ul>
 </li>
 </ul>
-<p>For more details see <a href="../net/#jstpnetconnectandinspectapp-client-interfaces-args-91callback93"><code>jstp.net.connectAndInspect()</code></a>.</p>
+<p>For more details see <a href="../net/#jstpnetconnectandinspectapp-client-interfaces-args-callback"><code>jstp.net.connectAndInspect()</code></a>.</p>
 <h3 id="jstpwsreconnectconnection-websocketconfig-requesturl-callback">jstp.ws.reconnect(connection, webSocketConfig, requestUrl, callback)<a class="headerlink" href="#jstpwsreconnectconnection-websocketconfig-requesturl-callback" title="Permanent link">&para;</a></h3>
 <ul>
 <li><code>connection</code>: <a href="../connection/#class-jstpconnection"><code>&lt;Connection&gt;</code></a></li>
@@ -726,7 +726,7 @@
 </ul>
 </li>
 </ul>
-<p>For more details see <a href="../net/#jstpnetreconnectconnection-args-91callback93"><code>jstp.net.reconnect()</code></a>.</p>
+<p>For more details see <a href="../net/#jstpnetreconnectconnection-args-callback"><code>jstp.net.reconnect()</code></a>.</p>
 <h3 id="jstpwscreateserveroptions91-listener93">jstp.ws.createServer(options[, listener])<a class="headerlink" href="#jstpwscreateserveroptions91-listener93" title="Permanent link">&para;</a></h3>
 <ul>
 <li><code>options</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object"><code>&lt;Object&gt;</code></a> | <a href="../application/#class-jstpapplication"><code>&lt;Application[]&gt;</code></a><ul>
@@ -737,7 +737,8 @@
   <code>AuthPolicy.authenticate()</code>.</li>
 <li><code>sessionStorageProvider</code> <a href="../session-storage-provider/#interface-jstpsessionstorageprovider"><code>&lt;SessionStorageProvider&gt;</code></a> If provided,
   this is used to store sessions for applications that do not have its own
-  storage provider.</li>
+  storage provider. Defaults to using <a href="../simple-session-storage-provider/#class-jstpsimplesessionstorageprovider"><code>SimpleSessionStorageProvider</code></a>
+  with its default settings.</li>
 <li><code>heartbeatInterval</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type"><code>&lt;number&gt;</code></a> Omitting this option disables
   heartbeat.</li>
 <li><code>clientExpirationTime</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type"><code>&lt;number&gt;</code></a> Time it takes for client's

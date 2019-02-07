@@ -424,8 +424,15 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#connectionhandshakeapp91-login91-password9393-callback" title="connection.handshake(app[, login[, password]], callback)" class="md-nav__link">
-    connection.handshake(app[, login[, password]], callback)
+  <a href="#connectionhandshakeapp91-session93-callback" title="connection.handshake(app[, session], callback)" class="md-nav__link">
+    connection.handshake(app[, session], callback)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connectionhandshakeapp-login-password-callback" title="connection.handshake(app, login, password, callback)" class="md-nav__link">
+    connection.handshake(app, login, password, callback)
   </a>
   
 </li>
@@ -913,8 +920,15 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#connectionhandshakeapp91-login91-password9393-callback" title="connection.handshake(app[, login[, password]], callback)" class="md-nav__link">
-    connection.handshake(app[, login[, password]], callback)
+  <a href="#connectionhandshakeapp91-session93-callback" title="connection.handshake(app[, session], callback)" class="md-nav__link">
+    connection.handshake(app[, session], callback)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connectionhandshakeapp-login-password-callback" title="connection.handshake(app, login, password, callback)" class="md-nav__link">
+    connection.handshake(app, login, password, callback)
   </a>
   
 </li>
@@ -1077,7 +1091,7 @@
 <li><code>server</code> <a href="../server/"><code>&lt;Server&gt;</code></a></li>
 <li><code>client</code> <a href="../client/#object-jstpclient"><code>&lt;Client&gt;</code></a></li>
 </ul>
-<p>Both <code>server</code> and <code>client</code> are optional but one of them is required.
+<p>Either <code>server</code> or <code>client</code> must be provided, but not both.
 <code>server</code> is required for server side connection, whereas <code>client</code> is required
 for client side connection.</p>
 <p>You <strong>should not</strong> call this constructor manually,
@@ -1168,7 +1182,26 @@ received.</p>
 <li><code>message</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object"><code>&lt;Object&gt;</code></a> Message object.</li>
 </ul>
 <p>Logging event emitted when a message is rejected.</p>
-<h3 id="connectionhandshakeapp91-login91-password9393-callback">connection.handshake(app[, login[, password]], callback)<a class="headerlink" href="#connectionhandshakeapp91-login91-password9393-callback" title="Permanent link">&para;</a></h3>
+<h3 id="connectionhandshakeapp91-session93-callback">connection.handshake(app[, session], callback)<a class="headerlink" href="#connectionhandshakeapp91-session93-callback" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>app</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type"><code>&lt;string&gt;</code></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object"><code>&lt;Object&gt;</code></a><ul>
+<li><code>name</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type"><code>&lt;string&gt;</code></a></li>
+<li><code>version</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type"><code>&lt;string&gt;</code></a></li>
+</ul>
+</li>
+<li><code>session</code> <a href="../session/"><code>&lt;Session&gt;</code></a></li>
+<li><code>callback</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function"><code>&lt;Function&gt;</code></a><ul>
+<li><code>error</code> <a href="../errors/#class-jstpremoteerror"><code>&lt;RemoteError&gt;</code></a></li>
+<li><code>sessionId</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type"><code>&lt;string&gt;</code></a></li>
+</ul>
+</li>
+</ul>
+<p><code>app</code> may be <code>'name'</code>, <code>'name@version'</code> or <code>{ name, version }</code>,
+where version must be a valid semver range.</p>
+<p>Send a handshake message over the connection.</p>
+<p>When <code>session</code> is provided, uses <code>'session'</code> authentication strategy,
+<code>'anonymous'</code> authentication strategy is used otherwise.</p>
+<h3 id="connectionhandshakeapp-login-password-callback">connection.handshake(app, login, password, callback)<a class="headerlink" href="#connectionhandshakeapp-login-password-callback" title="Permanent link">&para;</a></h3>
 <ul>
 <li><code>app</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type"><code>&lt;string&gt;</code></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object"><code>&lt;Object&gt;</code></a><ul>
 <li><code>name</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type"><code>&lt;string&gt;</code></a></li>
@@ -1185,7 +1218,8 @@ received.</p>
 </ul>
 <p><code>app</code> may be <code>'name'</code>, <code>'name@version'</code> or <code>{ name, version }</code>,
 where version must be a valid semver range.</p>
-<p>Send a handshake message over the connection.</p>
+<p>Send a handshake message over the connection using <code>'login'</code> authentication
+strategy.</p>
 <h3 id="connectioninspectinterfaceinterfacename-callback">connection.inspectInterface(interfaceName, callback)<a class="headerlink" href="#connectioninspectinterfaceinterfacename-callback" title="Permanent link">&para;</a></h3>
 <ul>
 <li><code>interfaceName</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type"><code>&lt;string&gt;</code></a></li>
@@ -1200,10 +1234,10 @@ where version must be a valid semver range.</p>
 <ul>
 <li><code>interfaceName</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type"><code>&lt;string&gt;</code></a></li>
 <li><code>methodName</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type"><code>&lt;string&gt;</code></a></li>
-<li><code>args</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object"><code>&lt;Object[]&gt;</code></a></li>
+<li><code>args</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array"><code>&lt;Array&gt;</code></a></li>
 <li><code>callback</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function"><code>&lt;Function&gt;</code></a><ul>
 <li><code>error</code> <a href="../errors/#class-jstpremoteerror"><code>&lt;RemoteError&gt;</code></a></li>
-<li><code>...args</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object"><code>&lt;Object[]&gt;</code></a></li>
+<li><code>...args</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array"><code>&lt;Array&gt;</code></a></li>
 </ul>
 </li>
 </ul>
@@ -1212,10 +1246,10 @@ where version must be a valid semver range.</p>
 <ul>
 <li><code>interfaceName</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type"><code>&lt;string&gt;</code></a></li>
 <li><code>methodName</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type"><code>&lt;string&gt;</code></a></li>
-<li><code>args</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object"><code>&lt;Object[]&gt;</code></a></li>
+<li><code>args</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array"><code>&lt;Array&gt;</code></a></li>
 <li><code>callback</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function"><code>&lt;Function&gt;</code></a><ul>
 <li><code>error</code> <a href="../errors/#class-jstpremoteerror"><code>&lt;RemoteError&gt;</code></a></li>
-<li><code>...args</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object"><code>&lt;Object[]&gt;</code></a></li>
+<li><code>...args</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array"><code>&lt;Array&gt;</code></a></li>
 </ul>
 </li>
 </ul>
@@ -1225,7 +1259,7 @@ callback.</p>
 <ul>
 <li><code>interfaceName</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type"><code>&lt;string&gt;</code></a></li>
 <li><code>eventName</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type"><code>&lt;string&gt;</code></a></li>
-<li><code>args</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object"><code>&lt;Object[]&gt;</code></a></li>
+<li><code>args</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array"><code>&lt;Array&gt;</code></a></li>
 </ul>
 <p>Send an event message over the connection.</p>
 <h3 id="connectionpingcallback">connection.ping(callback)<a class="headerlink" href="#connectionpingcallback" title="Permanent link">&para;</a></h3>
@@ -1239,7 +1273,7 @@ callback.</p>
 </ul>
 <p>Start periodically sending ping messages every <code>interval</code> milliseconds.</p>
 <h3 id="connectionstopheartbeat">connection.stopHeartbeat()<a class="headerlink" href="#connectionstopheartbeat" title="Permanent link">&para;</a></h3>
-<p>Start periodically sending ping messages.</p>
+<p>Stop periodically sending ping messages.</p>
 <h3 id="connectionclose">connection.close()<a class="headerlink" href="#connectionclose" title="Permanent link">&para;</a></h3>
 <p>Close the connection.</p>
 <h3 id="connectiongettransport">connection.getTransport()<a class="headerlink" href="#connectiongettransport" title="Permanent link">&para;</a></h3>
@@ -1262,8 +1296,9 @@ callback.</p>
 <p>Unique for this process connection identifier.</p>
 <h3 id="connectionremoteaddress">connection.remoteAddress<a class="headerlink" href="#connectionremoteaddress" title="Permanent link">&para;</a></h3>
 <ul>
-<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object"><code>&lt;Object&gt;</code></a></li>
+<li><code>&lt;any&gt;</code></li>
 </ul>
+<p>Value obtained from <code>connection.getTransport().remoteAddress</code>.</p>
 <h3 id="connectionhandshakedone">connection.handshakeDone<a class="headerlink" href="#connectionhandshakedone" title="Permanent link">&para;</a></h3>
 <ul>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Boolean_type"><code>&lt;boolean&gt;</code></a></li>

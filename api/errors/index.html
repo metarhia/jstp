@@ -857,6 +857,8 @@ from a remote method, you can pass any of the following to a callback:</p>
 <li>error message as a string;</li>
 <li>any other object that will return an error message as a result
   of its <code>toString</code> method.</li>
+<li><code>Array</code> of 1 or 2 elements: <code>[code, message]</code>, where the <code>code</code> is a number
+  and the optional <code>message</code> is a string.</li>
 </ul>
 <p>If an error code is unknown (i.e., in any case except the first and third ones)
 it will be set to zero. However, it is recommended to leverage error codes

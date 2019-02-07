@@ -313,13 +313,6 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#jstpcreateappsindexapplications" title="jstp.createAppsIndex(applications)" class="md-nav__link">
-    jstp.createAppsIndex(applications)
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#class-jstpapplication" title="Class: jstp.Application" class="md-nav__link">
     Class: jstp.Application
   </a>
@@ -357,6 +350,13 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jstpcreateappsindexapplications" title="jstp.createAppsIndex(applications)" class="md-nav__link">
+    jstp.createAppsIndex(applications)
+  </a>
   
 </li>
       
@@ -625,13 +625,6 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#jstpcreateappsindexapplications" title="jstp.createAppsIndex(applications)" class="md-nav__link">
-    jstp.createAppsIndex(applications)
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#class-jstpapplication" title="Class: jstp.Application" class="md-nav__link">
     Class: jstp.Application
   </a>
@@ -672,6 +665,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#jstpcreateappsindexapplications" title="jstp.createAppsIndex(applications)" class="md-nav__link">
+    jstp.createAppsIndex(applications)
+  </a>
+  
+</li>
+      
       
       
       
@@ -692,12 +692,6 @@
                 
                 
                 <h1 id="application">Application<a class="headerlink" href="#application" title="Permanent link">&para;</a></h1>
-<h3 id="jstpcreateappsindexapplications">jstp.createAppsIndex(applications)<a class="headerlink" href="#jstpcreateappsindexapplications" title="Permanent link">&para;</a></h3>
-<ul>
-<li><code>applications</code> <a href="#class-jstpapplication"><code>&lt;Application[]&gt;</code></a></li>
-<li>Returns: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map"><code>&lt;Map&gt;</code></a> Created index.</li>
-</ul>
-<p>Create an index of applications from an array.</p>
 <h2 id="class-jstpapplication">Class: jstp.Application<a class="headerlink" href="#class-jstpapplication" title="Permanent link">&para;</a></h2>
 <p>Generic application class. You are free to substitute it with other class with
 the same interface that suits your needs.</p>
@@ -706,8 +700,10 @@ the same interface that suits your needs.</p>
 <li><code>name</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type"><code>&lt;string&gt;</code></a> Application name that may contain version after
   '@' (e.g. app@1.0.0). Version in name is preferred over 'version' parameter.</li>
 <li><code>api</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object"><code>&lt;Object&gt;</code></a><ul>
-<li><code>[interfaceName]</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object"><code>&lt;Object&gt;</code></a><ul>
-<li><code>[methodName]</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function"><code>&lt;Function&gt;</code></a><ul>
+<li><code>[interfaceName]</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object"><code>&lt;Object&gt;</code></a> Keys with the arbitrary names that
+  will be used as the remote interface names.<ul>
+<li><code>[methodName]</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function"><code>&lt;Function&gt;</code></a> Keys with the arbitrary names
+  that will be used as the remote method names.<ul>
 <li><code>connection</code> <a href="../connection/#class-jstpconnection"><code>&lt;Connection&gt;</code></a></li>
 <li><code>...args</code> <code>&lt;any&gt;</code></li>
 <li><code>callback</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function"><code>&lt;Function&gt;</code></a></li>
@@ -718,8 +714,10 @@ the same interface that suits your needs.</p>
 </ul>
 </li>
 <li><code>eventHandlers</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object"><code>&lt;Object&gt;</code></a><ul>
-<li><code>[interfaceName]</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object"><code>&lt;Object&gt;</code></a><ul>
-<li><code>[eventName]</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function"><code>&lt;Function&gt;</code></a><ul>
+<li><code>[interfaceName]</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object"><code>&lt;Object&gt;</code></a> Keys with the arbitrary names that
+  will be used as the remote interface names.<ul>
+<li><code>[eventName]</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function"><code>&lt;Function&gt;</code></a> Keys with the arbitrary names that
+  will be used as the remote event names.<ul>
 <li><code>connection</code> <a href="../connection/#class-jstpconnection"><code>&lt;Connection&gt;</code></a></li>
 <li><code>...args</code> <code>&lt;any&gt;</code></li>
 </ul>
@@ -756,6 +754,12 @@ the same interface that suits your needs.</p>
 <li><code>args</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array"><code>&lt;Array&gt;</code></a></li>
 </ul>
 <p>This method is called when handling incoming <code>'event'</code> message.</p>
+<h2 id="jstpcreateappsindexapplications">jstp.createAppsIndex(applications)<a class="headerlink" href="#jstpcreateappsindexapplications" title="Permanent link">&para;</a></h2>
+<ul>
+<li><code>applications</code> <a href="#class-jstpapplication"><code>&lt;Application[]&gt;</code></a></li>
+<li>Returns: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map"><code>&lt;Map&gt;</code></a> Created index.</li>
+</ul>
+<p>Create an index of applications from an array.</p>
                 
                   
                 
