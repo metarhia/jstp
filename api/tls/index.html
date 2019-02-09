@@ -2,7 +2,7 @@
 
 
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" class="no-js">
   <head>
     
@@ -32,7 +32,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="../../favicon.png">
-      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-3.0.6">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-3.3.0">
     
     
       
@@ -40,7 +40,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/application.451f80e5.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/application.572ca0f0.css">
       
         <link rel="stylesheet" href="../../assets/stylesheets/application-palette.22915126.css">
       
@@ -51,7 +51,7 @@
       
     
     
-      <script src="../../assets/javascripts/modernizr.1aa3b519.js"></script>
+      <script src="../../assets/javascripts/modernizr.962652e9.js"></script>
     
     
       
@@ -61,6 +61,10 @@
       
     
     <link rel="stylesheet" href="../../assets/fonts/material-icons.css">
+    
+    
+    
+      
     
     
   </head>
@@ -686,7 +690,9 @@
 <li><code>app</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type"><code>&lt;string&gt;</code></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object"><code>&lt;Object&gt;</code></a> Application to connect to as
   <code>'name'</code> or <code>'name@version'</code> or <code>{ name, version }</code>, where version must be a
   valid semver range.</li>
-<li><code>client</code> <a href="../client/#object-jstpclient"><code>&lt;Client&gt;</code></a></li>
+<li><code>client</code> <a href="../client/#interface-jstpclient"><code>&lt;Client&gt;</code></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Null_type"><code>&lt;null&gt;</code></a> Optional, when omitted, an
+  object with the default values for <a href="../client/#clientapplication"><code>application</code></a>,
+  <a href="../client/#clientconnectpolicyapplication-connection91-session93-callback"><code>connectPolicy</code></a> and <a href="../client/#clientreconnectorconnection-reconnectfn"><code>reconnector</code></a> is used.</li>
 <li><code>...args</code> <code>&lt;any&gt;</code> Arguments passed directly to
   <a href="http://nodejs.org/api/tls.html#tls_tls_connect_options_callback"><code>tls.connect()</code></a> (except for <code>callback</code>)</li>
 <li><code>callback</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function"><code>&lt;Function&gt;</code></a><ul>
@@ -700,7 +706,9 @@
 <li><code>app</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type"><code>&lt;string&gt;</code></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object"><code>&lt;Object&gt;</code></a> Application to connect to as
   <code>'name'</code> or <code>'name@version'</code> or <code>{ name, version }</code>, where version must be a
   valid semver range.</li>
-<li><code>client</code> <a href="../client/#object-jstpclient"><code>&lt;Client&gt;</code></a></li>
+<li><code>client</code> <a href="../client/#interface-jstpclient"><code>&lt;Client&gt;</code></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Null_type"><code>&lt;null&gt;</code></a> Optional, when omitted, an
+  object with the default values for <a href="../client/#clientapplication"><code>application</code></a>,
+  <a href="../client/#clientconnectpolicyapplication-connection91-session93-callback"><code>connectPolicy</code></a> and <a href="../client/#clientreconnectorconnection-reconnectfn"><code>reconnector</code></a> is used.</li>
 <li><code>interfaces</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type"><code>&lt;string[]&gt;</code></a> Interface names to perform inspect on.</li>
 <li><code>...args</code> <code>&lt;any&gt;</code> Arguments passed directly to
   <a href="http://nodejs.org/api/tls.html#tls_tls_connect_options_callback"><code>tls.connect()</code></a> (except for <code>callback</code>)</li>
@@ -831,12 +839,9 @@ may interfere with the correct functioning of the JSTP protocol.</p>
       
     </div>
     
-      <script src="../../assets/javascripts/application.5e60981f.js"></script>
+      <script src="../../assets/javascripts/application.a353778b.js"></script>
       
       <script>app.initialize({version:"1.0.4",url:{base:"../.."}})</script>
-      
-    
-    
       
     
   </body>

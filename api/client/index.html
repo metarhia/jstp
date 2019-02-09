@@ -2,7 +2,7 @@
 
 
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" class="no-js">
   <head>
     
@@ -32,7 +32,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="../../favicon.png">
-      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-3.0.6">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-3.3.0">
     
     
       
@@ -40,7 +40,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/application.451f80e5.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/application.572ca0f0.css">
       
         <link rel="stylesheet" href="../../assets/stylesheets/application-palette.22915126.css">
       
@@ -51,7 +51,7 @@
       
     
     
-      <script src="../../assets/javascripts/modernizr.1aa3b519.js"></script>
+      <script src="../../assets/javascripts/modernizr.962652e9.js"></script>
     
     
       
@@ -61,6 +61,10 @@
       
     
     <link rel="stylesheet" href="../../assets/fonts/material-icons.css">
+    
+    
+    
+      
     
     
   </head>
@@ -517,8 +521,8 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#object-jstpclient" title="Object: jstp.Client" class="md-nav__link">
-    Object: jstp.Client
+  <a href="#interface-jstpclient" title="Interface: jstp.Client" class="md-nav__link">
+    Interface: jstp.Client
   </a>
   
     <nav class="md-nav">
@@ -632,8 +636,8 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#object-jstpclient" title="Object: jstp.Client" class="md-nav__link">
-    Object: jstp.Client
+  <a href="#interface-jstpclient" title="Interface: jstp.Client" class="md-nav__link">
+    Interface: jstp.Client
   </a>
   
     <nav class="md-nav">
@@ -706,7 +710,7 @@
                 
                 
                 <h1 id="client">Client<a class="headerlink" href="#client" title="Permanent link">&para;</a></h1>
-<h2 id="object-jstpclient">Object: jstp.Client<a class="headerlink" href="#object-jstpclient" title="Permanent link">&para;</a></h2>
+<h2 id="interface-jstpclient">Interface: jstp.Client<a class="headerlink" href="#interface-jstpclient" title="Permanent link">&para;</a></h2>
 <p>Client object is used to specify client-side connection behavior.</p>
 <h3 id="clientconnectpolicyapplication-connection91-session93-callback">client.connectPolicy(application, connection[, session], callback)<a class="headerlink" href="#clientconnectpolicyapplication-connection91-session93-callback" title="Permanent link">&para;</a></h3>
 <ul>
@@ -735,6 +739,8 @@ having the same signature.</p>
 <li><a href="../application/#class-jstpapplication"><code>&lt;Application&gt;</code></a></li>
 </ul>
 <p>Client-side application instance to be exposed over connection.</p>
+<p>If this field is not set, an <a href="../application/#class-jstpapplication"><code>Application</code></a> <code>jstp@1.0.0</code> with an
+empty <code>api</code> is used.</p>
 <h3 id="clientheartbeatinterval">client.heartbeatInterval<a class="headerlink" href="#clientheartbeatinterval" title="Permanent link">&para;</a></h3>
 <ul>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type"><code>&lt;number&gt;</code></a></li>
@@ -744,7 +750,8 @@ having the same signature.</p>
 <ul>
 <li><a href="../session/"><code>&lt;Session&gt;</code></a></li>
 </ul>
-<p>Setting this field leads to reconnection to the session.</p>
+<p>Setting this field results in using the <code>'session'</code> authentication strategy
+when connecting, which can be used to reconnect to the existing session.</p>
 <h3 id="clientlogger">client.logger<a class="headerlink" href="#clientlogger" title="Permanent link">&para;</a></h3>
 <ul>
 <li><a href="http://nodejs.org/api/events.html#events_class_eventemitter"><code>&lt;EventEmitter&gt;</code></a></li>
@@ -854,12 +861,9 @@ backoff functionality is used.</p>
       
     </div>
     
-      <script src="../../assets/javascripts/application.5e60981f.js"></script>
+      <script src="../../assets/javascripts/application.a353778b.js"></script>
       
       <script>app.initialize({version:"1.0.4",url:{base:"../.."}})</script>
-      
-    
-    
       
     
   </body>
