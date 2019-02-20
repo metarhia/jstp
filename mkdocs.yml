@@ -6,7 +6,15 @@ docs_dir: 'doc'
 
 nav:
   - 'README.md'
-  - 'Tutorial': 'tutorial/README.md'
+  - 'Tutorial':
+      - 'Intro': 'tutorial/intro.md'
+      - 'Setup': 'tutorial/setup.md'
+      - 'Creating applications': 'tutorial/creating-applications.md'
+      - 'Initializing a server': 'tutorial/initializing-a-server.md'
+      - 'Establishing client connection': 'tutorial/establishing-client-connection.md'
+      - 'Remote APIs': 'tutorial/remote-apis.md'
+      - 'Remote events': 'tutorial/remote-events.md'
+      - 'Example: chat application': 'tutorial/example-chat-application.md'
   - 'API Documentation':
       - 'Application': 'api/application.md'
       - 'Connection': 'api/connection.md'
