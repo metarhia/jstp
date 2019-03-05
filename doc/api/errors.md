@@ -24,7 +24,8 @@ as the first argument if an error occured. However, when returning an error
 from a remote method, you can pass any of the following to a callback:
 
 - `RemoteError` instance;
-- `Error` instance;
+- `Error` instance with an optional [`toJSTP()`][errortojstp] method
+  (otherwise `toString()` is used);
 - numeric error code;
 - error message as a string;
 - any other object that will return an error message as a result
@@ -114,6 +115,15 @@ Returns an array for JSTP messages. This array will always contain the error
 code and, if the message is not equal to code and the code is not one of
 predefined error codes, the error message.
 
+Deprecated: this method will be removed in the next major version, use
+toJSTP() method instead.
+
+### error.toJSTP()
+
+- Returns: [`<Array>`][array]
+
+Same as [`error.toJstpArray()`][error] method above.
+
 ### Class Method: RemoteError.fromJstpArray(array)
 
 - `array` [`<Array>`][array] array from a JSTP message.
@@ -132,10 +142,13 @@ JSTP message.
 
 This function returns an array suitable to be sent in a JSTP message from a
 `RemoteError` instance, an `Error` instance, an error code or an error message.
+If an `Error` instance has [`toJSTP()`][errortojstp] method it is called and its
+results are recursively passed to this method.
 If there is no error code (i.e., an `Error` or a `String` is passed), the error
-code is assumed to be `0`.
+code is assumed to be `1`.
 
 [remoteerror]: #class-jstpremoteerror
+[errortojstp]: #errortojstp
 [array]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array
 [error]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error
 [string]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type

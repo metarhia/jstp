@@ -36,7 +36,8 @@
     "./lib/wss.js": false,
     "./lib/ws.js": "./lib/ws-browser.js",
     "./lib/simple-auth-policy.js": false,
-    "./lib/simple-session-storage-provider.js": false
+    "./lib/simple-session-storage-provider.js": false,
+    "./lib/deprecate.js": "./lib/deprecate-browser.js"
   },
   "dependencies": {
     "mdsf": "^1.1.1",
@@ -60,7 +61,7 @@
     "remark-cli": "^6.0.1",
     "remark-preset-lint-metarhia": "^1.0.4",
     "remark-validate-links": "^8.0.0",
-    "tap": "^12.5.2",
+    "tap": "^12.6.1",
     "webpack": "^4.29.3",
     "webpack-command": "^0.4.2"
   },
