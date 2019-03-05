@@ -10,6 +10,14 @@ const message = 'Custom Message';
 const defaultErrorCode = 1;
 const sampleObject = { sample: 'Object' };
 
+const customErrorArray = [1, 'custom error'];
+class CustomError extends Error {
+  toJSTP() {
+    return customErrorArray;
+  }
+}
+const customError = new CustomError();
+
 const testCases = [
   {
     name: 'RemoteError',
@@ -40,6 +48,11 @@ const testCases = [
     name: 'Object',
     value: sampleObject,
     expected: [defaultErrorCode, sampleObject.toString()],
+  },
+  {
+    name: 'custom error with toJSTP() method',
+    value: customError,
+    expected: customErrorArray,
   },
 ];
 
