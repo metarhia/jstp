@@ -14,10 +14,10 @@ Hanshakes, RPC invocations and introspection requests are special cases of such
 operations. If they end up with an error, this error will be sent over
 network. As you can see in
 [handshake](../advanced/protocol.md#handshake-packet-handshake) and
-[callback](../advanced/protocol.md#remote-call-response-packet-callback) packets
-description, such errors are serialized into arrays that contain an error code
-and an optional error description. A high-level abstraction for these arrays is
-the [`RemoteError`][remoteerror] class.
+[callback](../advanced/protocol.md#remote-call-response-packet-callback)
+messages description, such errors are serialized into arrays that contain an
+error code and an optional error description. A high-level abstraction for these
+arrays is the [`RemoteError`][remoteerror] class.
 
 Callbacks of the operations stated above will receive instances of `RemoteError`
 as the first argument if an error occured. However, when returning an error
@@ -110,27 +110,27 @@ of the default messages if the `code` is one of the defined in this package
 
 - Returns: [`<Array>`][array]
 
-Returns an array for JSTP packets. This array will always contain the error
+Returns an array for JSTP messages. This array will always contain the error
 code and, if the message is not equal to code and the code is not one of
 predefined error codes, the error message.
 
 ### Class Method: RemoteError.fromJstpArray(array)
 
-- `array` [`<Array>`][array] array from a JSTP packet.
+- `array` [`<Array>`][array] array from a JSTP message.
 - Returns: [`<RemoteError>`][remoteerror]
 
 This factory method creates a `RemoteError` instance from an array found in a
-JSTP packet.
+JSTP message.
 
 ### Class Method: RemoteError.getJstpArrayFor(error)
 
 - `error` [`<RemoteError>`][remoteerror] |
   [`<Error>`][error] |
   [`<number>`][number] |
-  [`<string>`][string] Error to be converted to an array for a JSTP packet.
+  [`<string>`][string] Error to be converted to an array for a JSTP message.
 - Returns: [`<Array>`][array]
 
-This function returns an array suitable to be sent in a JSTP packet from a
+This function returns an array suitable to be sent in a JSTP message from a
 `RemoteError` instance, an `Error` instance, an error code or an error message.
 If there is no error code (i.e., an `Error` or a `String` is passed), the error
 code is assumed to be `0`.
