@@ -12,11 +12,13 @@ the same interface that suits your needs.
 - `api` [`<Object>`][object]
   - `[interfaceName]` [`<Object>`][object] Keys with the arbitrary names that
     will be used as the remote interface names.
-    - `[methodName]` [`<Function>`][function] Keys with the arbitrary names
-      that will be used as the remote method names.
+    - `[methodName]` [`<Function>`][function] |
+      [`<AsyncFunction>`][asyncfunction] Keys with the arbitrary names that
+      will be used as the remote method names.
       - `connection` [`<Connection>`][connection]
       - `...args` `<any>`
-      - `callback` [`<Function>`][function]
+      - `callback` [`<Function>`][function] Must be omitted if the function is
+        [`AsyncFunction`][asyncfunction].
 - `eventHandlers` [`<Object>`][object]
   - `[interfaceName]` [`<Object>`][object] Keys with the arbitrary names that
     will be used as the remote interface names.
@@ -69,3 +71,4 @@ Create an index of applications from an array.
 [array]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array
 [map]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map
 [function]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function
+[asyncfunction]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/AsyncFunction
