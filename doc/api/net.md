@@ -105,8 +105,8 @@ options, using any other strategy will result in
 [inspecterr]: ./errors.md#jstperr_interface_not_found
 [autherr]: ./errors.md#jstperr_auth_failed
 [serverconnect]: ./server.md#event-connect
-[netconnect]: http://nodejs.org/api/net.html#net_net_connect
-[netcreateserver]: http://nodejs.org/api/net.html#net_net_createserver_options_connectionlistener
+[netconnect]: https://nodejs.org/api/net.html#net_net_connect
+[netcreateserver]: https://nodejs.org/api/net.html#net_net_createserver_options_connectionlistener
 [string]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type
 [number]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type
 [object]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object

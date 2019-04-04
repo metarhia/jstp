@@ -32,7 +32,7 @@ It also emits the event on the proxy instance.
   it is not possible to get a callback.
 
 [connection]: ./connection.md#class-jstpconnection
-[eventemitter]: http://nodejs.org/api/events.html#events_class_eventemitter
+[eventemitter]: https://nodejs.org/api/events.html#events_class_eventemitter
 [boolean]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Boolean_type
 [function]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function
 [string]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type
