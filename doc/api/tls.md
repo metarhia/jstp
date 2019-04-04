@@ -87,8 +87,8 @@ For more details see [`jstp.net.createServer()`][jstpnetserver]
 [jstpnetconnectinspect]: ./net.md#jstpnetconnectandinspectapp-client-interfaces-args-callback
 [jstpnetreconnect]: ./net.md#jstpnetreconnectconnection-args-callback
 [jstpnetserver]: ./net.md#jstpnetcreateserveroptions91-listener93
-[tlsconnect]: http://nodejs.org/api/tls.html#tls_tls_connect_options_callback
-[tlscreateserver]: http://nodejs.org/api/tls.html#tls_tls_createserver_options_secureconnectionlistener
+[tlsconnect]: https://nodejs.org/api/tls.html#tls_tls_connect_options_callback
+[tlscreateserver]: https://nodejs.org/api/tls.html#tls_tls_createserver_options_secureconnectionlistener
 [string]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type
 [number]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type
 [object]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object

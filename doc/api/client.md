@@ -92,6 +92,6 @@ backoff functionality is used.
 [number]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type
 [object]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object
 [function]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function
-[eventemitter]: http://nodejs.org/api/events.html#events_class_eventemitter
+[eventemitter]: https://nodejs.org/api/events.html#events_class_eventemitter
 [error]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error
 [null]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Null_type

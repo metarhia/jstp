@@ -91,7 +91,7 @@ For more details see [`jstp.net.createServer()`][jstpnetserver]
 [jstpnetreconnect]: ./net.md#jstpnetreconnectconnection-args-callback
 [jstpnetserver]: ./net.md#jstpnetcreateserveroptions91-listener93
 [wsserverconfig]: https://github.com/theturtle32/WebSocket-Node/blob/master/docs/WebSocketServer.md#server-config-options
-[url]: http://nodejs.org/api/url.html#url_class_url
+[url]: https://nodejs.org/api/url.html#url_class_url
 [string]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type
 [number]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type
 [object]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object

@@ -28,6 +28,6 @@ End the connection optionally sending the last piece of data.
 
 Returns underlying transport object.
 
-[buffer]: http://nodejs.org/api/buffer.html#buffer_class_buffer
+[buffer]: https://nodejs.org/api/buffer.html#buffer_class_buffer
 [object]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object
 [string]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type
