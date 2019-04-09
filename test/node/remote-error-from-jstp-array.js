@@ -14,6 +14,9 @@ testCases.forEach(testCase => {
     const jstpArray = [testCase.code];
     if (testCase.message) {
       jstpArray.push(testCase.message);
+      if (testCase.info) {
+        jstpArray.push(...testCase.info);
+      }
     }
     const error = RemoteError.fromJstpArray(jstpArray);
     test.type(error, Error, 'must be an error');
@@ -29,6 +32,19 @@ testCases.forEach(testCase => {
       testCase.expectedMessage,
       'must have an message equal to message passed as argument'
     );
+    if (!testCase.info) {
+      test.strictSame(
+        error.info,
+        null,
+        'must have null info when it is not provided'
+      );
+    } else {
+      test.strictSame(
+        error.info,
+        testCase.expectedInfo,
+        'must have info equal to the info passed as argument'
+      );
+    }
     test.end();
   });
 });
