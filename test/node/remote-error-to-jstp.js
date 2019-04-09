@@ -8,11 +8,14 @@ const RemoteError = jstp.RemoteError;
 const testCases = require('../fixtures/remote-error-test-cases');
 
 testCases.forEach(testCase => {
-  const error = new RemoteError(testCase.code, testCase.message);
+  const error = new RemoteError(testCase.code, testCase.message, testCase.info);
   const jstpArray = error.toJSTP();
   const expectedJstpArray = [testCase.expectedCode];
   if (!RemoteError.defaultMessages[testCase.code] && testCase.message) {
     expectedJstpArray.push(testCase.expectedMessage);
+    if (testCase.info) {
+      expectedJstpArray.push(testCase.expectedInfo);
+    }
   }
 
   test(`Must properly construct jstp array from error with ${

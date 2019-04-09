@@ -8,6 +8,7 @@ const customMessage = 'Custom Message';
 const defaultMessage = RemoteError.defaultMessages[knownErrorCode];
 const unknownErrorCode = 42;
 const unknownMessage = 'Unknown Message';
+const customInfo = [{ context: {} }];
 
 module.exports = [
   {
@@ -35,5 +36,14 @@ module.exports = [
     code: unknownErrorCode,
     expectedCode: unknownErrorCode,
     expectedMessage: unknownErrorCode.toString(),
+  },
+  {
+    name: 'additional info',
+    code: knownErrorCode,
+    message: customMessage,
+    info: customInfo,
+    expectedCode: knownErrorCode,
+    expectedMessage: customMessage,
+    expectedInfo: customInfo,
   },
 ];

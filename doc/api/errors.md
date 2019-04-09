@@ -90,14 +90,16 @@ Default message: `'Internal API error'`.
 This class extends `Error` and represents an error that has been
 received from a remote method call over network.
 
-### new RemoteError(code\[, message\])
+### new RemoteError(code\[, message\[, info\]\])
 
 - `code` [`<number>`][number] Error code.
 - `message` [`<string>`][string] Error message.
+- `info` [`<Array>`][array] Additional info.
 
 If the `message` is not provided, it is set to either `code.toString()` or one
 of the default messages if the `code` is one of the defined in this package
 (listed above).
+If the `info` is not provided, it is set to `null`.
 
 ### error.code
 
@@ -106,6 +108,10 @@ of the default messages if the `code` is one of the defined in this package
 ### error.message
 
 - [`<string>`][string]
+
+### error.info
+
+- [`<Array>`][array] | [`<null>`][null]
 
 ### error.toJstpArray()
 
@@ -153,3 +159,4 @@ code is assumed to be `1`.
 [error]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error
 [string]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type
 [number]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type
+[null]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Null_type
