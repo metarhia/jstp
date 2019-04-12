@@ -1,5 +1,102 @@
 # `@metarhia/jstp` changelog
 
+## Version 2.3.0 (2019-04-25, @belochub)
+
+This release introduces support for async methods in applications.
+Other notable changes include fixes for ExpiringMap storage, reconnection,
+argument output in the CLI, support for passing additional info in errors, and
+introduction of the package documentation and tutorial.
+
+Notable changes:
+
+- **lib:** fix invalid args handling in reconnectFn()
+  _(Mykola Bilochub)_
+  [#411](https://github.com/metarhia/jstp/pull/411)
+- **lib:** fix ExpiringMap internal storage growing
+  _(Mykola Bilochub)_
+  [#414](https://github.com/metarhia/jstp/pull/414)
+- **docs:** use mkdocs for documentation
+  _(Mykola Bilochub)_
+  [#410](https://github.com/metarhia/jstp/pull/410)
+  **\[semver-minor\]**
+- **cli:** improve args serialization
+  _(Mykola Bilochub)_
+  [#415](https://github.com/metarhia/jstp/pull/415)
+  **\[semver-minor\]**
+- **docs:** add tutorial to documentation
+  _(mille-nium)_
+  [#417](https://github.com/metarhia/jstp/pull/417)
+  **\[semver-minor\]**
+- **lib:** add support for custom error serialization
+  _(Mykola Bilochub)_
+  [#418](https://github.com/metarhia/jstp/pull/418)
+  **\[semver-minor\]**
+- **lib:** allow passing additional info to RemoteError
+  _(Mykola Bilochub)_
+  [#425](https://github.com/metarhia/jstp/pull/425)
+  **\[semver-minor\]**
+- **lib:** add support for async methods in Applications
+  _(Mykola Bilochub)_
+  [#423](https://github.com/metarhia/jstp/pull/423)
+  **\[semver-minor\]**
+
+All changes:
+
+- **deps:** use prettier for code formatting
+  _(Dmytro Nechai)_
+  [#402](https://github.com/metarhia/jstp/pull/402)
+- **deps:** update devDependencies
+  _(Mykola Bilochub)_
+  [#403](https://github.com/metarhia/jstp/pull/403)
+- **npm:** add Prettier configs to .npmignore
+  _(Mykola Bilochub)_
+  [#408](https://github.com/metarhia/jstp/pull/408)
+- **deps:** update Prettier and fix configs
+  _(Mykola Bilochub)_
+  [#409](https://github.com/metarhia/jstp/pull/409)
+- **lib:** fix invalid args handling in reconnectFn()
+  _(Mykola Bilochub)_
+  [#411](https://github.com/metarhia/jstp/pull/411)
+- **lib:** fix ExpiringMap internal storage growing
+  _(Mykola Bilochub)_
+  [#414](https://github.com/metarhia/jstp/pull/414)
+- **deps:** update mdsf and devDependencies
+  _(Mykola Bilochub)_
+  [#416](https://github.com/metarhia/jstp/pull/416)
+- **docs:** use mkdocs for documentation
+  _(Mykola Bilochub)_
+  [#410](https://github.com/metarhia/jstp/pull/410)
+  **\[semver-minor\]**
+- **cli:** improve args serialization
+  _(Mykola Bilochub)_
+  [#415](https://github.com/metarhia/jstp/pull/415)
+  **\[semver-minor\]**
+- **docs:** add tutorial to documentation
+  _(mille-nium)_
+  [#417](https://github.com/metarhia/jstp/pull/417)
+  **\[semver-minor\]**
+- **docs:** fix incorrect term usage
+  _(Mykola Bilochub)_
+  [#421](https://github.com/metarhia/jstp/pull/421)
+- **lib:** add support for custom error serialization
+  _(Mykola Bilochub)_
+  [#418](https://github.com/metarhia/jstp/pull/418)
+  **\[semver-minor\]**
+- **docs:** replace http with https in all links
+  _(Mykola Bilochub)_
+  [#424](https://github.com/metarhia/jstp/pull/424)
+- **lib:** allow passing additional info to RemoteError
+  _(Mykola Bilochub)_
+  [#425](https://github.com/metarhia/jstp/pull/425)
+  **\[semver-minor\]**
+- **lib:** add support for async methods in Applications
+  _(Mykola Bilochub)_
+  [#423](https://github.com/metarhia/jstp/pull/423)
+  **\[semver-minor\]**
+- **deps:** update dependencies
+  _(Mykola Bilochub)_
+  [#420](https://github.com/metarhia/jstp/pull/420)
+
 ## Version 2.2.1 (2019-01-16, @belochub)
 
 Remove unsupported Web Crypto API browser warning.
