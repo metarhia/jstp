@@ -137,12 +137,10 @@ function getSemverTag(repo, id) {
 }
 
 function httpsGetJson(options) {
-  options = Object.assign(
-    {
-      headers: { 'User-Agent': 'metarhia-jstp-release-tool' },
-    },
-    options
-  );
+  options = {
+    headers: { 'User-Agent': 'metarhia-jstp-release-tool' },
+    ...options,
+  };
   if (token) {
     options.headers['Authorization'] = `token ${token}`;
   }

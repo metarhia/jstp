@@ -98,7 +98,7 @@ function outputResults(benchTimeHR) {
 
   const sum = results.reduce(
     (previous, current) =>
-      previous + Math.pow(current[1], 2) + Math.pow(current[0] - mean, 2),
+      previous + current[1] ** 2 + (current[0] - mean) ** 2,
     0
   );
   const stdev = Math.sqrt(sum / workersAmount);

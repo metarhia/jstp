@@ -15,7 +15,7 @@ const stdev = (sample, meanValue) => {
   if (len === 0 || len === 1) return 0;
   let sum = 0;
   for (let i = 0; i < len; i++) {
-    sum += Math.pow(sample[i] - meanValue, 2);
+    sum += (sample[i] - meanValue) ** 2;
   }
   const variance = sum / len;
   return Math.sqrt(variance);
@@ -43,8 +43,8 @@ const combineStdev = (samples, mean, count) => {
   for (let i = 0; i < samples.length; i++) {
     const sample = samples[i];
     sum +=
-      sample.count * Math.pow(sample.stdev, 2) +
-      sample.count * Math.pow(sample.mean - mean, 2);
+      sample.count * sample.stdev ** 2 +
+      sample.count * (sample.mean - mean) ** 2;
   }
   return Math.sqrt(sum / count);
 };
