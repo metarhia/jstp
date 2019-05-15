@@ -6,17 +6,10 @@ const jstp = require('../..');
 
 const app = require('../fixtures/application');
 
-const makeFakeAsyncFn = fn => {
-  fn[Symbol.toStringTag] = 'AsyncFunction';
-  return fn;
-};
-
 const application = new jstp.Application(app.name, {
   someInterface: {
-    getSessionId: makeFakeAsyncFn(connection =>
-      Promise.resolve(connection.session.id)
-    ),
-    sum: makeFakeAsyncFn((connection, a, b) => Promise.resolve(a + b)),
+    getSessionId: async connection => connection.session.id,
+    sum: async (connection, a, b) => a + b,
   },
 });
 const server = jstp.net.createServer([application]);
