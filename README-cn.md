@@ -31,46 +31,37 @@
     src="https://img.shields.io/npm/dt/@metarhia/jstp.svg"
     alt="NPM Downloads"
   /></a>
-  <h1>JSTP / JavaScript Transfer Protocol</h1>
+  <h1>JSTP / JavaScript传输协议</h1>
 </div>
 
-[中文版](./README-cn.md)
 
-JSTP is an RPC protocol and framework which provides two-way asynchronous data
-transfer with support of multiple parallel non-blocking interactions that is so
-transparent that an app may not even distinguish between local async functions
-and remote procedures.
+JSTP是一个提供双向异步数据的RPC协议和框架，支持多个并行传输的非阻塞交互，他是如此透明，应用程序甚至可能不区分本地异步函数和远程过程。
 
-And, as a nice bonus, there's a blazing fast [JSON5](https://github.com/json5)
-implementation bundled in!
+另外，它还附带了一个非常快的[JSON5](https://github.com/json5)功能!
 
-**This project is bound by a [Code of Conduct](CODE_OF_CONDUCT.md).**
 
-## Installation
+**这个项目受行为[准则](CODE_OF_CONDUCT.md)的约束**
 
-JSTP works in Node.js and web browsers:
 
+
+## 安装
+
+JSTP是基于Node.js和web浏览器工作的:
 ```sh
 $ npm install --save @metarhia/jstp
 ```
+或者，使用UMD包 [jstp.umd.js](https://unpkg.com/@metarhia/jstp@latest/dist/jstp.umd.js)
 
-Or, alternatively, there is
-[jstp.umd.js](https://unpkg.com/@metarhia/jstp@latest/dist/jstp.umd.js)
-UMD bundle.
+我们还有针对[Swift](https://github.com/metarhia/jstp-swift)和[Java](https://github.com/metarhia/jstp-java)的官方客户端实现，可以轻松地在iOS和Android tada上运行🎉
 
-We also have official client-side implementations for
-[Swift](https://github.com/metarhia/jstp-swift) and
-[Java](https://github.com/metarhia/jstp-java)
-that work effortlessly on iOS and Android 🎉
-
-There is also an interactive CLI provided by this package:
+我们提供了一个命令行工具jstp-cli：
 
 ```sh
 $ npm install -g @metarhia/jstp
 $ jstp-cli
 ```
 
-## Getting Started
+## 入门指南
 
 Server:
 
@@ -144,10 +135,9 @@ function handleConnect(error, connection, app) {
 }
 ```
 
-## Project Maintainers
+## 项目维护者
 
-Kudos to [@tshemsedinov](https://github.com/tshemsedinov) for the initial idea
-and proof-of-concept implementation. Current project team is:
+感谢 [@tshemsedinov](https://github.com/tshemsedinov) 提供的初始想法和概念验证实现。目前项目团队为:
 
 - [@aqrln](https://github.com/aqrln) &mdash;
   **Alexey Orlenko** &lt;eaglexrlnk@gmail.com&gt;
