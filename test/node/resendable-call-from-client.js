@@ -68,15 +68,12 @@ function reconnect() {
 test.plan(6);
 
 createServer(port => {
-  connect(
-    port,
-    () => {
-      connection.callMethodWithResend('iface', 'method', [], error => {
-        test.error(error, 'callMethodWithResend must not encounter an error');
-        test.pass('callback must be called');
-        connection.close();
-        server.close();
-      });
-    }
-  );
+  connect(port, () => {
+    connection.callMethodWithResend('iface', 'method', [], error => {
+      test.error(error, 'callMethodWithResend must not encounter an error');
+      test.pass('callback must be called');
+      connection.close();
+      server.close();
+    });
+  });
 });
